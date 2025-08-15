@@ -1,0 +1,6 @@
+@ELA.Api_HostAddress = http://localhost:5217
+
+GET {{ELA.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
