@@ -2,8 +2,6 @@
 
 A modular, scalable flashcard-style vocabulary learning system built with **ASP.NET Core Web API**, **Entity Framework Core**, and **PostgreSQL**. The project follows **Clean Architecture** and **Domain-Driven Design (DDD)** principles without CQRS.
 
----
-
 ## ⚙️ Tech Stack
 
 - **ASP.NET Core Web API**
@@ -11,8 +9,6 @@ A modular, scalable flashcard-style vocabulary learning system built with **ASP.
 - **PostgreSQL**
 - **Clean Architecture** (Domain / Application / Infrastructure / API layers)
 - **Domain-Driven Design (DDD)** principles
-
----
 
 ## 🧠 Features
 
@@ -23,16 +19,12 @@ A modular, scalable flashcard-style vocabulary learning system built with **ASP.
 - Separation of concerns with layered architecture
 - EF Core mapping with value objects and clean persistence setup
 
----
-
 ## 📁 Project Structure
 
 - **Domain** – Rich entities, value objects, and business rules
 - **Application** – Use cases, DTOs, and interfaces
 - **Infrastructure** – EF Core, PostgreSQL, repositories
 - **API** – ASP.NET Core controllers and endpoints
-
----
 
 ## 🚀 Getting Started
 
@@ -71,19 +63,15 @@ A modular, scalable flashcard-style vocabulary learning system built with **ASP.
 
     Once running, the API will be available at `https://localhost:5001` (or your configured port). You can test endpoints using Scarla UI at `/` or with tools like Postman.
 
----
-
 ## 🎯 To Do
 
-- User authentication
-- Unit and integration testing coverage
-- Frontend web client (React)
-- In-app statistics & progress tracking dashboard
-- Review scheduling and reminders
-- Advanced spaced repetition algorithm customization
-- Mobile app (future consideration)
-
----
+- [ ] User authentication
+- [ ] Unit and integration testing coverage
+- [ ] Frontend web client (React)
+- [ ] In-app statistics & progress tracking dashboard
+- [ ] Review scheduling and reminders
+- [ ] Advanced spaced repetition algorithm customization
+- [ ] Mobile app (future consideration)
 
 ## 📖 Learn More
 
@@ -91,8 +79,6 @@ A modular, scalable flashcard-style vocabulary learning system built with **ASP.
 - [Clean Architecture Explained](https://github.com/jasontaylordev/CleanArchitecture)
 - [Domain-Driven Design Reference](https://domainlanguage.com/ddd/reference/)
 - [SM-2 Algorithm Explained](https://www.supermemo.com/en/archives1990-2015/english/ol/sm2)
-
----
 
 ## 🔖 License
 

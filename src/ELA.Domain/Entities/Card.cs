@@ -4,32 +4,26 @@ public class Card : BaseAuditableEntity
 {
     public string UserId { get; private set; } = string.Empty;
     public string DefinitionId { get; private set; } = string.Empty;
+    public Definition Definition { get; private set; }
+
 
     // SM-2
     public double EaseFactor { get; private set; } = 2.5;
-    public int Interval { get; private set; }
-    public int Repetition { get; private set; }
+    public int Interval { get; private set; } = 0;
+    public int Repetition { get; private set; } = 0;
     public DateTimeOffset NextReview { get; private set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? LastReview { get; private set; }
-    public bool Suspended { get; private set; }
+    public bool Suspended { get; private set; } = false;
 
     private readonly List<ReviewLog> _reviewLogs = new();
     public IReadOnlyCollection<ReviewLog> ReviewLogs => _reviewLogs.AsReadOnly();
 
-    public Card(string definitionId, string userId)
+    public Card(string definitionId, string userId, Definition definition)
     {
-        if (string.IsNullOrWhiteSpace(definitionId))
-        {
-            throw new ArgumentException("Definition ID cannot be null or empty.", nameof(definitionId));
-        }
-
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-        }
-
+        ValidateInputs(definitionId, userId);
         DefinitionId = definitionId;
         UserId = userId;
+        Definition = definition;
     }
 
     public void Review(int qualityRating, DateTimeOffset reviewDate)
@@ -88,4 +82,17 @@ public class Card : BaseAuditableEntity
 
     public void Suspend() => Suspended = true;
     public void Activate() => Suspended = false;
+
+    private static void ValidateInputs(string definitionId, string userId)
+    {
+        if (string.IsNullOrWhiteSpace(definitionId))
+        {
+            throw new ArgumentException("Definition ID cannot be null or empty.", nameof(definitionId));
+        }
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+        }
+    }
 }

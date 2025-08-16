@@ -26,7 +26,7 @@ public class Vocabulary : BaseAuditableEntity
         UpdateLastModified();
     }
 
-    public Definition AddDefinition(string meaning, string partOfSpeech)
+    public Definition AddDefinition(string meaning, PartOfSpeech partOfSpeech)
     {
         var definition = new Definition(meaning, partOfSpeech);
         _definitions.Add(definition);
@@ -43,6 +43,18 @@ public class Vocabulary : BaseAuditableEntity
         }
 
         _definitions.Remove(definition);
+        UpdateLastModified();
+    }
+
+    public void UpdateDefinition(Guid definitionId, string newMeaning, PartOfSpeech newPartOfSpeech)
+    {
+        var definition = _definitions.FirstOrDefault(d => d.Id == definitionId);
+        if (definition == null)
+        {
+            throw new ArgumentException("Definition not found.", nameof(definitionId));
+        }
+
+        definition.Update(newMeaning, newPartOfSpeech);
         UpdateLastModified();
     }
 

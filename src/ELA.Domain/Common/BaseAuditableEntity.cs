@@ -2,8 +2,15 @@
 
 public abstract class BaseAuditableEntity : BaseEntity
 {
-    public DateTimeOffset Created { get; private set; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset LastModified { get; private set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset Created { get; private set; }
+    public DateTimeOffset LastModified { get; private set; }
+
+    protected BaseAuditableEntity()
+    {
+        var now = DateTimeOffset.UtcNow;
+        Created = now;
+        LastModified = now;
+    }
 
     public void UpdateLastModified()
     {
