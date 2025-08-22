@@ -2,8 +2,8 @@ namespace ELA;
 
 public class Card : BaseAuditableEntity
 {
-    public string UserId { get; private set; } = string.Empty;
-    public string DefinitionId { get; private set; } = string.Empty;
+    public Guid UserId { get; private set; } = Guid.Empty;
+    public Guid DefinitionId { get; private set; } = Guid.Empty;
     public Definition Definition { get; private set; }
 
 
@@ -18,10 +18,9 @@ public class Card : BaseAuditableEntity
     private readonly List<ReviewLog> _reviewLogs = new();
     public IReadOnlyCollection<ReviewLog> ReviewLogs => _reviewLogs.AsReadOnly();
 
-    public Card(string definitionId, string userId, Definition definition)
+    public Card(Guid userId, Definition definition)
     {
-        ValidateInputs(definitionId, userId);
-        DefinitionId = definitionId;
+        ValidateInputs(definition.Id, userId);
         UserId = userId;
         Definition = definition;
     }
@@ -83,16 +82,16 @@ public class Card : BaseAuditableEntity
     public void Suspend() => Suspended = true;
     public void Activate() => Suspended = false;
 
-    private static void ValidateInputs(string definitionId, string userId)
+    private static void ValidateInputs(Guid definitionId, Guid userId)
     {
-        if (string.IsNullOrWhiteSpace(definitionId))
+        if (definitionId == Guid.Empty)
         {
-            throw new ArgumentException("Definition ID cannot be null or empty.", nameof(definitionId));
+            throw new ArgumentException("Definition ID cannot be empty.", nameof(definitionId));
         }
 
-        if (string.IsNullOrWhiteSpace(userId))
+        if (userId == Guid.Empty)
         {
-            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+            throw new ArgumentException("User ID cannot be empty.", nameof(userId));
         }
     }
 }

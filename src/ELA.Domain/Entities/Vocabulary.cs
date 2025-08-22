@@ -6,7 +6,7 @@ public class Vocabulary : BaseAuditableEntity
     public string Text { get; private set; }
     public string IPA { get; private set; }
 
-    private readonly List<Definition> _definitions = new();
+    private readonly List<Definition> _definitions = [];
     public IReadOnlyList<Definition> Definitions => _definitions.AsReadOnly();
 
     public Vocabulary(string text, string ipa)
@@ -26,9 +26,9 @@ public class Vocabulary : BaseAuditableEntity
         UpdateLastModified();
     }
 
-    public Definition AddDefinition(string meaning, PartOfSpeech partOfSpeech)
+    public Definition AddDefinition(string meaning, string translation, PartOfSpeech partOfSpeech)
     {
-        var definition = new Definition(meaning, partOfSpeech);
+        var definition = new Definition(meaning, translation, partOfSpeech, this);
         _definitions.Add(definition);
         UpdateLastModified();
         return definition;
@@ -46,7 +46,7 @@ public class Vocabulary : BaseAuditableEntity
         UpdateLastModified();
     }
 
-    public void UpdateDefinition(Guid definitionId, string newMeaning, PartOfSpeech newPartOfSpeech)
+    public void UpdateDefinition(Guid definitionId, string newMeaning, string newTranslation, PartOfSpeech newPartOfSpeech)
     {
         var definition = _definitions.FirstOrDefault(d => d.Id == definitionId);
         if (definition == null)
@@ -54,7 +54,7 @@ public class Vocabulary : BaseAuditableEntity
             throw new ArgumentException("Definition not found.", nameof(definitionId));
         }
 
-        definition.Update(newMeaning, newPartOfSpeech);
+        definition.Update(newMeaning, newTranslation, newPartOfSpeech);
         UpdateLastModified();
     }
 
@@ -65,9 +65,13 @@ public class Vocabulary : BaseAuditableEntity
             throw new ArgumentException("Text cannot be null or empty.", nameof(text));
         }
 
+        if (text.Length > 255) throw new ArgumentException("Text too long", nameof(text));
+
         if (string.IsNullOrWhiteSpace(ipa))
         {
             throw new ArgumentException("IPA cannot be null or empty.", nameof(ipa));
         }
+
+        if (ipa.Length > 50) throw new ArgumentException("IPA too long", nameof(ipa));
     }
 }

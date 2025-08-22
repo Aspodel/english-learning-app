@@ -4,10 +4,10 @@ public sealed class PartOfSpeech : ValueObject
 {
     public string Value { get; }
 
-    private static readonly HashSet<string> AllowedValues = new()
-    {
+    private static readonly HashSet<string> AllowedValues =
+    [
         "Noun", "Verb", "Adjective", "Adverb", "Pronoun", "Preposition", "Conjunction", "Interjection", "Determiner"
-    };
+    ];
 
     private PartOfSpeech(string value)
     {

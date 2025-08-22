@@ -25,10 +25,13 @@ public class Example : BaseEntity
         {
             throw new ArgumentException("Text cannot be null or empty.", nameof(text));
         }
+        if (text.Length > 500) throw new ArgumentException("Text too long", nameof(text));
 
         if (string.IsNullOrWhiteSpace(translation))
         {
             throw new ArgumentException("Translation cannot be null or empty.", nameof(translation));
         }
+
+        if (translation.Length > 500) throw new ArgumentException("Translation too long", nameof(translation));
     }
 }

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ELA.Application\ELA.Application.csproj" />
+    <ProjectReference Include="..\ELA.Infrastructure\ELA.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

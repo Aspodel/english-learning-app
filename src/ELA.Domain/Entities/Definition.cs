@@ -2,32 +2,41 @@
 
 public class Definition : BaseEntity
 {
-    public string Meaning { get; set; }
-    public PartOfSpeech PartOfSpeech { get; set; }
+    public string Meaning { get; private set; }
+    public string Translation { get; private set; }
+    public PartOfSpeech PartOfSpeech { get; private set; }
+
+
+    public Guid VocabularyId => Vocabulary.Id;
+    public Vocabulary Vocabulary { get; private set; }
 
     public Card? Card { get; private set; }
+
     private readonly List<Example> _examples = new();
     public IReadOnlyList<Example> Examples => _examples.AsReadOnly();
 
-    public Definition(string meaning, PartOfSpeech partOfSpeech)
+
+    public Definition(string meaning, string translation, PartOfSpeech partOfSpeech, Vocabulary vocabulary)
     {
-        ValidateInputs(meaning, partOfSpeech);
+        ValidateInputs(meaning, translation);
         Meaning = meaning;
+        Translation = translation;
+        PartOfSpeech = partOfSpeech;
+        Vocabulary = vocabulary;
+    }
+
+    public void Update(string meaning, string translation, PartOfSpeech partOfSpeech)
+    {
+        ValidateInputs(meaning, translation);
+        Meaning = meaning;
+        Translation = translation;
         PartOfSpeech = partOfSpeech;
     }
 
-    public void Update(string meaning, PartOfSpeech partOfSpeech)
-    {
-        ValidateInputs(meaning, partOfSpeech);
-        Meaning = meaning;
-        PartOfSpeech = partOfSpeech;
-    }
-
-    public Example AddExample(string text, string translation)
+    public void AddExample(string text, string translation)
     {
         var example = new Example(text, translation);
         _examples.Add(example);
-        return example;
     }
 
     public void RemoveExample(Guid exampleId)
@@ -52,14 +61,14 @@ public class Definition : BaseEntity
         example.Update(newText, newTranslation);
     }
 
-    public void AddCard(string userId)
+    public void AddCard(Guid userId)
     {
         if (Card != null)
         {
             throw new InvalidOperationException("This definition is already associated with a card.");
         }
 
-        Card = new Card(Id.ToString(), userId, this);
+        Card = new Card(userId, this);
     }
 
     public void RemoveCard()
@@ -72,16 +81,16 @@ public class Definition : BaseEntity
         Card = null;
     }
 
-    private static void ValidateInputs(string meaning, PartOfSpeech partOfSpeech)
+    private static void ValidateInputs(string meaning, string translation)
     {
         if (string.IsNullOrWhiteSpace(meaning))
         {
             throw new ArgumentException("Meaning cannot be null or empty.", nameof(meaning));
         }
 
-        if (partOfSpeech == null)
+        if (string.IsNullOrWhiteSpace(translation))
         {
-            throw new ArgumentException("Part of speech cannot be null.", nameof(partOfSpeech));
+            throw new ArgumentException("Translation cannot be null or empty.", nameof(translation));
         }
     }
 }
