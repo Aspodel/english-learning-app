@@ -1,18 +1,21 @@
 namespace ELA;
 
-public record AddCardDto
+public sealed record AddCardDto
 (
     int QualityRating
 );
 
-public record CardDto
+public sealed record CardDto
 (
     Guid Id,
     Guid DefinitionId,
+    Guid UserId,
     int Interval,
     double EaseFactor,
-    int Repetitions,
-    DateTimeOffset NextReview
+    int Repetition,
+    DateTimeOffset NextReview,
+    DateTimeOffset? LastReview
 );
 
-public record ReviewCardDto(int QualityRating);
+
+public sealed record ReviewCardDto(int QualityRating, DateTimeOffset? ReviewDate = null);

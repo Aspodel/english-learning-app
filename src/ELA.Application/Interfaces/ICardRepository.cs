@@ -2,11 +2,10 @@ namespace ELA;
 
 public interface ICardRepository
 {
-    Task<Card?> GetByIdAsync(Guid id);
-    Task<IEnumerable<Card>> GetAllAsync();
-    Task AddAsync(Card card);
-    Task UpdateAsync(Card card);
-    Task DeleteAsync(Guid id);
-
-    Task<IEnumerable<Card>> GetByUserIdAsync(Guid userId);
+    Task<Card?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Card>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task AddAsync(Card card, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Card card, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Card>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 }

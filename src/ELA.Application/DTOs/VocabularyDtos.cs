@@ -1,12 +1,12 @@
 namespace ELA;
 
-public record AddVocabularyDto
+public sealed record AddVocabularyDto
 (
     string Text,
     string IPA
 );
 
-public record VocabularyDto
+public sealed record VocabularyDto
 (
     Guid Id,
     string Text,

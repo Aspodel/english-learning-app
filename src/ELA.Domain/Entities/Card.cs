@@ -25,58 +25,35 @@ public class Card : BaseAuditableEntity
         Definition = definition;
     }
 
-    public void Review(int qualityRating, DateTimeOffset reviewDate)
+    public void AddReviewResult(int qualityRating, DateTimeOffset reviewDate,
+        int newInterval, double newEaseFactor, int newRepetition, DateTimeOffset nextReview)
     {
-        if (Suspended)
-        {
-            throw new InvalidOperationException("Cannot review a suspended card.");
-        }
+        if (Suspended) throw new InvalidOperationException("Cannot review a suspended card.");
+        if (qualityRating < 0 || qualityRating > 5) throw new ArgumentOutOfRangeException(nameof(qualityRating));
 
-        if (qualityRating < 0 || qualityRating > 5)
-        {
-            throw new ArgumentOutOfRangeException(nameof(qualityRating), "Quality rating must be between 0 and 5.");
-        }
-
-        // Save previous state for ReviewLog
         var previousInterval = Interval;
         var previousEaseFactor = EaseFactor;
         var previousRepetition = Repetition;
 
-        // SM-2 algorithm logic for spaced repetition
-        if (qualityRating >= 3)
-        {
-            if (Repetition == 0)
-                Interval = 1;
-            else if (Repetition == 1)
-                Interval = 6;
-            else
-                Interval = (int)Math.Round(Interval * EaseFactor);
-
-            Repetition++;
-        }
-        else
-        {
-            Repetition = 0;
-            Interval = 1;
-        }
-
-        EaseFactor = Math.Max(1.3, EaseFactor + (0.1 - (5 - qualityRating) * (0.08 + (5 - qualityRating) * 0.02)));
+        Interval = newInterval;
+        EaseFactor = Math.Max(1.3, newEaseFactor);
+        Repetition = newRepetition;
         LastReview = reviewDate;
-        NextReview = reviewDate.AddDays(Interval);
+        NextReview = nextReview;
 
-        // Add a ReviewLog entry
-        var reviewLog = new ReviewLog(
+        var log = new ReviewLog(
             cardId: Id,
             reviewDate: reviewDate,
             qualityRating: qualityRating,
             previousInterval: previousInterval,
             previousEaseFactor: previousEaseFactor,
             previousRepetition: previousRepetition,
-            newInterval: Interval,
-            newEaseFactor: EaseFactor,
-            newRepetition: Repetition);
+            newInterval: newInterval,
+            newEaseFactor: newEaseFactor,
+            newRepetition: newRepetition);
 
-        _reviewLogs.Add(reviewLog);
+        _reviewLogs.Add(log);
+        UpdateLastModified();
     }
 
     public void Suspend() => Suspended = true;

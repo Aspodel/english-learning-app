@@ -1,12 +1,12 @@
 namespace ELA;
 
-public record AddExampleDto
+public sealed record AddExampleDto
 (
     string Text,
     string Translation
 );
 
-public record ExampleDto
+public sealed record ExampleDto
 (
     Guid Id,
     string Text,

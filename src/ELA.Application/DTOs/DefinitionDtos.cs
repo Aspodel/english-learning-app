@@ -1,13 +1,13 @@
 namespace ELA;
 
-public record AddDefinitionDto
+public sealed record AddDefinitionDto
 (
     string Meaning,
     string Translation,
     PartOfSpeech PartOfSpeech
 );
 
-public record DefinitionDto
+public sealed record DefinitionDto
 (
     Guid Id,
     string Meaning,
