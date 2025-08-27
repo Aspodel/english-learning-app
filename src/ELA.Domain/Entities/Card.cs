@@ -53,7 +53,6 @@ public class Card : BaseAuditableEntity
             newRepetition: newRepetition);
 
         _reviewLogs.Add(log);
-        UpdateLastModified();
     }
 
     public void Suspend() => Suspended = true;

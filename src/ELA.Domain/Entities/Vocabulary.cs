@@ -19,18 +19,14 @@ public class Vocabulary : BaseAuditableEntity
     public void Update(string text, string ipa)
     {
         ValidateInputs(text, ipa);
-
         Text = text;
         IPA = ipa;
-
-        UpdateLastModified();
     }
 
     public Definition AddDefinition(string meaning, string translation, PartOfSpeech partOfSpeech)
     {
         var definition = new Definition(meaning, translation, partOfSpeech, this);
         _definitions.Add(definition);
-        UpdateLastModified();
         return definition;
     }
 
@@ -43,7 +39,6 @@ public class Vocabulary : BaseAuditableEntity
         }
 
         _definitions.Remove(definition);
-        UpdateLastModified();
     }
 
     public void UpdateDefinition(Guid definitionId, string newMeaning, string newTranslation, PartOfSpeech newPartOfSpeech)
@@ -55,7 +50,6 @@ public class Vocabulary : BaseAuditableEntity
         }
 
         definition.Update(newMeaning, newTranslation, newPartOfSpeech);
-        UpdateLastModified();
     }
 
     private static void ValidateInputs(string text, string ipa)
