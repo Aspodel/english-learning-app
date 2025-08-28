@@ -6,22 +6,20 @@ public class Definition : BaseEntity
     public string Translation { get; private set; }
     public PartOfSpeech PartOfSpeech { get; private set; }
 
-
-    public Guid VocabularyId => Vocabulary.Id;
+    public Guid VocabularyId { get; private set; }
     public Vocabulary Vocabulary { get; private set; }
 
-    public Card? Card { get; private set; }
-
-    private readonly List<Example> _examples = new();
+    private readonly List<Example> _examples = [];
     public IReadOnlyList<Example> Examples => _examples.AsReadOnly();
 
 
-    public Definition(string meaning, string translation, PartOfSpeech partOfSpeech, Vocabulary vocabulary)
+    public Definition(string meaning, string translation, PartOfSpeech partOfSpeech, Guid vocabularyId, Vocabulary vocabulary)
     {
         ValidateInputs(meaning, translation);
         Meaning = meaning;
         Translation = translation;
         PartOfSpeech = partOfSpeech;
+        VocabularyId = vocabularyId;
         Vocabulary = vocabulary;
     }
 
@@ -59,26 +57,6 @@ public class Definition : BaseEntity
         }
 
         example.Update(newText, newTranslation);
-    }
-
-    public void AddCard(Guid userId)
-    {
-        if (Card != null)
-        {
-            throw new InvalidOperationException("This definition is already associated with a card.");
-        }
-
-        Card = new Card(userId, this);
-    }
-
-    public void RemoveCard()
-    {
-        if (Card == null)
-        {
-            throw new InvalidOperationException("This definition is not associated with any card.");
-        }
-
-        Card = null;
     }
 
     private static void ValidateInputs(string meaning, string translation)

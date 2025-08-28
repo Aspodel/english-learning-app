@@ -2,10 +2,11 @@ namespace ELA;
 
 public class Card : BaseAuditableEntity
 {
-    public Guid UserId { get; private set; } = Guid.Empty;
-    public Guid DefinitionId { get; private set; } = Guid.Empty;
-    public Definition Definition { get; private set; }
+    public string Front { get; private set; }
+    public string Back { get; private set; }
 
+    public Guid DeckId => Deck.Id;
+    public Deck Deck { get; private set; }
 
     // SM-2
     public double EaseFactor { get; private set; } = 2.5;
@@ -15,14 +16,25 @@ public class Card : BaseAuditableEntity
     public DateTimeOffset? LastReview { get; private set; }
     public bool Suspended { get; private set; } = false;
 
-    private readonly List<ReviewLog> _reviewLogs = new();
+    private readonly List<ReviewLog> _reviewLogs = [];
     public IReadOnlyCollection<ReviewLog> ReviewLogs => _reviewLogs.AsReadOnly();
 
-    public Card(Guid userId, Definition definition)
+    public Card(string front, string back, Deck deck)
     {
-        ValidateInputs(definition.Id, userId);
-        UserId = userId;
-        Definition = definition;
+        Front = front;
+        Back = back;
+        Deck = deck;
+    }
+
+    public void Update(string newFront, string newBack)
+    {
+        if (string.IsNullOrWhiteSpace(newFront))
+            throw new ArgumentException("Card front cannot be empty.", nameof(newFront));
+        if (string.IsNullOrWhiteSpace(newBack))
+            throw new ArgumentException("Card back cannot be empty.", nameof(newBack));
+
+        Front = newFront;
+        Back = newBack;
     }
 
     public void AddReviewResult(int qualityRating, DateTimeOffset reviewDate,
@@ -57,17 +69,4 @@ public class Card : BaseAuditableEntity
 
     public void Suspend() => Suspended = true;
     public void Activate() => Suspended = false;
-
-    private static void ValidateInputs(Guid definitionId, Guid userId)
-    {
-        if (definitionId == Guid.Empty)
-        {
-            throw new ArgumentException("Definition ID cannot be empty.", nameof(definitionId));
-        }
-
-        if (userId == Guid.Empty)
-        {
-            throw new ArgumentException("User ID cannot be empty.", nameof(userId));
-        }
-    }
 }

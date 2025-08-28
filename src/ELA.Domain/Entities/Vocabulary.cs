@@ -6,14 +6,19 @@ public class Vocabulary : BaseAuditableEntity
     public string Text { get; private set; }
     public string IPA { get; private set; }
 
+    public Guid UserId { get; private set; }
+    public User User { get; private set; }
+
     private readonly List<Definition> _definitions = [];
     public IReadOnlyList<Definition> Definitions => _definitions.AsReadOnly();
 
-    public Vocabulary(string text, string ipa)
+    public Vocabulary(string text, string ipa, Guid userId, User user)
     {
         ValidateInputs(text, ipa);
         Text = text;
         IPA = ipa;
+        UserId = userId;
+        User = user;
     }
 
     public void Update(string text, string ipa)
@@ -25,7 +30,7 @@ public class Vocabulary : BaseAuditableEntity
 
     public Definition AddDefinition(string meaning, string translation, PartOfSpeech partOfSpeech)
     {
-        var definition = new Definition(meaning, translation, partOfSpeech, this);
+        var definition = new Definition(meaning, translation, partOfSpeech, Id, this);
         _definitions.Add(definition);
         return definition;
     }
