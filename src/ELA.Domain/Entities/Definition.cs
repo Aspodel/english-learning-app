@@ -1,19 +1,19 @@
 ﻿namespace ELA;
 
-public class Definition : BaseEntity
+public class Definition : BaseEntity<int>
 {
     public string Meaning { get; private set; }
     public string Translation { get; private set; }
     public PartOfSpeech PartOfSpeech { get; private set; }
 
-    public Guid VocabularyId { get; private set; }
+    public int VocabularyId { get; private set; }
     public Vocabulary Vocabulary { get; private set; }
 
     private readonly List<Example> _examples = [];
     public IReadOnlyList<Example> Examples => _examples.AsReadOnly();
 
 
-    public Definition(string meaning, string translation, PartOfSpeech partOfSpeech, Guid vocabularyId, Vocabulary vocabulary)
+    public Definition(string meaning, string translation, PartOfSpeech partOfSpeech, int vocabularyId, Vocabulary vocabulary)
     {
         ValidateInputs(meaning, translation);
         Meaning = meaning;
@@ -37,7 +37,7 @@ public class Definition : BaseEntity
         _examples.Add(example);
     }
 
-    public void RemoveExample(Guid exampleId)
+    public void RemoveExample(int exampleId)
     {
         var example = _examples.FirstOrDefault(e => e.Id == exampleId);
         if (example == null)
@@ -48,7 +48,7 @@ public class Definition : BaseEntity
         _examples.Remove(example);
     }
 
-    public void UpdateExample(Guid exampleId, string newText, string newTranslation)
+    public void UpdateExample(int exampleId, string newText, string newTranslation)
     {
         var example = _examples.FirstOrDefault(e => e.Id == exampleId);
         if (example == null)

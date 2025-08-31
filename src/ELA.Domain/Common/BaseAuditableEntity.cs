@@ -1,6 +1,6 @@
 ﻿namespace ELA;
 
-public abstract class BaseAuditableEntity : BaseEntity
+public abstract class BaseAuditableEntity<T> : BaseEntity<T>
 {
     public DateTimeOffset Created { get; set; }
 

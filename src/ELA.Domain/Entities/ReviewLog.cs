@@ -1,8 +1,8 @@
 namespace ELA;
 
-public class ReviewLog : BaseEntity
+public class ReviewLog : BaseEntity<int>
 {
-    public Guid CardId { get; private set; }
+    public int CardId { get; private set; }
     public DateTimeOffset ReviewDate { get; private set; } = DateTimeOffset.UtcNow;
 
     // Review result
@@ -18,7 +18,7 @@ public class ReviewLog : BaseEntity
     public double NewEaseFactor { get; private set; }
     public int NewRepetition { get; private set; }
 
-    public ReviewLog(Guid cardId, DateTimeOffset reviewDate, int qualityRating,
+    public ReviewLog(int cardId, DateTimeOffset reviewDate, int qualityRating,
         int previousInterval, double previousEaseFactor, int previousRepetition,
         int newInterval, double newEaseFactor, int newRepetition)
     {
@@ -35,10 +35,10 @@ public class ReviewLog : BaseEntity
         NewRepetition = newRepetition;
     }
 
-    private static void ValidateInputs(Guid cardId, int qualityRating, int previousInterval, double previousEaseFactor, int previousRepetition, int newInterval, double newEaseFactor, int newRepetition)
+    private static void ValidateInputs(int cardId, int qualityRating, int previousInterval, double previousEaseFactor, int previousRepetition, int newInterval, double newEaseFactor, int newRepetition)
     {
-        if (cardId == Guid.Empty)
-            throw new ArgumentException("CardId cannot be empty.", nameof(cardId));
+        if (cardId <= 0)
+            throw new ArgumentException("CardId must be positive.", nameof(cardId));
         if (qualityRating < 0 || qualityRating > 5)
             throw new ArgumentOutOfRangeException(nameof(qualityRating), "QualityRating must be between 0 and 5.");
         if (previousInterval < 0)

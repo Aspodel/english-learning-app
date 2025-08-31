@@ -1,6 +1,6 @@
 namespace ELA;
 
-public abstract class BaseEntity
+public abstract class BaseEntity<T>
 {
-    public Guid Id { get; private init; } = Guid.NewGuid();
+    public T Id { get; private init; } = default!;
 }
