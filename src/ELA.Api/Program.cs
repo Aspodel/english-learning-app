@@ -1,16 +1,21 @@
+using ELA;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+builder.AddApplicationServices();
+builder.AddInfrastructureServices();
+builder.AddWebApiServices();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    await app.InitialiseDatabaseAsync();
+
     app.MapOpenApi();
     app.MapScalarApiReference(
         options =>
@@ -43,7 +48,11 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+app.UseExceptionHandler(options => { });
+
 app.Run();
+
+public partial class Program { }
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {

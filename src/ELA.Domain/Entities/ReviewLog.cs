@@ -1,6 +1,6 @@
 namespace ELA;
 
-public class ReviewLog : BaseEntity<int>
+public class ReviewLog : BaseEntity
 {
     public int CardId { get; private set; }
     public DateTimeOffset ReviewDate { get; private set; } = DateTimeOffset.UtcNow;

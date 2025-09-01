@@ -1,26 +1,32 @@
 ﻿namespace ELA;
 
-public class Definition : BaseEntity<int>
+public class Definition : BaseEntity
 {
     public string Meaning { get; private set; }
     public string Translation { get; private set; }
     public PartOfSpeech PartOfSpeech { get; private set; }
 
     public int VocabularyId { get; private set; }
-    public Vocabulary Vocabulary { get; private set; }
+    public Vocabulary? Vocabulary { get; private set; }
 
     private readonly List<Example> _examples = [];
     public IReadOnlyList<Example> Examples => _examples.AsReadOnly();
 
+    private Definition()
+    {
+        Meaning = string.Empty;
+        Translation = string.Empty;
+        PartOfSpeech = PartOfSpeech.From("Noun");
+        VocabularyId = 0;
+    }
 
-    public Definition(string meaning, string translation, PartOfSpeech partOfSpeech, int vocabularyId, Vocabulary vocabulary)
+    public Definition(string meaning, string translation, PartOfSpeech partOfSpeech, int vocabularyId)
     {
         ValidateInputs(meaning, translation);
         Meaning = meaning;
         Translation = translation;
         PartOfSpeech = partOfSpeech;
         VocabularyId = vocabularyId;
-        Vocabulary = vocabulary;
     }
 
     public void Update(string meaning, string translation, PartOfSpeech partOfSpeech)

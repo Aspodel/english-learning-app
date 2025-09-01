@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ELA;
 
@@ -9,9 +7,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
     private readonly ICurrentUser _user;
     private readonly TimeProvider _dateTime;
 
-    public AuditableEntityInterceptor(
-        ICurrentUser user,
-        TimeProvider dateTime)
+    public AuditableEntityInterceptor(ICurrentUser user, TimeProvider dateTime)
     {
         _user = user;
         _dateTime = dateTime;

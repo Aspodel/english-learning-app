@@ -1,6 +1,6 @@
 ﻿namespace ELA;
 
-public class Example : BaseEntity<int>
+public class Example : BaseEntity
 {
     public string Text { get; private set; }
     public string Translation { get; private set; }

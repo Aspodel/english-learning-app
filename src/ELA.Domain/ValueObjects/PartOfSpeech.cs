@@ -2,6 +2,11 @@ namespace ELA;
 
 public sealed class PartOfSpeech : ValueObject
 {
+    private PartOfSpeech()
+    {
+        Value = string.Empty;
+    }
+
     public string Value { get; }
 
     private static readonly HashSet<string> AllowedValues =

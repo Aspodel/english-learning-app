@@ -1,16 +1,22 @@
 ﻿namespace ELA;
 
-public class Vocabulary : BaseAuditableEntity<int>
+public class Vocabulary : BaseAuditableEntity
 {
 
     public string Text { get; private set; }
     public string IPA { get; private set; }
 
     public string UserId { get; private set; }
-    public User? User { get; private set; }
 
     private readonly List<Definition> _definitions = [];
     public IReadOnlyList<Definition> Definitions => _definitions.AsReadOnly();
+
+    private Vocabulary()
+    {
+        Text = string.Empty;
+        IPA = string.Empty;
+        UserId = string.Empty;
+    }
 
     public Vocabulary(string text, string ipa, string userId)
     {
@@ -19,7 +25,7 @@ public class Vocabulary : BaseAuditableEntity<int>
         IPA = ipa;
         UserId = userId;
     }
-
+    
     public void Update(string text, string ipa)
     {
         ValidateInputs(text, ipa);
@@ -29,7 +35,7 @@ public class Vocabulary : BaseAuditableEntity<int>
 
     public Definition AddDefinition(string meaning, string translation, PartOfSpeech partOfSpeech)
     {
-        var definition = new Definition(meaning, translation, partOfSpeech, Id, this);
+        var definition = new Definition(meaning, translation, partOfSpeech, Id);
         _definitions.Add(definition);
         return definition;
     }

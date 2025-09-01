@@ -1,22 +1,20 @@
 namespace ELA;
 
-public class Deck : BaseAuditableEntity<int>
+public class Deck : BaseAuditableEntity
 {
     public string Name { get; private set; }
 
     public string UserId { get; private set; }
-    public User User { get; private set; }
 
     private readonly List<Card> _cards = [];
     public IReadOnlyCollection<Card> Cards => _cards.AsReadOnly();
 
-    public Deck(string name, string userId, User user)
+    public Deck(string name, string userId)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Deck name cannot be empty.", nameof(name));
         Name = name;
         UserId = userId;
-        User = user;
     }
 
     public void Rename(string newName)
@@ -28,7 +26,7 @@ public class Deck : BaseAuditableEntity<int>
 
     public Card AddCard(string front, string back)
     {
-        var card = new Card(front, back, Id, this);
+        var card = new Card(front, back, Id);
         _cards.Add(card);
         return card;
     }

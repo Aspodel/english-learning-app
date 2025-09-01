@@ -1,12 +1,12 @@
 namespace ELA;
 
-public class Card : BaseAuditableEntity<int>
+public class Card : BaseAuditableEntity
 {
     public string Front { get; private set; }
     public string Back { get; private set; }
 
     public int DeckId { get; private set; }
-    public Deck Deck { get; private set; }
+    public Deck? Deck { get; private set; }
 
     // SM-2
     public double EaseFactor { get; private set; } = 2.5;
@@ -19,11 +19,10 @@ public class Card : BaseAuditableEntity<int>
     private readonly List<ReviewLog> _reviewLogs = [];
     public IReadOnlyCollection<ReviewLog> ReviewLogs => _reviewLogs.AsReadOnly();
 
-    public Card(string front, string back, int deckId, Deck deck)
+    public Card(string front, string back, int deckId)
     {
         Front = front;
         Back = back;
-        Deck = deck;
         DeckId = deckId;
     }
 
