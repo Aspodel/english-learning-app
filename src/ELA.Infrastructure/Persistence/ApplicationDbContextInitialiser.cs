@@ -67,42 +67,78 @@ public class ApplicationDbContextInitialiser
     public async Task TrySeedAsync()
     {
         // Default roles
-        // var administratorRole = new IdentityRole(Roles.Administrator);
+        var administratorRole = new IdentityRole(Roles.Administrator);
 
-        // if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
-        // {
-        //     await _roleManager.CreateAsync(administratorRole);
-        // }
+        if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
+        {
+            await _roleManager.CreateAsync(administratorRole);
+        }
 
-        // // Default users
-        // var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
+        // Default users
+        var administrator = new ApplicationUser { UserName = "admin", Email = "administrator@localhost" };
 
-        // if (_userManager.Users.All(u => u.UserName != administrator.UserName))
-        // {
-        //     await _userManager.CreateAsync(administrator, "Administrator1!");
-        //     if (!string.IsNullOrWhiteSpace(administratorRole.Name))
-        //     {
-        //         await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
-        //     }
-        // }
+        if (_userManager.Users.All(u => u.UserName != administrator.UserName))
+        {
+            await _userManager.CreateAsync(administrator, "Administrator1!");
+            if (!string.IsNullOrWhiteSpace(administratorRole.Name))
+            {
+                await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
+            }
+        }
 
-        // // Default data
-        // // Seed, if necessary
-        // if (!_context.TodoLists.Any())
-        // {
-        //     _context.TodoLists.Add(new TodoList
-        //     {
-        //         Title = "Todo List",
-        //         Items =
-        //         {
-        //             new TodoItem { Title = "Make a todo list 📃" },
-        //             new TodoItem { Title = "Check off the first item ✅" },
-        //             new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
-        //             new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
-        //         }
-        //     });
+        var user = new ApplicationUser { UserName = "user", Email = "user@localhost" };
 
-        //     await _context.SaveChangesAsync();
-        // }
+        if (_userManager.Users.All(u => u.UserName != user.UserName))
+        {
+            await _userManager.CreateAsync(user, "User1!");
+        }
+
+        // Default data
+        if (!_context.Vocabularies.Any())
+        {
+            var vocab1 = new Vocabulary("apple", "ˈæp.əl", user.Id);
+            vocab1.AddDefinition("a round fruit", "quả táo", PartOfSpeech.From("Noun"))
+                  .AddExample("I ate an apple.", "Tôi đã ăn một quả táo.");
+
+            var vocab2 = new Vocabulary("run", "rʌn", user.Id);
+            vocab2.AddDefinition("to move quickly on foot", "chạy", PartOfSpeech.From("Verb"))
+                  .AddExample("She runs every morning.", "Cô ấy chạy mỗi sáng.");
+
+            var vocab3 = new Vocabulary("light", "laɪt", user.Id);
+            vocab3.AddDefinition("the natural agent that makes things visible", "ánh sáng", PartOfSpeech.From("Noun"))
+                  .AddExample("Light travels faster than sound.", "Ánh sáng di chuyển nhanh hơn âm thanh.");
+            vocab3.AddDefinition("not heavy", "nhẹ", PartOfSpeech.From("Adjective"))
+                  .AddExample("She wears light clothing in summer.", "Cô ấy mặc quần áo nhẹ vào mùa hè.");
+            vocab3.AddDefinition("to set fire to something", "đốt, thắp", PartOfSpeech.From("Verb"))
+                  .AddExample("They lit a fire in the fireplace.", "Họ nhóm lửa trong lò sưởi.");
+
+            var vocab4 = new Vocabulary("bank", "bæŋk", user.Id);
+            vocab4.AddDefinition("a financial institution", "ngân hàng", PartOfSpeech.From("Noun"))
+                  .AddExample("I deposited money in the bank.", "Tôi gửi tiền vào ngân hàng.");
+            vocab4.AddDefinition("the side of a river", "bờ sông", PartOfSpeech.From("Noun"))
+                  .AddExample("They sat on the river bank.", "Họ ngồi trên bờ sông.");
+
+            var vocab5 = new Vocabulary("play", "pleɪ", user.Id);
+            vocab5.AddDefinition("to engage in a game or activity", "chơi", PartOfSpeech.From("Verb"))
+                  .AddExample("The children are playing in the park.", "Bọn trẻ đang chơi trong công viên.");
+            vocab5.AddDefinition("a theatrical performance", "vở kịch", PartOfSpeech.From("Noun"))
+                  .AddExample("We watched a Shakespeare play.", "Chúng tôi xem một vở kịch của Shakespeare.");
+
+            _context.Vocabularies.AddRange(vocab1, vocab2, vocab3, vocab4, vocab5);
+        }
+
+        if (!_context.Decks.Any())
+        {
+            var deck = new Deck("English Basics", user.Id);
+            var card1 = deck.AddCard("Hello", "Xin chào");
+            var card2 = deck.AddCard("Goodbye", "Tạm biệt");
+
+            card1.AddReviewResult(5, DateTimeOffset.UtcNow, 1, 2.6, 1, DateTimeOffset.UtcNow.AddDays(1));
+            card2.AddReviewResult(4, DateTimeOffset.UtcNow, 1, 2.5, 1, DateTimeOffset.UtcNow.AddDays(1));
+
+            _context.Decks.Add(deck);
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

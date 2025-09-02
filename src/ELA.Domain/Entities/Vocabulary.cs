@@ -64,18 +64,7 @@ public class Vocabulary : BaseAuditableEntity
 
     private static void ValidateInputs(string text, string ipa)
     {
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            throw new ArgumentException("Text cannot be null or empty.", nameof(text));
-        }
-
-        if (text.Length > 255) throw new ArgumentException("Text too long", nameof(text));
-
-        if (string.IsNullOrWhiteSpace(ipa))
-        {
-            throw new ArgumentException("IPA cannot be null or empty.", nameof(ipa));
-        }
-
-        if (ipa.Length > 50) throw new ArgumentException("IPA too long", nameof(ipa));
+        Guard.Against.NullOrWhiteSpace(text, nameof(text));
+        Guard.Against.NullOrWhiteSpace(ipa, nameof(ipa));
     }
 }

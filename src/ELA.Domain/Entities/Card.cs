@@ -21,6 +21,9 @@ public class Card : BaseAuditableEntity
 
     public Card(string front, string back, int deckId)
     {
+        Guard.Against.NullOrWhiteSpace(front, nameof(front));
+        Guard.Against.NullOrWhiteSpace(back, nameof(back));
+
         Front = front;
         Back = back;
         DeckId = deckId;
@@ -28,10 +31,8 @@ public class Card : BaseAuditableEntity
 
     public void Update(string newFront, string newBack)
     {
-        if (string.IsNullOrWhiteSpace(newFront))
-            throw new ArgumentException("Card front cannot be empty.", nameof(newFront));
-        if (string.IsNullOrWhiteSpace(newBack))
-            throw new ArgumentException("Card back cannot be empty.", nameof(newBack));
+        Guard.Against.NullOrWhiteSpace(newFront, nameof(newFront));
+        Guard.Against.NullOrWhiteSpace(newBack, nameof(newBack));
 
         Front = newFront;
         Back = newBack;
@@ -41,7 +42,7 @@ public class Card : BaseAuditableEntity
         int newInterval, double newEaseFactor, int newRepetition, DateTimeOffset nextReview)
     {
         if (Suspended) throw new InvalidOperationException("Cannot review a suspended card.");
-        if (qualityRating < 0 || qualityRating > 5) throw new ArgumentOutOfRangeException(nameof(qualityRating));
+        Guard.Against.OutOfRange(qualityRating, nameof(qualityRating), 0, 5);
 
         var previousInterval = Interval;
         var previousEaseFactor = EaseFactor;

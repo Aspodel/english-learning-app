@@ -67,14 +67,7 @@ public class Definition : BaseEntity
 
     private static void ValidateInputs(string meaning, string translation)
     {
-        if (string.IsNullOrWhiteSpace(meaning))
-        {
-            throw new ArgumentException("Meaning cannot be null or empty.", nameof(meaning));
-        }
-
-        if (string.IsNullOrWhiteSpace(translation))
-        {
-            throw new ArgumentException("Translation cannot be null or empty.", nameof(translation));
-        }
+        Guard.Against.NullOrWhiteSpace(meaning, nameof(meaning));
+        Guard.Against.NullOrWhiteSpace(translation, nameof(translation));
     }
 }

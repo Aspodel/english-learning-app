@@ -1,4 +1,4 @@
-using ELA.Application.Vocabularies.Queries.GetVocabularyById;
+using ELA.Vocabularies.Dtos;
 
 namespace ELA;
 
@@ -16,32 +16,29 @@ public class GetVocabularyByIdQueryHandler : IRequestHandler<GetVocabularyByIdQu
     public async Task<VocabularyDto> Handle(GetVocabularyByIdQuery request, CancellationToken cancellationToken)
     {
         var vocabulary = await _context.Vocabularies
-            .AsNoTracking()
             .Include(v => v.Definitions)
                 .ThenInclude(d => d.Examples)
+            .AsNoTracking()
             .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
 
         Guard.Against.Null(vocabulary, nameof(vocabulary),
             $"Vocabulary with Id {request.Id} was not found.");
 
-        return new VocabularyDto
-        {
-            Id = vocabulary.Id,
-            Text = vocabulary.Text,
-            IPA = vocabulary.IPA,
-            Definitions = vocabulary.Definitions.Select(d => new DefinitionDto
-            {
-                Id = d.Id,
-                Meaning = d.Meaning,
-                Translation = d.Translation,
-                PartOfSpeech = d.PartOfSpeech,
-                Examples = d.Examples.Select(e => new ExampleDto
-                {
-                    Id = e.Id,
-                    Text = e.Text,
-                    Translation = e.Translation
-                }).ToList()
-            }).ToList()
-        };
+        return new VocabularyDto(
+            vocabulary.Id,
+            vocabulary.Text,
+            vocabulary.IPA,
+            vocabulary.Definitions.Select(d => new DefinitionDto(
+                d.Id,
+                d.Meaning,
+                d.Translation,
+                d.PartOfSpeech.ToString(),
+                d.Examples.Select(e => new ExampleDto(
+                    e.Id,
+                    e.Text,
+                    e.Translation
+                )).ToList()
+            )).ToList()
+        );
     }
 }

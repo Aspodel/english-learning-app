@@ -37,21 +37,18 @@ public class ReviewLog : BaseEntity
 
     private static void ValidateInputs(int cardId, int qualityRating, int previousInterval, double previousEaseFactor, int previousRepetition, int newInterval, double newEaseFactor, int newRepetition)
     {
-        if (cardId <= 0)
-            throw new ArgumentException("CardId must be positive.", nameof(cardId));
-        if (qualityRating < 0 || qualityRating > 5)
-            throw new ArgumentOutOfRangeException(nameof(qualityRating), "QualityRating must be between 0 and 5.");
-        if (previousInterval < 0)
-            throw new ArgumentOutOfRangeException(nameof(previousInterval), "PreviousInterval cannot be negative.");
+        Guard.Against.Negative(cardId, nameof(cardId));
+        Guard.Against.OutOfRange(qualityRating, nameof(qualityRating), 0, 5);
+        Guard.Against.Negative(previousInterval, nameof(previousInterval));
+        Guard.Against.Negative(previousRepetition, nameof(previousRepetition));
+        Guard.Against.Negative(newInterval, nameof(newInterval));
+        Guard.Against.Negative(newRepetition, nameof(newRepetition));
+
         if (previousEaseFactor < 1.3)
-            throw new ArgumentOutOfRangeException(nameof(previousEaseFactor), "PreviousEaseFactor must be at least 1.3.");
-        if (previousRepetition < 0)
-            throw new ArgumentOutOfRangeException(nameof(previousRepetition), "PreviousRepetition cannot be negative.");
-        if (newInterval < 0)
-            throw new ArgumentOutOfRangeException(nameof(newInterval), "NewInterval cannot be negative.");
+            throw new ArgumentException("Ease factor must be >= 1.3", nameof(previousEaseFactor));
+
         if (newEaseFactor < 1.3)
-            throw new ArgumentOutOfRangeException(nameof(newEaseFactor), "NewEaseFactor must be at least 1.3.");
-        if (newRepetition < 0)
-            throw new ArgumentOutOfRangeException(nameof(newRepetition), "NewRepetition cannot be negative.");
+            throw new ArgumentException("Ease factor must be >= 1.3", nameof(newEaseFactor));
+
     }
 }

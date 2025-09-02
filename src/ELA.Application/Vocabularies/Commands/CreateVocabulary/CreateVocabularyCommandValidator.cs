@@ -10,8 +10,5 @@ public class CreateVocabularyCommandValidator : AbstractValidator<CreateVocabula
 
         RuleFor(x => x.IPA)
             .MaximumLength(100).WithMessage("IPA must not exceed 100 characters.");
-
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required.");
     }
 }

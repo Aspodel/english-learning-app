@@ -1,15 +1,13 @@
+using ELA.Vocabularies.Dtos;
+
 namespace ELA;
 
-public record CreateVocabularyCommand : IRequest<int>
-{
-    public string Text { get; init; } = string.Empty;
+public record CreateVocabularyCommand(
+    string Text,
+    string IPA)
+    : IRequest<VocabularyDto>;
 
-    public string IPA { get; init; } = string.Empty;
-
-    public string UserId { get; init; } = string.Empty;
-}
-
-public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCommand, int>
+public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCommand, VocabularyDto>
 {
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUser _currentUser;
@@ -20,7 +18,7 @@ public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCo
         _currentUser = currentUser;
     }
 
-    public async Task<int> Handle(CreateVocabularyCommand request, CancellationToken cancellationToken)
+    public async Task<VocabularyDto> Handle(CreateVocabularyCommand request, CancellationToken cancellationToken)
     {
         Guard.Against.NullOrWhiteSpace(_currentUser.Id);
 
@@ -30,6 +28,6 @@ public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCo
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        return new VocabularyDto(entity.Id, entity.Text, entity.IPA, []);
     }
 }

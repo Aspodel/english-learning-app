@@ -1,14 +1,13 @@
-using ELA.Application.Vocabularies.Queries.GetVocabulariesWithPagination;
+using ELA.Vocabularies.Dtos;
 
 namespace ELA;
 
-public record GetVocabulariesWithPaginationQuery : IRequest<PaginatedList<VocabularyDto>>
-{
-    public int PageNumber { get; init; } = 1;
-    public int PageSize { get; init; } = 10;
-}
+public record GetVocabulariesWithPaginationQuery(
+    int PageNumber = 1,
+    int PageSize = 10)
+    : IRequest<PaginatedList<SummaryVocabularyDto>>;
 
-public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVocabulariesWithPaginationQuery, PaginatedList<VocabularyDto>>
+public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVocabulariesWithPaginationQuery, PaginatedList<SummaryVocabularyDto>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUser _currentUser;
@@ -19,21 +18,26 @@ public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVoca
         _currentUser = currentUser;
     }
 
-    public async Task<PaginatedList<VocabularyDto>> Handle(GetVocabulariesWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<SummaryVocabularyDto>> Handle(GetVocabulariesWithPaginationQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Vocabularies
-            .AsNoTracking()
-            .Where(v => v.UserId == _currentUser.Id)
+            // .Where(v => v.UserId == _currentUser.Id)
             .OrderBy(v => v.Created)
-            .ThenBy(v => v.Id)
-            .Select(v => new VocabularyDto
-            {
-                Id = v.Id,
-                Text = v.Text,
-                IPA = v.IPA,
-                Created = v.Created,
-            });
+                .ThenBy(v => v.Text)
+            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .AsNoTracking()
+            .Select(v => new SummaryVocabularyDto(
+                v.Id,
+                v.Text,
+                v.IPA,
+                v.Created,
+                v.Definitions
+                    .Select(d => d.PartOfSpeech.ToString())
+                    .Distinct()
+                    .ToList()
+            ));
 
-        return await PaginatedList<VocabularyDto>.CreateAsync(query, request.PageNumber, request.PageSize, cancellationToken);
+        return await PaginatedList<SummaryVocabularyDto>.CreateAsync(query, request.PageNumber, request.PageSize, cancellationToken);
     }
 }

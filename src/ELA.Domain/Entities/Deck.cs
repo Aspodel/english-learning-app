@@ -11,16 +11,14 @@ public class Deck : BaseAuditableEntity
 
     public Deck(string name, string userId)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Deck name cannot be empty.", nameof(name));
+        Guard.Against.NullOrWhiteSpace(name, nameof(name));
         Name = name;
         UserId = userId;
     }
 
     public void Rename(string newName)
     {
-        if (string.IsNullOrWhiteSpace(newName))
-            throw new ArgumentException("Deck name cannot be empty.", nameof(newName));
+        Guard.Against.NullOrWhiteSpace(newName, nameof(newName));
         Name = newName;
     }
 
