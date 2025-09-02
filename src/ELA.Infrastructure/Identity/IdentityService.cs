@@ -75,4 +75,16 @@ public class IdentityService : IIdentityService
 
         return result.ToApplicationResult();
     }
+
+    public async Task<bool> CheckPasswordAsync(string userId, string password)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+        
+        return await _userManager.CheckPasswordAsync(user, password);
+    }
 }

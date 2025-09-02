@@ -22,6 +22,8 @@ public static class DependencyInjection
         // Customise default API behaviour
         builder.Services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
+            
+        builder.Services.AddEndpointsApiExplorer();
 
         builder.Services.AddOpenApi(options =>
         {
@@ -47,7 +49,7 @@ public static class DependencyInjection
                 return Task.CompletedTask;
             });
         });
-        
+
         builder.Services.AddControllers();
     }
 }
