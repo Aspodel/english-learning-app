@@ -7,10 +7,10 @@ public record VocabularyDto(
     List<DefinitionDto> Definitions
 );
 
-public record SummaryVocabularyDto(
+public record VocabularyListItemDto(
     int Id,
     string Text,
     string IPA,
-    DateTimeOffset Created,
-    List<string> PartOfSpeech
+    int DefinitionCount,
+    DateTimeOffset Created
 );

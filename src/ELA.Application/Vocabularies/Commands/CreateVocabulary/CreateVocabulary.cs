@@ -20,7 +20,7 @@ public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCo
 
     public async Task<VocabularyDto> Handle(CreateVocabularyCommand request, CancellationToken cancellationToken)
     {
-        Guard.Against.NullOrWhiteSpace(_currentUser.Id);
+        Guard.Against.NotFound(_currentUser.Id ?? "Unknown User", _currentUser.Id);
 
         var entity = new Vocabulary(request.Text, request.IPA, _currentUser.Id);
 

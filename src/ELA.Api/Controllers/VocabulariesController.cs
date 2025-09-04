@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace ELA;
 
 public class VocabulariesController : BaseController

@@ -2,13 +2,12 @@ using ELA.Vocabularies.Dtos;
 
 namespace ELA;
 
-[Authorize(Roles = "Administrator")]
 public record GetVocabulariesWithPaginationQuery(
     int PageNumber = 1,
     int PageSize = 10)
-    : IRequest<PaginatedList<SummaryVocabularyDto>>;
+    : IRequest<PaginatedList<VocabularyListItemDto>>;
 
-public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVocabulariesWithPaginationQuery, PaginatedList<SummaryVocabularyDto>>
+public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVocabulariesWithPaginationQuery, PaginatedList<VocabularyListItemDto>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUser _currentUser;
@@ -19,7 +18,7 @@ public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVoca
         _currentUser = currentUser;
     }
 
-    public async Task<PaginatedList<SummaryVocabularyDto>> Handle(GetVocabulariesWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<VocabularyListItemDto>> Handle(GetVocabulariesWithPaginationQuery request, CancellationToken cancellationToken)
     {
         var query = _context.Vocabularies
             // .Where(v => v.UserId == _currentUser.Id)
@@ -28,17 +27,14 @@ public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVoca
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)
             .AsNoTracking()
-            .Select(v => new SummaryVocabularyDto(
+            .Select(v => new VocabularyListItemDto(
                 v.Id,
                 v.Text,
                 v.IPA,
-                v.Created,
-                v.Definitions
-                    .Select(d => d.PartOfSpeech.ToString())
-                    .Distinct()
-                    .ToList()
+                v.Definitions.Count,
+                v.Created
             ));
 
-        return await PaginatedList<SummaryVocabularyDto>.CreateAsync(query, request.PageNumber, request.PageSize, cancellationToken);
+        return await PaginatedList<VocabularyListItemDto>.CreateAsync(query, request.PageNumber, request.PageSize, cancellationToken);
     }
 }

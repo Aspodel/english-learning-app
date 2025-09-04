@@ -1,5 +1,4 @@
 using ELA;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
 namespace Microsoft.Extensions.DependencyInjection;

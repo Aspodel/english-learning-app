@@ -5,7 +5,8 @@ public class UpdateVocabularyCommandValidator : AbstractValidator<UpdateVocabula
     public UpdateVocabularyCommandValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Id is required.");
+            .NotEmpty().WithMessage("Id is required.")
+            .GreaterThan(0).WithMessage("Id must be greater than 0.");
 
         RuleFor(x => x.Text)
             .NotEmpty().WithMessage("Text is required.")

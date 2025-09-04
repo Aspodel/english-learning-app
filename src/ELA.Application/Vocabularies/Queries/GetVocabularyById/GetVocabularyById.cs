@@ -21,8 +21,7 @@ public class GetVocabularyByIdQueryHandler : IRequestHandler<GetVocabularyByIdQu
             .AsNoTracking()
             .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
 
-        Guard.Against.Null(vocabulary, nameof(vocabulary),
-            $"Vocabulary with Id {request.Id} was not found.");
+        Guard.Against.NotFound(request.Id, vocabulary);
 
         return new VocabularyDto(
             vocabulary.Id,

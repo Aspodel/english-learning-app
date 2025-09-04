@@ -13,11 +13,11 @@ public class DeleteVocabularyCommandHandler : IRequestHandler<DeleteVocabularyCo
 
     public async Task<Unit> Handle(DeleteVocabularyCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Vocabularies.FindAsync(request.Id, cancellationToken);
+        var vocabulary = await _context.Vocabularies.FindAsync(request.Id, cancellationToken);
 
-        Guard.Against.NotFound(request.Id, entity);
+        Guard.Against.NotFound(request.Id, vocabulary);
 
-        _context.Vocabularies.Remove(entity);
+        _context.Vocabularies.Remove(vocabulary);
 
         await _context.SaveChangesAsync(cancellationToken);
 

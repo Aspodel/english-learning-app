@@ -1,5 +1,3 @@
-using FluentValidation.Results;
-
 namespace ELA;
 
 public record DeleteUserCommand(string UserId) : IRequest;
@@ -15,6 +13,10 @@ public class DeleteUserHandler : IRequestHandler<DeleteUserCommand>
 
     public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
+        var user = await _identityService.GetUserNameAsync(request.UserId);
+
+        Guard.Against.NotFound(request.UserId, user);
+
         var result = await _identityService.DeleteUserAsync(request.UserId);
 
         result.ThrowIfFailed(nameof(DeleteUserCommand));

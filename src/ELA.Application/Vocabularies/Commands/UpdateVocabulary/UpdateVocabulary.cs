@@ -17,11 +17,11 @@ public class UpdateVocabularyCommandHandler : IRequestHandler<UpdateVocabularyCo
 
     public async Task<Unit> Handle(UpdateVocabularyCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Vocabularies.FindAsync(request.Id, cancellationToken);
+        var vocabulary = await _context.Vocabularies.FindAsync(request.Id, cancellationToken);
 
-        Guard.Against.NotFound(request.Id, entity);
+        Guard.Against.NotFound(request.Id, vocabulary);
 
-        entity.Update(request.Text, request.IPA);
+        vocabulary.Update(request.Text, request.IPA);
 
         await _context.SaveChangesAsync(cancellationToken);
 
