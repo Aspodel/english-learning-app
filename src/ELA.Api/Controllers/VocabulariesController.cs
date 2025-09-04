@@ -4,6 +4,15 @@ namespace ELA;
 
 public class VocabulariesController : BaseController
 {
+    [HttpGet("test-auth")]
+    public IActionResult TestAuth()
+    {
+        return Ok(new
+        {
+            User.Identity?.IsAuthenticated,
+            Claims = User.Claims.Select(c => new { c.Type, c.Value })
+        });
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetWithPagination([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)

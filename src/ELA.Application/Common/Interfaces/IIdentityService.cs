@@ -3,6 +3,8 @@ namespace ELA;
 public interface IIdentityService
 {
     Task<string?> GetUserNameAsync(string userId);
+    
+    Task<IList<string>> GetUserRolesAsync(string userId);
 
     Task<bool> IsInRoleAsync(string userId, string role);
 
@@ -12,5 +14,5 @@ public interface IIdentityService
 
     Task<Result> DeleteUserAsync(string userId);
 
-    Task<bool> CheckPasswordAsync(string userId, string password);
+    Task<(bool Success, string? UserId)> ValidateUserAsync(string userName, string password);
 }

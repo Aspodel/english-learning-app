@@ -26,6 +26,14 @@ public class IdentityService : IIdentityService
         return user?.UserName;
     }
 
+    public async Task<IList<string>> GetUserRolesAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId)
+            ?? throw new InvalidOperationException($"User {userId} not found.");
+
+        return await _userManager.GetRolesAsync(user);
+    }
+
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
     {
         var user = new ApplicationUser
@@ -76,15 +84,13 @@ public class IdentityService : IIdentityService
         return result.ToApplicationResult();
     }
 
-    public async Task<bool> CheckPasswordAsync(string userId, string password)
+    public async Task<(bool Success, string? UserId)> ValidateUserAsync(string userName, string password)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-
+        var user = await _userManager.FindByNameAsync(userName);
         if (user == null)
-        {
-            return false;
-        }
-        
-        return await _userManager.CheckPasswordAsync(user, password);
+            return (false, null);
+
+        var isValid = await _userManager.CheckPasswordAsync(user, password);
+        return (isValid, isValid ? user.Id : null);
     }
 }

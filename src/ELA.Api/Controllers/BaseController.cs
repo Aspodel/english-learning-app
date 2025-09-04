@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ELA;
 
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
+[Microsoft.AspNetCore.Authorization.Authorize]
 public class BaseController : ControllerBase
 {
     private ISender _mediator = null!;

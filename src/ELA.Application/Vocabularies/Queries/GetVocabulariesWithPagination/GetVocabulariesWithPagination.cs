@@ -2,6 +2,7 @@ using ELA.Vocabularies.Dtos;
 
 namespace ELA;
 
+[Authorize(Roles = "Administrator")]
 public record GetVocabulariesWithPaginationQuery(
     int PageNumber = 1,
     int PageSize = 10)

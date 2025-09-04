@@ -16,7 +16,7 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseDatabaseAsync();
 
     app.MapOpenApi();
-    app.MapScalarApiReference("/api",
+    app.MapScalarApiReference(
         options =>
         {
             options
@@ -24,13 +24,16 @@ if (app.Environment.IsDevelopment())
         }
     );
 }
-app.Map("/", () => Results.Redirect("/api"));
 
 app.UseHealthChecks("/health");
 
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler(options => { });
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

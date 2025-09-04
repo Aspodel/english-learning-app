@@ -37,7 +37,6 @@ public static class DependencyInjection
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
                     Name = "Authorization",
-                    Description = "Type into the textbox: Bearer {your JWT token}"
                 };
 
                 // Apply security requirement globally
