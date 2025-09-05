@@ -32,7 +32,7 @@ public class GetDeckByIdQueryHandler : IRequestHandler<GetDeckByIdQuery, DeckDto
             ))
             .FirstOrDefaultAsync(cancellationToken);
 
-        Guard.Against.Null(deck, $"Deck with Id {request.Id} not found.");
+        Guard.Against.NotFound(request.Id, deck);
 
         return deck;
     }

@@ -2,14 +2,12 @@ namespace ELA;
 
 public class VocabulariesController : BaseController
 {
-    [HttpGet("test-auth")]
-    public IActionResult TestAuth()
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
     {
-        return Ok(new
-        {
-            User.Identity?.IsAuthenticated,
-            Claims = User.Claims.Select(c => new { c.Type, c.Value })
-        });
+        var result = await Mediator.Send(new GetVocabularyByIdQuery(id), cancellationToken);
+        return Ok(result);
     }
 
     [HttpGet]
@@ -19,10 +17,10 @@ public class VocabulariesController : BaseController
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string searchText)
     {
-        var result = await Mediator.Send(new GetVocabularyByIdQuery(id), cancellationToken);
+        var result = await Mediator.Send(new SearchVocabulariesQuery(searchText));
         return Ok(result);
     }
 
