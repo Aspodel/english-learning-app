@@ -256,25 +256,16 @@ namespace ELA.Infrastructure.Migrations
                     b.Property<int>("CardId")
                         .HasColumnType("integer");
 
-                    b.Property<double>("NewEaseFactor")
+                    b.Property<double>("EaseFactor")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("NewInterval")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NewRepetition")
-                        .HasColumnType("integer");
-
-                    b.Property<double>("PreviousEaseFactor")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("PreviousInterval")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PreviousRepetition")
+                    b.Property<int>("Interval")
                         .HasColumnType("integer");
 
                     b.Property<int>("QualityRating")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Repetition")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("ReviewDate")
@@ -492,6 +483,18 @@ namespace ELA.Infrastructure.Migrations
                         {
                             b1.Property<int>("DefinitionId")
                                 .HasColumnType("integer");
+
+                            b1.Property<string>("Abbreviation")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("character varying(10)")
+                                .HasColumnName("POS_Abbreviation");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("PartOfSpeech");
 
                             b1.HasKey("DefinitionId");
 

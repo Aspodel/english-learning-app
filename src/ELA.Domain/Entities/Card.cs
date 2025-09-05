@@ -44,10 +44,6 @@ public class Card : BaseAuditableEntity
         if (Suspended) throw new InvalidOperationException("Cannot review a suspended card.");
         Guard.Against.OutOfRange(qualityRating, nameof(qualityRating), 0, 5);
 
-        var previousInterval = Interval;
-        var previousEaseFactor = EaseFactor;
-        var previousRepetition = Repetition;
-
         Interval = newInterval;
         EaseFactor = Math.Max(1.3, newEaseFactor);
         Repetition = newRepetition;
@@ -58,12 +54,9 @@ public class Card : BaseAuditableEntity
             cardId: Id,
             reviewDate: reviewDate,
             qualityRating: qualityRating,
-            previousInterval: previousInterval,
-            previousEaseFactor: previousEaseFactor,
-            previousRepetition: previousRepetition,
-            newInterval: newInterval,
-            newEaseFactor: newEaseFactor,
-            newRepetition: newRepetition);
+            easeFactor: EaseFactor,
+            repetition: Repetition,
+            interval: Interval);
 
         _reviewLogs.Add(log);
     }

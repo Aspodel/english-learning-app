@@ -31,7 +31,7 @@ public class GetVocabularyByIdQueryHandler : IRequestHandler<GetVocabularyByIdQu
                 d.Id,
                 d.Meaning,
                 d.Translation,
-                d.PartOfSpeech.ToString(),
+                d.PartOfSpeech.Name,
                 d.Examples.Select(e => new ExampleDto(
                     e.Id,
                     e.Text,

@@ -16,7 +16,7 @@ public class Definition : BaseEntity
     {
         Meaning = string.Empty;
         Translation = string.Empty;
-        PartOfSpeech = PartOfSpeech.From("Noun");
+        PartOfSpeech = PartOfSpeech.Noun;
         VocabularyId = 0;
     }
 

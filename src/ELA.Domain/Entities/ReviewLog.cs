@@ -3,52 +3,38 @@ namespace ELA;
 public class ReviewLog : BaseEntity
 {
     public int CardId { get; private set; }
-    public DateTimeOffset ReviewDate { get; private set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset ReviewDate { get; private set; }
 
     // Review result
     public int QualityRating { get; private set; } // 0 to 5 scale
 
-    // Before applying SM-2
-    public int PreviousInterval { get; private set; }
-    public double PreviousEaseFactor { get; private set; }
-    public int PreviousRepetition { get; private set; }
-
-    // After applying SM-2
-    public int NewInterval { get; private set; }
-    public double NewEaseFactor { get; private set; }
-    public int NewRepetition { get; private set; }
+    // SM-2
+    public int Interval { get; private set; }  
+    public double EaseFactor { get; private set; }
+    public int Repetition { get; private set; }
 
     public ReviewLog(int cardId, DateTimeOffset reviewDate, int qualityRating,
-        int previousInterval, double previousEaseFactor, int previousRepetition,
-        int newInterval, double newEaseFactor, int newRepetition)
+        int interval, double easeFactor, int repetition)
     {
-        ValidateInputs(cardId, qualityRating, previousInterval, previousEaseFactor, previousRepetition, newInterval, newEaseFactor, newRepetition);
+        ValidateInputs(cardId, qualityRating, interval, easeFactor, repetition);
 
         CardId = cardId;
         ReviewDate = reviewDate;
         QualityRating = qualityRating;
-        PreviousInterval = previousInterval;
-        PreviousEaseFactor = previousEaseFactor;
-        PreviousRepetition = previousRepetition;
-        NewInterval = newInterval;
-        NewEaseFactor = newEaseFactor;
-        NewRepetition = newRepetition;
+        Interval = interval;
+        EaseFactor = easeFactor;
+        Repetition = repetition;
     }
 
-    private static void ValidateInputs(int cardId, int qualityRating, int previousInterval, double previousEaseFactor, int previousRepetition, int newInterval, double newEaseFactor, int newRepetition)
+    private static void ValidateInputs(int cardId, int qualityRating, int interval, double easeFactor, int repetition)
     {
         Guard.Against.Negative(cardId, nameof(cardId));
         Guard.Against.OutOfRange(qualityRating, nameof(qualityRating), 0, 5);
-        Guard.Against.Negative(previousInterval, nameof(previousInterval));
-        Guard.Against.Negative(previousRepetition, nameof(previousRepetition));
-        Guard.Against.Negative(newInterval, nameof(newInterval));
-        Guard.Against.Negative(newRepetition, nameof(newRepetition));
+        Guard.Against.Negative(repetition, nameof(repetition));
+        Guard.Against.Negative(interval, nameof(interval));
+        Guard.Against.Negative(repetition, nameof(repetition));
 
-        if (previousEaseFactor < 1.3)
-            throw new ArgumentException("Ease factor must be >= 1.3", nameof(previousEaseFactor));
-
-        if (newEaseFactor < 1.3)
-            throw new ArgumentException("Ease factor must be >= 1.3", nameof(newEaseFactor));
-
+        if (easeFactor < 1.3)
+            throw new ArgumentException("Ease factor must be >= 1.3", nameof(easeFactor));
     }
 }

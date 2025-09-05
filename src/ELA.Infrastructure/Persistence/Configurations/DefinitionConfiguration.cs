@@ -14,6 +14,18 @@ public class DefinitionConfiguration : IEntityTypeConfiguration<Definition>
             .HasMaxLength(500);
 
         builder.OwnsOne(d => d.PartOfSpeech);
+        builder.OwnsOne(d => d.PartOfSpeech, pos =>
+        {
+            pos.Property(p => p.Name)
+               .HasColumnName("PartOfSpeech")
+               .IsRequired()
+               .HasMaxLength(50);
+
+            pos.Property(p => p.Abbreviation)
+               .HasColumnName("POS_Abbreviation")
+               .IsRequired()
+               .HasMaxLength(10);
+        });
 
         builder.HasMany(d => d.Examples)
             .WithOne()

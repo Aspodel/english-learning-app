@@ -248,6 +248,8 @@ namespace ELA.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Meaning = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Translation = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    PartOfSpeech = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    POS_Abbreviation = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     VocabularyId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -270,12 +272,9 @@ namespace ELA.Infrastructure.Migrations
                     CardId = table.Column<int>(type: "integer", nullable: false),
                     ReviewDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     QualityRating = table.Column<int>(type: "integer", nullable: false),
-                    PreviousInterval = table.Column<int>(type: "integer", nullable: false),
-                    PreviousEaseFactor = table.Column<double>(type: "double precision", nullable: false),
-                    PreviousRepetition = table.Column<int>(type: "integer", nullable: false),
-                    NewInterval = table.Column<int>(type: "integer", nullable: false),
-                    NewEaseFactor = table.Column<double>(type: "double precision", nullable: false),
-                    NewRepetition = table.Column<int>(type: "integer", nullable: false)
+                    Interval = table.Column<int>(type: "integer", nullable: false),
+                    EaseFactor = table.Column<double>(type: "double precision", nullable: false),
+                    Repetition = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
