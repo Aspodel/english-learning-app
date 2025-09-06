@@ -8,15 +8,18 @@ public class IdentityService : IIdentityService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
+    private readonly IJwtTokenService _jwtTokenService;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService)
+        IAuthorizationService authorizationService,
+        IJwtTokenService jwtTokenService)
     {
         _userManager = userManager;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<string?> GetUserNameAsync(string userId)
@@ -24,14 +27,6 @@ public class IdentityService : IIdentityService
         var user = await _userManager.FindByIdAsync(userId);
 
         return user?.UserName;
-    }
-
-    public async Task<IList<string>> GetUserRolesAsync(string userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId)
-            ?? throw new InvalidOperationException($"User {userId} not found.");
-
-        return await _userManager.GetRolesAsync(user);
     }
 
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
@@ -84,13 +79,83 @@ public class IdentityService : IIdentityService
         return result.ToApplicationResult();
     }
 
-    public async Task<(bool Success, string? UserId)> ValidateUserAsync(string userName, string password)
+    public async Task<(Result Result, string? Token)> LoginAsync(string userName, string password)
     {
         var user = await _userManager.FindByNameAsync(userName);
         if (user == null)
-            return (false, null);
+        {
+            return (Result.Failure(["Invalid username or password."]), null);
+        }
 
         var isValid = await _userManager.CheckPasswordAsync(user, password);
-        return (isValid, isValid ? user.Id : null);
+        if (!isValid)
+        {
+            return (Result.Failure(["Invalid username or password."]), null);
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var token = _jwtTokenService.GenerateToken(user.Id, user.UserName!, roles);
+        return (Result.Success(), token);
+    }  
+
+    public async Task<Result> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return Result.Failure(new[] { "User not found." });
+
+        var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        return result.ToApplicationResult();
+    }
+
+    public async Task<Result> UpdateProfileAsync(string userId, string email, string firstName, string lastName)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return Result.Failure(new[] { "User not found." });
+
+        user.Email = email;
+        user.FirstName = firstName;
+        user.LastName = lastName;
+
+        var result = await _userManager.UpdateAsync(user);
+        return result.ToApplicationResult();
+    }
+
+    public async Task<UserDto?> GetUserByIdAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return null;
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return new UserDto
+        {
+            Id = user.Id,
+            UserName = user.UserName ?? "",
+            Email = user.Email ?? "",
+            FullName = $"{user.FirstName} {user.LastName}".Trim(),
+            Roles = roles
+        };
+    }
+
+    public async Task<IList<UserDto>> GetAllUsersAsync()
+    {
+        var users = _userManager.Users.ToList();
+        var list = new List<UserDto>();
+
+        foreach (var user in users)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            list.Add(new UserDto
+            {
+                Id = user.Id,
+                UserName = user.UserName ?? "",
+                Email = user.Email ?? "",
+                FullName = $"{user.FirstName} {user.LastName}".Trim(),
+                Roles = roles
+            });
+        }
+
+        return list;
     }
 }

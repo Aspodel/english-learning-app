@@ -5,22 +5,19 @@ public record LoginCommand(string UserName, string Password) : IRequest<string>;
 public class LoginHandler : IRequestHandler<LoginCommand, string>
 {
     private readonly IIdentityService _identityService;
-    private readonly IJwtTokenService _jwtService;
 
-    public LoginHandler(IIdentityService identityService, IJwtTokenService jwtService)
+    public LoginHandler(IIdentityService identityService)
     {
         _identityService = identityService;
-        _jwtService = jwtService;
     }
 
     public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var (success, userId) = await _identityService.ValidateUserAsync(request.UserName, request.Password);
-        if (!success || userId is null)
-            throw new UnauthorizedAccessException("Invalid username or password");
-            
-        var roles = await _identityService.GetUserRolesAsync(userId);
+        var (result, token) = await _identityService.LoginAsync(request.UserName, request.Password);
 
-        return _jwtService.GenerateToken(userId, request.UserName, roles);
+        result.ThrowIfFailed(nameof(LoginCommand));
+        Guard.Against.Null(token, nameof(token));
+
+        return token;
     }
 }
