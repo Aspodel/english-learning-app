@@ -4,8 +4,8 @@ namespace ELA;
 
 public record GetVocabulariesWithPaginationQuery(
     int PageNumber = 1,
-    int PageSize = 10)
-    : IRequest<PaginatedList<VocabularyListItemDto>>;
+    int PageSize = 10
+) : IRequest<PaginatedList<VocabularyListItemDto>>;
 
 public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVocabulariesWithPaginationQuery, PaginatedList<VocabularyListItemDto>>
 {

@@ -97,7 +97,7 @@ public class IdentityService : IIdentityService
 
         var token = _jwtTokenService.GenerateToken(user.Id, user.UserName!, roles);
         return (Result.Success(), token);
-    }  
+    }
 
     public async Task<Result> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
     {
@@ -138,24 +138,15 @@ public class IdentityService : IIdentityService
         };
     }
 
-    public async Task<IList<UserDto>> GetAllUsersAsync()
+    public IQueryable<UserDto> GetAllUsersAsync()
     {
-        var users = _userManager.Users.ToList();
-        var list = new List<UserDto>();
-
-        foreach (var user in users)
+        var users = _userManager.Users.Select(user => new UserDto
         {
-            var roles = await _userManager.GetRolesAsync(user);
-            list.Add(new UserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName ?? "",
-                Email = user.Email ?? "",
-                FullName = $"{user.FirstName} {user.LastName}".Trim(),
-                Roles = roles
-            });
-        }
-
-        return list;
+            Id = user.Id,
+            UserName = user.UserName ?? "",
+            Email = user.Email ?? "",
+            FullName = $"{user.FirstName} {user.LastName}".Trim(),
+        });
+        return users;
     }
 }

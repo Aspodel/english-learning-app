@@ -20,5 +20,5 @@ public interface IIdentityService
 
     Task<UserDto?> GetUserByIdAsync(string userId);
 
-    Task<IList<UserDto>> GetAllUsersAsync();
+    IQueryable<UserDto> GetAllUsersAsync();
 }

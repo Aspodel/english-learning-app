@@ -1,8 +1,8 @@
 namespace ELA;
 
-public record GetCurrentUserQuery(string UserId) : IRequest<UserDto?>;
+public record GetCurrentUserQuery() : IRequest<UserDto>;
 
-public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserDto?>
+public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserDto>
 {
     private readonly IIdentityService _identityService;
     private readonly ICurrentUser _currentUser;
@@ -13,11 +13,14 @@ public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, U
         _currentUser = currentUser;
     }
 
-    public async Task<UserDto?> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
     {
         if (_currentUser.Id is null)
             throw new UnauthorizedAccessException();
 
-        return await _identityService.GetUserByIdAsync(_currentUser.Id);
+        var user = await _identityService.GetUserByIdAsync(_currentUser.Id);
+        Guard.Against.NotFound(_currentUser.Id, user);
+
+        return user;
     }
 }
