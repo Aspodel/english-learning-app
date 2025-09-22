@@ -29,6 +29,8 @@ app.UseHealthChecks("/health");
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseExceptionHandler(options => { });
 
 app.UseAuthentication();
