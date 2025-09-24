@@ -1,7 +1,7 @@
-import { WarehouseClient } from "./warehouse-client";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/get-axios-error";
+import { api } from "@/lib/api-client";
 
 type DeleteBody = {
     id: string;
@@ -13,7 +13,7 @@ export function createDelete(name: string, route: string) {
         const filteredQueryParams = Object.fromEntries(
             Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
         );
-        const response = await WarehouseClient.delete(route.replace(":id", body.id), { params: filteredQueryParams });
+        const response = await api.delete(route.replace(":id", body.id), { params: filteredQueryParams });
         if (response.status === 204) {
             return;
         }

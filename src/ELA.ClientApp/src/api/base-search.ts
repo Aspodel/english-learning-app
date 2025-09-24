@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { WarehouseClient } from "./warehouse-client";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { getErrorMessage } from "@/lib/get-axios-error";
+import { api } from "@/lib/api-client";
 
 type SearchBody = {
     queryParams?: Record<string, string | undefined>;
@@ -13,7 +13,7 @@ export function createSearch<T>(name: string, route: string) {
         const filteredQueryParams = Object.fromEntries(
             Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
         );
-        const response = await WarehouseClient.get(route, { params: filteredQueryParams });
+        const response = await api.get(route, { params: filteredQueryParams });
         if (response.status === 200) return response.data;
         throw new Error(`Failed to search ${name}`);
     }

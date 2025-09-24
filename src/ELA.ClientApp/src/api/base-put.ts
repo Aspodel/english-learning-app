@@ -1,5 +1,5 @@
+import { api } from "@/lib/api-client";
 import { getErrorMessage } from "@/lib/get-axios-error";
-import { WarehouseClient } from "./warehouse-client";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -18,7 +18,7 @@ export function createPut<T>(name: string, route: string) {
         const filteredQueryParams = Object.fromEntries(
             Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
         );
-        const response = await WarehouseClient.put(route, body.data, { params: filteredQueryParams });
+        const response = await api.put(route, body.data, { params: filteredQueryParams });
         if (response.status === 200) {
             return response.data;
         }

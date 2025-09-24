@@ -1,8 +1,8 @@
-import Axios, { InternalAxiosRequestConfig } from 'axios';
+import Axios, { type InternalAxiosRequestConfig } from 'axios';
 
-import { useNotifications } from '@/components/ui/notifications';
 import { env } from '@/config/env';
 import { paths } from '@/config/paths';
+import { toast } from 'sonner';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   if (config.headers) {
@@ -24,10 +24,10 @@ api.interceptors.response.use(
   },
   (error) => {
     const message = error.response?.data?.message || error.message;
-    useNotifications.getState().addNotification({
-      type: 'error',
-      title: 'Error',
-      message,
+
+    toast.error('Error', {
+      description: message,
+      duration: 5000,
     });
 
     if (error.response?.status === 401) {
@@ -38,5 +38,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
