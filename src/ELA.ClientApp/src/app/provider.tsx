@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { ErrorFallback } from '@/components/common/error-fallback';
 import { Loader } from '@/components/common/loader';
 import { QueryProvider } from '@/lib/query-client';
+import { ThemeProvider } from '@/components/theme-provider';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -16,10 +17,12 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     <React.Suspense fallback={<Loader />}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <QueryProvider>
-          {/* <AuthLoader renderLoading={() => <Loader />}> */}
-          {children}
-          <Toaster position='top-right' richColors />
-          {/* </AuthLoader> */}
+          <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+            {/* <AuthLoader> */}
+            {children}
+            <Toaster position='top-right' richColors />
+            {/* </AuthLoader> */}
+          </ThemeProvider>
         </QueryProvider>
       </ErrorBoundary>
     </React.Suspense>
