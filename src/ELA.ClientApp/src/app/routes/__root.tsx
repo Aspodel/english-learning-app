@@ -1,6 +1,5 @@
 import { ThemeToggle } from '@/components/theme-toggle';
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
-// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createRootRoute({
   component: () => (
@@ -22,25 +21,19 @@ export const Route = createRootRoute({
           App
         </Link>
       </div> */}
-      {/* Page Content */}
-      {/* <main className='flex-1 w-full'>
-        <Outlet />
-      </main> */}
       <ThemeToggle
         className='group size-8 hover:[&>svg]:scale-120 hover:[&>svg]:transition-all'
         variant='ghost'
         size='icon'
       />
+      {/* Page Content */}
       <main className='flex-1'>
-        {/* <div className='h-full flex flex-col'> */}
         <Outlet />
-        {/* </div> */}
       </main>
       {/* Footer */}
       {/* <footer className='bg-white shadow p-4 text-center text-sm text-gray-500'>
         © 2025 ELA
       </footer> */}
-      {/* <TanStackRouterDevtools /> */}
     </div>
   ),
 });
