@@ -13,6 +13,11 @@ import { Route as SignupRouteImport } from './app/routes/signup'
 import { Route as SigninRouteImport } from './app/routes/signin'
 import { Route as AppRouteRouteImport } from './app/routes/app/route'
 import { Route as IndexRouteImport } from './app/routes/index'
+import { Route as AppIndexRouteImport } from './app/routes/app/index'
+import { Route as AppVocabularyRouteImport } from './app/routes/app/vocabulary'
+import { Route as AppQuizzesRouteImport } from './app/routes/app/quizzes'
+import { Route as AppFlashcardsRouteImport } from './app/routes/app/flashcards'
+import { Route as AppDashboardRouteImport } from './app/routes/app/dashboard'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -34,37 +39,103 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppVocabularyRoute = AppVocabularyRouteImport.update({
+  id: '/vocabulary',
+  path: '/vocabulary',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppQuizzesRoute = AppQuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppFlashcardsRoute = AppFlashcardsRouteImport.update({
+  id: '/flashcards',
+  path: '/flashcards',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRouteRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/vocabulary': typeof AppVocabularyRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRouteRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/vocabulary': typeof AppVocabularyRoute
+  '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/app': typeof AppRouteRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/vocabulary': typeof AppVocabularyRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/signin' | '/signup'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/signin'
+    | '/signup'
+    | '/app/dashboard'
+    | '/app/flashcards'
+    | '/app/quizzes'
+    | '/app/vocabulary'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/signin' | '/signup'
-  id: '__root__' | '/' | '/app' | '/signin' | '/signup'
+  to:
+    | '/'
+    | '/signin'
+    | '/signup'
+    | '/app/dashboard'
+    | '/app/flashcards'
+    | '/app/quizzes'
+    | '/app/vocabulary'
+    | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/signin'
+    | '/signup'
+    | '/app/dashboard'
+    | '/app/flashcards'
+    | '/app/quizzes'
+    | '/app/vocabulary'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppRouteRoute: typeof AppRouteRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
 }
@@ -99,12 +170,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/vocabulary': {
+      id: '/app/vocabulary'
+      path: '/vocabulary'
+      fullPath: '/app/vocabulary'
+      preLoaderRoute: typeof AppVocabularyRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/quizzes': {
+      id: '/app/quizzes'
+      path: '/quizzes'
+      fullPath: '/app/quizzes'
+      preLoaderRoute: typeof AppQuizzesRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/flashcards': {
+      id: '/app/flashcards'
+      path: '/flashcards'
+      fullPath: '/app/flashcards'
+      preLoaderRoute: typeof AppFlashcardsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppFlashcardsRoute: typeof AppFlashcardsRoute
+  AppQuizzesRoute: typeof AppQuizzesRoute
+  AppVocabularyRoute: typeof AppVocabularyRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppFlashcardsRoute: AppFlashcardsRoute,
+  AppQuizzesRoute: AppQuizzesRoute,
+  AppVocabularyRoute: AppVocabularyRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppRouteRoute: AppRouteRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
 }

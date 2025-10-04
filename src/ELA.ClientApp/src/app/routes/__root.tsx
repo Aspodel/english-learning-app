@@ -1,4 +1,3 @@
-import { ThemeToggle } from '@/components/theme-toggle';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createRootRoute({
@@ -21,11 +20,12 @@ export const Route = createRootRoute({
           App
         </Link>
       </div> */}
-      <ThemeToggle
+
+      {/* <ThemeToggle
         className='group size-8 hover:[&>svg]:scale-120 hover:[&>svg]:transition-all'
         variant='ghost'
         size='icon'
-      />
+      /> */}
       {/* Page Content */}
       <main className='flex-1'>
         <Outlet />
