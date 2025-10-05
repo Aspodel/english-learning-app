@@ -34,12 +34,12 @@ const AppLayout: React.FC = () => {
               <BreadcrumbList>
                 <BreadcrumbItem className='hidden md:block'>
                   <BreadcrumbLink href='#'>
-                    Building Your Application
+                    Building Your Own Knowledge Base
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className='hidden md:block' />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>Vocabulary</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
