@@ -59,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <Flame className='size-4' />
                 </div>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate text-base font-semibold'>ELA</span>
+                  <span className='truncate text-base text-primary font-semibold'>ELA</span>
                   <span className='truncate text-xs'>
                     Modern learning platform
                   </span>
