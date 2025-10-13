@@ -13,6 +13,8 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import { FormFieldWrapper } from '@/components/form-field-wrapper';
+import { FieldWrapper } from '@/components/field-wrapper';
+import { FieldGroup } from '@/components/ui/field';
 
 interface SignInFormProps {
   onSubmit: (credentials: AuthCredentials) => void;
@@ -73,17 +75,30 @@ const SignInForm: React.FC<SignInFormProps> = ({
               </span>
             </div>
 
-            <FormFieldWrapper name='username' label='Username'>
+            {/* <FormFieldWrapper name='username' label='Username'>
               <Input placeholder='johndoe' disabled={loading} />
-            </FormFieldWrapper>
+            </FormFieldWrapper> */}
 
-            <FormFieldWrapper name='password' label='Password'>
+            <FieldGroup>
+              <FieldWrapper name='username' label='Username'>
+                <Input placeholder='johndoe' disabled={loading} />
+              </FieldWrapper>
+              <FieldWrapper name='password' label='Password'>
+                <Input
+                  type='password'
+                  placeholder='••••••••'
+                  disabled={loading}
+                />
+              </FieldWrapper>
+            </FieldGroup>
+
+            {/* <FormFieldWrapper name='password' label='Password'>
               <Input
                 type='password'
                 placeholder='••••••••'
                 disabled={loading}
               />
-            </FormFieldWrapper>
+            </FormFieldWrapper> */}
           </CardContent>
 
           <CardFooter className='flex flex-col gap-4'>

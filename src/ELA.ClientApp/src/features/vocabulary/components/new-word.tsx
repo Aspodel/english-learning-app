@@ -1,4 +1,5 @@
 import React from 'react';
+import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -13,8 +14,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-
-import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Drawer,
   DrawerClose,
@@ -25,8 +24,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { Plus } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type FormValues = {
   word: string;
@@ -49,7 +49,7 @@ export default function NewWord() {
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <Button>
-            <Plus /> Add New Word
+            <Plus /> Add
           </Button>
         </DrawerTrigger>
         <DrawerContent>

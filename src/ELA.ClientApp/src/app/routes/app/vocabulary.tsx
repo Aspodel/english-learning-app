@@ -1,19 +1,18 @@
-import FeatureLayout from '@/components/common/layouts/feature-layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import NewWord from '@/features/vocabulary/components/new-word';
-import { SectionCards } from '@/features/vocabulary/components/section-card';
-import VocabularyList from '@/features/vocabulary/components/vocabulary-list';
+import React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import { Plus } from 'lucide-react';
-import { useState } from 'react';
+
+import { Input } from '@/components/ui/input';
+import { SectionCards } from '@/features/vocabulary/components/section-card';
+import NewWord from '@/features/vocabulary/components/new-word';
+import FeatureLayout from '@/components/common/layouts/feature-layout';
+import VocabularyList from '@/features/vocabulary/components/vocabulary-list';
 
 export const Route = createFileRoute('/app/vocabulary')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = React.useState('');
   const filteredVocabulary = sampleVocabulary.filter(
     (item) =>
       item.word.toLowerCase().includes(search.toLowerCase()) ||

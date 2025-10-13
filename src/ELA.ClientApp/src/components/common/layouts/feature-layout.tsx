@@ -4,13 +4,13 @@ import { Link } from '@tanstack/react-router';
 import { Head } from '@/components/common/head';
 import { cn } from '@/lib/utils';
 
-interface FeatureLayoutProps {
+type FeatureLayoutProps = {
   title?: string;
   description?: string;
   toolbar?: ReactNode;
   children: ReactNode;
   className?: string;
-}
+};
 
 const FeatureLayout: React.FC<FeatureLayoutProps> = ({
   title,
@@ -25,7 +25,9 @@ const FeatureLayout: React.FC<FeatureLayoutProps> = ({
       <div className='flex justify-between items-center'>
         <div>
           {title && <h1 className='text-3xl font-bold'>{title}</h1>}
-          {description && <p className='text-muted-foreground'>{description}</p>}
+          {description && (
+            <p className='text-muted-foreground'>{description}</p>
+          )}
         </div>
 
         <div>{toolbar}</div>

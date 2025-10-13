@@ -7,10 +7,10 @@ interface VocabularyItem {
   definition: string;
 }
 
-interface VocabularyListProps {
+type VocabularyListProps = {
   items: VocabularyItem[];
   onSelect?: (item: VocabularyItem) => void;
-}
+};
 
 const VocabularyList: React.FC<VocabularyListProps> = ({ items, onSelect }) => {
   return (
