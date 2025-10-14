@@ -46,7 +46,7 @@ function RouteComponent() {
             </div>
             <NewWord />
           </div>
-          <VocabularyList items={filteredVocabulary} />
+          <VocabularyList items={[]} />
         </div>
       </div>
     </FeatureLayout>

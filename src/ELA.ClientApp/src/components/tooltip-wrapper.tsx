@@ -1,5 +1,3 @@
-import type { ComponentProps, ReactNode } from 'react';
-
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
@@ -9,8 +7,8 @@ export function TooltipWrapper({
   className,
   children,
   ...props
-}: ComponentProps<typeof TooltipTrigger> & {
-  label: ReactNode;
+}: React.ComponentProps<typeof TooltipTrigger> & {
+  label: React.ReactNode;
   command?: React.ReactNode;
 }) {
   return (

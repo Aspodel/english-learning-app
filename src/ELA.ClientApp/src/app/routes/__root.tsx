@@ -1,3 +1,4 @@
+import { NotFound } from '@/components/common/not-found';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createRootRoute({
@@ -36,4 +37,8 @@ export const Route = createRootRoute({
       </footer> */}
     </div>
   ),
+
+  notFoundComponent: () => {
+    return <NotFound />;
+  },
 });
