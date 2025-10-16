@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { Kbd } from './ui/kbd';
 
 export function TooltipWrapper({
   label,
@@ -20,11 +21,7 @@ export function TooltipWrapper({
       <TooltipContent>
         <span className='flex items-center gap-[1ch]'>
           {label}
-          {command && (
-            <kbd className='bg-muted text-muted-foreground flex items-center gap-[0.5ch] rounded px-1.5 py-0.5 font-mono text-xs [&>svg]:size-3'>
-              {command}
-            </kbd>
-          )}
+          {command && <Kbd>{command}</Kbd>}
         </span>
       </TooltipContent>
     </Tooltip>
