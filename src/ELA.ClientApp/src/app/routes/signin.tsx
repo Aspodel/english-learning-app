@@ -1,5 +1,7 @@
-import SigninForm from '@/features/auth/components/signin-form';
 import { createFileRoute } from '@tanstack/react-router';
+
+import { AuthLayout } from '@/components/common/layouts/auth-layout';
+import SigninForm from '@/features/auth/components/signin-form';
 
 export const Route = createFileRoute('/signin')({
   component: SignIn,
@@ -7,8 +9,8 @@ export const Route = createFileRoute('/signin')({
 
 function SignIn() {
   return (
-    <div className='h-full flex flex-col justify-center items-center'>
+    <AuthLayout>
       <SigninForm />
-    </div>
+    </AuthLayout>
   );
 }

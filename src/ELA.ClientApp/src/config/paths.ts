@@ -10,10 +10,10 @@ export const paths = {
       getHref: (redirectTo?: string | null | undefined) =>
         `/auth/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
-    login: {
-      path: '/auth/login',
+    signin: {
+      path: '/signin',
       getHref: (redirectTo?: string | null | undefined) =>
-        `/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
+        `/signin${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
   },
 

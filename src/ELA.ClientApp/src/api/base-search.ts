@@ -9,21 +9,27 @@ type SearchBody = {
 }
 
 export function createSearch<T>(name: string, route: string) {
-    const search = async (body: SearchBody): Promise<T[]> => {
+    const search = async (body: SearchBody): Promise<PaginatedList<T>> => {
         const filteredQueryParams = Object.fromEntries(
             Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
         );
-        const response = await api.get(route, { params: filteredQueryParams });
-        if (response.status === 200) return response.data;
-        throw new Error(`Failed to search ${name}`);
+         try {
+            const response = await api.get(route, { params: filteredQueryParams });
+            console.log('Search success:', response.data);
+            return response.data;
+        } catch (err) {
+            console.error('Search failed:', err);
+            throw new Error(`Failed to search ${name}`);
+        }
     }
     const useSearch = (body: SearchBody) => {
-        const { data, isLoading, refetch, error, isError } = useQuery<T[], Error>({
+        const { data, isLoading, refetch, error, isError } = useQuery<PaginatedList<T>, Error>({
             queryKey: [`search-${name}`, body.queryParams],
             queryFn: () => search(body),
         });
         useEffect(() => {
             if (isError) {
+                console.log(error);
                 toast.error(`Error searching ${name}`, {
                     description: getErrorMessage(error),
                     duration: 5000,
@@ -31,7 +37,16 @@ export function createSearch<T>(name: string, route: string) {
             }
         }, [isError, error]);
 
-        return { data: data ?? [], isLoading, refetch };
+        const emptyResult: PaginatedList<T> = {
+            items: [],
+            pageNumber: 1,
+            totalPages: 1,
+            totalCount: 0,
+            hasPreviousPage: false,
+            hasNextPage: false,
+        };
+
+        return { data: data ?? emptyResult, isLoading, refetch };
     }
 
     return { useSearch };

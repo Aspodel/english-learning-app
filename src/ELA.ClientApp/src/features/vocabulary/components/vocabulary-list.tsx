@@ -8,25 +8,19 @@ import {
 } from '@/components/ui/item';
 import { EmptyComponent } from '@/components/empty-component';
 
-interface VocabularyItem {
-  id: number;
-  word: string;
-  definition: string;
-}
-
 type VocabularyListProps = {
-  items: VocabularyItem[];
+  items: Vocabulary[] | any[];
   onCreate?: () => void;
-  onSelect?: (item: VocabularyItem) => void;
+  onSelect?: (item: Vocabulary) => void;
 };
 
 const VocabularyList: React.FC<VocabularyListProps> = ({ items, onSelect }) => {
   if (items.length === 0) {
     return (
       <EmptyComponent
-      title="No Words Found"
-      description="There are currently no words in your vocabulary list. Add new words to get started!"
-      icon="📋"
+        title='No Words Found'
+        description='There are currently no words in your vocabulary list. Add new words to get started!'
+        icon='📋'
       />
     );
   }
@@ -37,14 +31,12 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onSelect }) => {
         <Item
           variant='outline'
           key={item.id}
-          className={`cursor-${onSelect ? 'pointer' : 'default'} gap-0 transition-shadow hover:shadow-lg`}
+          className={`cursor-${onSelect ? 'pointer' : 'default'} gap-0 transition hover:shadow-md hover:scale-[1.05]`}
           onClick={onSelect ? () => onSelect(item) : undefined}
         >
           <ItemContent>
-            <ItemTitle className='text-lg'>{item.word}</ItemTitle>
-            <ItemDescription>
-              <p className='text-muted-foreground'>{item.definition}</p>
-            </ItemDescription>
+            <ItemTitle className='text-lg'>{item.text}</ItemTitle>
+            <ItemDescription>{item.ipa}</ItemDescription>
           </ItemContent>
         </Item>
       ))}

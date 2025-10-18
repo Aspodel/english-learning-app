@@ -5,7 +5,7 @@ import { getErrorMessage } from "@/lib/get-axios-error";
 import { api } from "@/lib/api-client";
 
 type GetBody = {
-    id: string;
+    id: string | number;
     queryParams?: Record<string, string | undefined>;
 }
 
@@ -14,7 +14,7 @@ export function createGet<T>(name: string, route: string) {
         const filteredQueryParams = Object.fromEntries(
             Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
         );
-        const response = await api.get(route.replace(":id", body.id), { params: filteredQueryParams });
+        const response = await api.get(route.replace(":id", String(body.id)), { params: filteredQueryParams });
         if (response.status === 200) return response.data;
         throw new Error(`Failed to get ${name}`);
     };

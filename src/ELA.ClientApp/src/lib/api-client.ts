@@ -1,8 +1,11 @@
-import Axios, { type InternalAxiosRequestConfig } from 'axios';
+import axios, { type InternalAxiosRequestConfig } from 'axios';
+import { toast } from 'sonner';
 
 import { env } from '@/config/env';
 import { paths } from '@/config/paths';
-import { toast } from 'sonner';
+
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjA5OGE1My1kMmNlLTRjMGYtYjExNy02NTY0ODY3NzRjYzIiLCJ1bmlxdWVfbmFtZSI6InVzZXIiLCJleHAiOjE3NjA4MDc1OTQsImlzcyI6IkVMQS5BcGkiLCJhdWQiOiJFTEEuQ2xpZW50In0.mgmWwHtOYV-o5r5c6oCQKYyberxTcpECfsT3Nc10hgw';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   if (config.headers) {
@@ -10,10 +13,12 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   }
 
   config.withCredentials = true;
+
+  config.headers.Authorization = `Bearer ${token}`;
   return config;
 }
 
-export const api = Axios.create({
+export const api = axios.create({
   baseURL: env.API_URL,
 });
 
@@ -34,7 +39,7 @@ api.interceptors.response.use(
       const searchParams = new URLSearchParams();
       const redirectTo =
         searchParams.get('redirectTo') || window.location.pathname;
-      window.location.href = paths.auth.login.getHref(redirectTo);
+      window.location.href = paths.auth.signin.getHref(redirectTo);
     }
 
     return Promise.reject(error);

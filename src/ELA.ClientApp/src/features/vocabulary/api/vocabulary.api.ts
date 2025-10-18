@@ -1,7 +1,7 @@
 import { createCRUD } from '@/lib/crud-factory';
 import type { CreateVocabularyDto, UpdateVocabularyDto } from './types';
 
-const endpoint = 'vocabulary';
+const endpoint = 'vocabularies';
 
 export const vocabularyApi = createCRUD<
   CreateVocabularyDto,

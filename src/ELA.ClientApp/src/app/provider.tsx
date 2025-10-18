@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-// import { AuthLoader } from '@/lib/auth';
 import { Toaster } from '@/components/ui/sonner';
 import { ErrorFallback } from '@/components/common/error-fallback';
 import { Loading } from '@/components/common/loading';
@@ -18,10 +17,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <QueryProvider>
           <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-            {/* <AuthLoader> */}
             {children}
             <Toaster position='top-right' richColors />
-            {/* </AuthLoader> */}
           </ThemeProvider>
         </QueryProvider>
       </ErrorBoundary>
