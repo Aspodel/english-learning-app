@@ -4,7 +4,7 @@ import NewDeck from '@/features/flashcard/components/new-deck';
 import FeatureLayout from '@/components/common/layouts/feature-layout';
 import { EmptyComponent } from '@/components/empty-component';
 
-export const Route = createFileRoute('/app/flashcards')({
+export const Route = createFileRoute('/app/flashcard')({
   component: RouteComponent,
 });
 

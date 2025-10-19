@@ -1,45 +1,54 @@
-import { api } from "@/lib/api-client";
-import { getErrorMessage } from "@/lib/get-axios-error";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { api } from '@/lib/api-client';
+import { getErrorMessage } from '@/lib/get-axios-error';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 type PostBody<T> = {
-    data: T;
-    queryParams?: Record<string, string | undefined>;
-}
+  data: T;
+  queryParams?: Record<string, string | undefined>;
+};
 
 type PostResponse = {
-    id: string;
-}
+  id: string;
+};
 
 export function createPost<T>(name: string, route: string) {
-    const create = async (body: PostBody<T>): Promise<PostResponse> => {
-        const filteredQueryParams = Object.fromEntries(
-            Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
-        );
-        const response = await api.post(route, body.data, { params: filteredQueryParams });
-        if (response.status === 201) {
-            return response.data;
-        }
-        throw new Error(`Failed to create ${name}`);
+  const create = async (body: PostBody<T>): Promise<PostResponse> => {
+    const filteredQueryParams = Object.fromEntries(
+      Object.entries(body.queryParams ?? {}).filter(
+        ([, v]) => typeof v === 'string' && v
+      )
+    );
+    const response = await api.post(route, body.data, {
+      params: filteredQueryParams,
+    });
+    if (response.status === 201) {
+      return response.data;
     }
+    throw new Error(`Failed to create ${name}`);
+  };
 
-    const useCreate = () => {
-        const defaultErrorHandler = (error: unknown) => {
-            toast.error(`Error creating ${name}`, {
-                description: getErrorMessage(error),
-                duration: 5000,
-            });
-        }
+  const useCreate = () => {
+    const queryClient = useQueryClient();
 
-        const createMutation = useMutation<PostResponse, unknown, PostBody<T>>({
-            mutationKey: [`post-${name}`],
-            mutationFn: create,
-            onError: defaultErrorHandler
-        })
+    const defaultErrorHandler = (error: unknown) => {
+      toast.error(`Error creating ${name}`, {
+        description: getErrorMessage(error),
+        duration: 5000,
+      });
+    };
 
-        return { createMutation }
-    }
+    const createMutation = useMutation<PostResponse, unknown, PostBody<T>>({
+      mutationKey: [`post-${name}`],
+      mutationFn: create,
+      onError: defaultErrorHandler,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [`search-${name}`] });
+      },
+    });
 
-    return { useCreate }
+    return { createMutation };
+  };
+
+  return { useCreate };
 }

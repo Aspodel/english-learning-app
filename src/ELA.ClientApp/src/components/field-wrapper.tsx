@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Info } from 'lucide-react';
 
 import {
@@ -28,9 +28,12 @@ export function FieldWrapper({
   className,
   ...props
 }: FieldWrapperProps) {
+  const { control } = useFormContext();
+
   return (
     <Controller
       name={name}
+      control={control}
       render={({ field, fieldState }) => (
         <Field
           data-invalid={fieldState.invalid}

@@ -5,7 +5,7 @@ import { env } from '@/config/env';
 import { paths } from '@/config/paths';
 
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjA5OGE1My1kMmNlLTRjMGYtYjExNy02NTY0ODY3NzRjYzIiLCJ1bmlxdWVfbmFtZSI6InVzZXIiLCJleHAiOjE3NjA4MDc1OTQsImlzcyI6IkVMQS5BcGkiLCJhdWQiOiJFTEEuQ2xpZW50In0.mgmWwHtOYV-o5r5c6oCQKYyberxTcpECfsT3Nc10hgw';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjA5OGE1My1kMmNlLTRjMGYtYjExNy02NTY0ODY3NzRjYzIiLCJ1bmlxdWVfbmFtZSI6InVzZXIiLCJleHAiOjE3NjA4NzMxMTgsImlzcyI6IkVMQS5BcGkiLCJhdWQiOiJFTEEuQ2xpZW50In0.ILksS07bRlbCnyi2cXQQTAxgGhxV8r9yJBN5HbZPIqo';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   if (config.headers) {
@@ -25,7 +25,7 @@ export const api = axios.create({
 api.interceptors.request.use(authRequestInterceptor);
 api.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response;
   },
   (error) => {
     const message = error.response?.data?.message || error.message;

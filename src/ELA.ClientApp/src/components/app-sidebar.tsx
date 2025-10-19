@@ -200,13 +200,13 @@ const menuItems = [
     icon: BookMarked,
   },
   {
-    title: 'Flashcards',
-    url: '/app/flashcards',
+    title: 'Flashcard',
+    url: '/app/flashcard',
     icon: WalletCards,
   },
   {
-    title: 'Quizzes',
-    url: '/app/quizzes',
+    title: 'Quiz',
+    url: '/app/quiz',
     icon: NotebookPen,
   },
 ];

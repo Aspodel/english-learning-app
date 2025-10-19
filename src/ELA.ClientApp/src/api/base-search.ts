@@ -13,14 +13,10 @@ export function createSearch<T>(name: string, route: string) {
         const filteredQueryParams = Object.fromEntries(
             Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
         );
-         try {
-            const response = await api.get(route, { params: filteredQueryParams });
-            console.log('Search success:', response.data);
-            return response.data;
-        } catch (err) {
-            console.error('Search failed:', err);
-            throw new Error(`Failed to search ${name}`);
-        }
+        
+        const response = await api.get(route, { params: filteredQueryParams });
+        if (response.status === 200) return response.data;
+        throw new Error(`Failed to search ${name}`);
     }
     const useSearch = (body: SearchBody) => {
         const { data, isLoading, refetch, error, isError } = useQuery<PaginatedList<T>, Error>({

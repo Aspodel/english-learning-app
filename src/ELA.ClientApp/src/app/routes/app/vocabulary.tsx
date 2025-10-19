@@ -13,17 +13,24 @@ export const Route = createFileRoute('/app/vocabulary')({
 });
 
 function RouteComponent() {
-  // const vocab = vocabularyApi.useSearch({});
-  const t = vocabularyApi.useGet({ id: 1 });
-  console.log(t);
+  const vocab = vocabularyApi.useSearch({queryParams: { pageSize: '100' }});
+  console.log(vocab.data, vocab.isLoading);
   const [search, setSearch] = React.useState('');
-  const filteredVocabulary = sampleVocabulary.filter(
+  // const filteredVocabulary = sampleVocabulary.filter(
+  //   (item) =>
+  //     item.text.toLowerCase().includes(search.toLowerCase()) ||
+  //     item.definitions.some((def) =>
+  //       def.meaning.toLowerCase().includes(search.toLowerCase())
+  //     )
+  // );
+
+  const filteredVocabulary = vocab.data?.items.filter(
     (item) =>
-      item.text.toLowerCase().includes(search.toLowerCase()) ||
-      item.definitions.some((def) =>
-        def.meaning.toLowerCase().includes(search.toLowerCase())
-      )
-  );
+      item.text.toLowerCase().includes(search.toLowerCase())
+      //  || item.definitions.some((def) =>
+      //   def.meaning.toLowerCase().includes(search.toLowerCase())
+      // )
+  ) || [];
 
   return (
     <FeatureLayout

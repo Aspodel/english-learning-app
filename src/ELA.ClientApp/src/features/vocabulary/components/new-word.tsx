@@ -1,6 +1,7 @@
 import React from 'react';
+import { toast } from 'sonner';
 import { Plus } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,24 +25,33 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { Label } from '@/components/ui/label';
+import { FieldWrapper } from '@/components/field-wrapper';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
-type FormValues = {
-  word: string;
-  meaning: string;
-};
+import { vocabularyApi } from '../api/vocabulary.api';
+import { useVocabularyCreateForm } from '../hooks/use-vocabulary-form';
+import type { CreateVocabularyDto } from '../api/types';
 
 export default function NewWord() {
   const isMobile = useIsMobile();
   const [open, setOpen] = React.useState(false);
-  const { register, handleSubmit, reset } = useForm<FormValues>();
 
-  const onSubmit = (data: FormValues) => {
-    // Handle submit logic here
-    console.log(data);
-    reset();
+  const { form } = useVocabularyCreateForm();
+  const { createMutation } = vocabularyApi.useCreate();
+
+  const onSubmit = (data: CreateVocabularyDto) => {
+    createMutation.mutate(
+      { data },
+      {
+        onSuccess: () => {
+          toast.success('Word created successfully');
+
+          setOpen(false);
+          form.reset();
+        },
+      }
+    );
   };
 
   if (isMobile) {
@@ -60,30 +70,29 @@ export default function NewWord() {
             </DrawerDescription>
           </DrawerHeader>
 
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className='grid flex-1 auto-rows-min gap-6 px-4'
-          >
-            <div className='grid gap-3'>
-              <Label>Word</Label>
-              <Input
-                placeholder='Word'
-                {...register('word', { required: true })}
-              />
-            </div>
-            <div className='grid gap-3'>
-              <Label>Meaning</Label>
-              <Input
-                placeholder='Meaning'
-                {...register('meaning', { required: true })}
-              />
-            </div>
-          </form>
+          <FormProvider {...form}>
+            <form
+              id='vocabulary-form'
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='grid flex-1 auto-rows-min gap-6 px-4'
+            >
+              <FieldWrapper name='text' label='Word'>
+                <Input placeholder='Word' />
+              </FieldWrapper>
+              <FieldWrapper name='ipa' label='IPA'>
+                <Input placeholder='IPA' />
+              </FieldWrapper>
+            </form>
+          </FormProvider>
 
           <DrawerFooter>
-            <Button type='submit'>Add word</Button>
+            <Button type='submit' form='vocabulary-form'>
+              Add word
+            </Button>
             <DrawerClose asChild>
-              <Button variant='outline'>Cancel</Button>
+              <Button variant='outline' onClick={() => form.reset()}>
+                Cancel
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </DrawerContent>
@@ -92,7 +101,7 @@ export default function NewWord() {
   }
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button>
           <Plus /> Add New Word
@@ -106,30 +115,29 @@ export default function NewWord() {
           </SheetDescription>
         </SheetHeader>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className='grid flex-1 auto-rows-min gap-6 px-4'
-        >
-          <div className='grid gap-3'>
-            <Label>Word</Label>
-            <Input
-              placeholder='Word'
-              {...register('word', { required: true })}
-            />
-          </div>
-          <div className='grid gap-3'>
-            <Label>Meaning</Label>
-            <Input
-              placeholder='Meaning'
-              {...register('meaning', { required: true })}
-            />
-          </div>
-        </form>
+        <FormProvider {...form}>
+          <form
+            id='vocabulary-form'
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='grid flex-1 auto-rows-min gap-6 px-4'
+          >
+            <FieldWrapper name='text' label='Word'>
+              <Input placeholder='Word' />
+            </FieldWrapper>
+            <FieldWrapper name='ipa' label='IPA'>
+              <Input placeholder='IPA' />
+            </FieldWrapper>
+          </form>
+        </FormProvider>
 
         <SheetFooter>
-          <Button type='submit'>Add word</Button>
+          <Button type='submit' form='vocabulary-form'>
+            Add word
+          </Button>
           <SheetClose asChild>
-            <Button variant='outline'>Close</Button>
+            <Button variant='outline' onClick={() => form.reset()}>
+              Cancel
+            </Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

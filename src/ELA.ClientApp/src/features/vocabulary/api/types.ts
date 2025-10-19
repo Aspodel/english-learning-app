@@ -1,10 +1,11 @@
 export type CreateVocabularyDto = {
-  word: string;
-  definition: string;
-  exampleSentence?: string;
+  text: string;
+  ipa: string;
 };
 
 export type UpdateVocabularyDto = {
-  definition?: string;
-  exampleSentence?: string;
+  text: string;
+  ipa: string;
+  userId: string;
+  definitions: Definition[];
 };
