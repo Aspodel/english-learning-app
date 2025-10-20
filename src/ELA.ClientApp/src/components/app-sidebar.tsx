@@ -27,7 +27,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Link, useRouterState } from '@tanstack/react-router';
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,11 +38,19 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { useSignOut } from '@/api/auth';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const routerState = useRouterState();
   const pathname = routerState.location.pathname;
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
+  const logout = useSignOut;
+
+  const handleLogout = () => {
+    logout();
+    navigate({ to: '/signin' });
+  }
 
   return (
     <Sidebar collapsible='icon' variant='inset' {...props}>
@@ -175,7 +183,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={handleLogout}>
                   <LogOut />
                   Log out
                 </DropdownMenuItem>

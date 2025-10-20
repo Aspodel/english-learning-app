@@ -14,24 +14,30 @@ import {
 } from '@/components/ui/card';
 import { FieldWrapper } from '@/components/field-wrapper';
 import { FieldGroup } from '@/components/ui/field';
+import { useSignIn } from '@/api/auth';
+import { toast } from 'sonner';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 
-interface SignInFormProps {
-  onSubmit: (credentials: AuthCredentials) => void;
-  loading?: boolean;
-  // error?: string;
-}
+const SignInForm: React.FC = () => {
+  const { mutate: signIn, isPending: loading } = useSignIn();
+  const navigate = useNavigate();
+  const { redirectTo } = useSearch({ from: '/signin' });
 
-const SignInForm: React.FC<SignInFormProps> = ({
-  onSubmit,
-  loading = false,
-  // error,
-}) => {
   const form = useForm<AuthCredentials>({
     defaultValues: {
       username: '',
       password: '',
     },
   });
+
+  const onSubmit = (data: AuthCredentials) => {
+    signIn(data, {
+      onSuccess: () => {
+        toast.success('Signed in successfully');
+        navigate({ to: redirectTo ?? '/app/dashboard' });
+      },
+    });
+  };
 
   return (
     <Form {...form}>
@@ -74,10 +80,6 @@ const SignInForm: React.FC<SignInFormProps> = ({
               </span>
             </div>
 
-            {/* <FormFieldWrapper name='username' label='Username'>
-              <Input placeholder='johndoe' disabled={loading} />
-            </FormFieldWrapper> */}
-
             <FieldGroup>
               <FieldWrapper name='username' label='Username'>
                 <Input placeholder='johndoe' disabled={loading} />
@@ -90,14 +92,6 @@ const SignInForm: React.FC<SignInFormProps> = ({
                 />
               </FieldWrapper>
             </FieldGroup>
-
-            {/* <FormFieldWrapper name='password' label='Password'>
-              <Input
-                type='password'
-                placeholder='••••••••'
-                disabled={loading}
-              />
-            </FormFieldWrapper> */}
           </CardContent>
 
           <CardFooter className='flex flex-col gap-4'>
@@ -106,7 +100,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
               disabled={loading}
               className='w-full bg-primary text-primary-foreground'
             >
-              {loading ? 'Creating...' : 'Create account'}
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
 
             <div className='text-center text-sm'>

@@ -34,6 +34,11 @@ const getUser = async (): Promise<User> => {
 
 const requestWithCredentials = async <T>(url: string, data: T) => {
   const response = await api.post(url, data);
+  
+  // store token
+  const token = response.data.token;
+  if (token) localStorage.setItem('access_token', token);
+
   return response.data;
 };
 
@@ -91,11 +96,11 @@ const useSignUp = (
   );
 
 const useSignOut = (
-  options?: Omit<UseMutationOptions<unknown, Error, void>, 'mutationFn'>
-) =>
-  useApiMutation<unknown, void>(async () => {
-    const response = await api.post('/auth/logout');
-    return response.data;
-  }, options);
+  // options?: Omit<UseMutationOptions<unknown, Error, void>, 'mutationFn'>
+) => localStorage.removeItem('access_token');
+  // useApiMutation<unknown, void>(async () => {
+  //   const response = await api.post('/auth/logout');
+  //   return response.data;
+  // }, options);
 
 export { useUser, useSignIn, useSignUp, useSignOut };

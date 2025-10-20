@@ -1,20 +1,18 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
-import { toast } from 'sonner';
 
 import { env } from '@/config/env';
 import { paths } from '@/config/paths';
-
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjA5OGE1My1kMmNlLTRjMGYtYjExNy02NTY0ODY3NzRjYzIiLCJ1bmlxdWVfbmFtZSI6InVzZXIiLCJleHAiOjE3NjA4NzMxMTgsImlzcyI6IkVMQS5BcGkiLCJhdWQiOiJFTEEuQ2xpZW50In0.ILksS07bRlbCnyi2cXQQTAxgGhxV8r9yJBN5HbZPIqo';
+import { toast } from 'sonner';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  if (config.headers) {
-    config.headers.Accept = 'application/json';
+  const token = localStorage.getItem('access_token');
+
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  config.withCredentials = true;
-
-  config.headers.Authorization = `Bearer ${token}`;
+  config.headers.Accept = 'application/json';
   return config;
 }
 
@@ -29,6 +27,7 @@ api.interceptors.response.use(
   },
   (error) => {
     const message = error.response?.data?.message || error.message;
+    console.log('[API CLIENT] log: ', message);
 
     toast.error('Error', {
       description: message,
@@ -36,6 +35,7 @@ api.interceptors.response.use(
     });
 
     if (error.response?.status === 401) {
+      localStorage.removeItem('access_token');
       const searchParams = new URLSearchParams();
       const redirectTo =
         searchParams.get('redirectTo') || window.location.pathname;
