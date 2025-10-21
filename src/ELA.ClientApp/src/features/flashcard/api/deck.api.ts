@@ -1,12 +1,13 @@
 import { createCRUD } from '@/lib/crud-factory';
+import type { CreateDeckDto, UpdateDeckDto, DeckListItem } from './type';
 
-const endpoint = 'deck';
+const endpoint = 'decks';
 
 export const deckApi = createCRUD<
   CreateDeckDto,
   UpdateDeckDto,
   Deck,
-  Deck
+  DeckListItem
 >(endpoint, {
   get: `/${endpoint}/:id`,
   post: `/${endpoint}`,

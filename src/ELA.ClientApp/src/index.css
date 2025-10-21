@@ -168,6 +168,10 @@
   --shadow-2xl: 0px 1px 4px 0px hsl(0 0% 0% / 0.13);
 }
 
+body {
+  letter-spacing: var(--tracking-normal);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -176,10 +180,6 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
   }
-}
-
-body {
-  letter-spacing: var(--tracking-normal);
 }
 
 /* View Transition Wave Effect */

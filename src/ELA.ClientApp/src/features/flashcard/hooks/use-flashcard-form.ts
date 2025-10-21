@@ -15,7 +15,7 @@ const formSchema = z.object({
   reviewLogs: z.array(z.number()).optional(),
 });
 
-export type formSchemaType = z.infer<typeof formSchema>;
+export type flashCardFormSchemaType = z.infer<typeof formSchema>;
 
 export function useFlashCardCreateForm() {
   const initialValues = {

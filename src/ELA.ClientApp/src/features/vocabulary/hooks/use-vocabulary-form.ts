@@ -8,7 +8,7 @@ const formSchema = z.object({
   ipa: z.string().min(1, 'IPA is required'),
 });
 
-export type formSchemaType = z.infer<typeof formSchema>;
+export type vocabularyFormSchemaType = z.infer<typeof formSchema>;
 
 export function useVocabularyCreateForm() {
   const initialValues = {

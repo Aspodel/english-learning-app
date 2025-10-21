@@ -18,7 +18,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         <QueryProvider>
           <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
             {children}
-            <Toaster position='top-right' richColors />
+            <Toaster position='top-center' />
           </ThemeProvider>
         </QueryProvider>
       </ErrorBoundary>

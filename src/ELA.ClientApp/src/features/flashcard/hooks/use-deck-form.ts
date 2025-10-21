@@ -5,17 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  userId: z.string().min(1, 'User ID is required'),
-  cards: z.array(z.number()),
+  cards: z.array(z.number()).optional(),
 });
 
-export type formSchemaType = z.infer<typeof formSchema>;
+export type deckFormSchemaType = z.infer<typeof formSchema>;
 
 export function useDeckCreateForm() {
   const initialValues = {
     name: '',
-    userId: '',
-    cards: [],
   };
 
   const form = useForm({
@@ -30,7 +27,6 @@ export function useDeckEditForm(deck: Deck) {
   const initialValues = React.useMemo(
     () => ({
       name: deck.name,
-      userId: deck.userId,
       cards: deck.cards.map((card) => card.id),
     }),
     [deck]

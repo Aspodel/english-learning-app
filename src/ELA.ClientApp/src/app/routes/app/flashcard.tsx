@@ -1,26 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import NewDeck from '@/features/flashcard/components/new-deck';
 import FeatureLayout from '@/components/common/layouts/feature-layout';
-import { EmptyComponent } from '@/components/empty-component';
+import { deckApi, DeckList, NewDeck } from '@/features/flashcard';
 
 export const Route = createFileRoute('/app/flashcard')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const deck = deckApi.useSearch({});
+  console.log(deck);
   return (
     <FeatureLayout
       title='Decks'
-      description='Choose a deck to study'
+      description='Browse and manage your flashcard decks'
       toolbar={<NewDeck />}
     >
-      <div className='flex h-full w-full flex-col items-center justify-center gap-4'>
-        <EmptyComponent
-          title='No decks yet'
-          description='Create a new deck to start studying flashcards!'
-          icon= {'📚'}
-        />
+      <div className='flex flex-col h-full gap-4 pt-8'>
+      <DeckList items={deck.data.items} />
       </div>
     </FeatureLayout>
   );
