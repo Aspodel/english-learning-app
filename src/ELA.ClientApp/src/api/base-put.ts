@@ -1,46 +1,58 @@
-import { api } from "@/lib/api-client";
-import { getErrorMessage } from "@/lib/get-axios-error";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { api } from '@/lib/api-client';
+import { getErrorMessage } from '@/lib/get-axios-error';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 type PutBody<T> = {
-    data: T;
-    queryParams?: Record<string, string | undefined>;
-}
+  id: string | number;
+  data: T;
+  queryParams?: Record<string, string | undefined>;
+};
 
 type PutResponse = {
-    id: string;
-}
+  id: string;
+};
 
 export function createPut<T>(name: string, route: string) {
-
-    const update = async (body: PutBody<T>): Promise<PutResponse> => {
-        const filteredQueryParams = Object.fromEntries(
-            Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
-        );
-        const response = await api.put(route, body.data, { params: filteredQueryParams });
-        if (response.status === 200) {
-            return response.data;
-        }
-        throw new Error(`Failed to update ${name}`);
+  const update = async (body: PutBody<T>): Promise<PutResponse> => {
+    const filteredQueryParams = Object.fromEntries(
+      Object.entries(body.queryParams ?? {}).filter(
+        ([, v]) => typeof v === 'string' && v
+      )
+    );
+    const response = await api.put(
+      route.replace(':id', String(body.id)),
+      body.data,
+      { params: filteredQueryParams }
+    );
+    if (response.status === 204) {
+      return response.data;
     }
+    throw new Error(`Failed to update ${name}`);
+  };
 
-    const useUpdate = () => {
-        const defaultErrorHandler = (error: unknown) => {
-            toast.error(`Error updating ${name}`, {
-                description: getErrorMessage(error),
-                duration: 5000,
-            });
-        }
+  const useUpdate = () => {
+    const queryClient = useQueryClient();
 
-        const updateMutation = useMutation<PutResponse, unknown, PutBody<T>>({
-            mutationKey: [`put-${name}`],
-            mutationFn: update,
-            onError: defaultErrorHandler
-        })
+    const defaultErrorHandler = (error: unknown) => {
+      toast.error(`Error updating ${name}`, {
+        description: getErrorMessage(error),
+        duration: 5000,
+      });
+    };
 
-        return { updateMutation }
-    }
+    const updateMutation = useMutation<PutResponse, unknown, PutBody<T>>({
+      mutationKey: [`put-${name}`],
+      mutationFn: update,
+      onError: defaultErrorHandler,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [`search-${name}`] });
+        queryClient.invalidateQueries({ queryKey: [`get-${name}`] });
+      },
+    });
 
-    return { useUpdate }
+    return { updateMutation };
+  };
+
+  return { useUpdate };
 }

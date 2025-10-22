@@ -21,6 +21,7 @@ type ConfirmDialogProps = {
   onConfirm?: () => void;
   onCancel?: () => void;
   isLoading?: boolean;
+  trigger?: React.ReactNode;
   children?: React.ReactNode;
 };
 
@@ -32,16 +33,20 @@ export const ConfirmDialog = ({
   onConfirm,
   onCancel,
   isLoading = false,
+  trigger,
   children,
 }: ConfirmDialogProps) => {
   return (
     <AlertDialog>
-      {children && <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>}
+      {trigger && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+
+        {children}
+
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onCancel}>{cancelText}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={isLoading}>

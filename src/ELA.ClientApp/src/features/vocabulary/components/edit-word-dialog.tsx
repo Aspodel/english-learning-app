@@ -1,28 +1,36 @@
 import React from 'react';
 import { toast } from 'sonner';
-import { PlusIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import {
-  useVocabularyCreateForm,
+  useVocabularyEditForm,
   vocabularyApi,
   VocabularyForm,
   type vocabularyFormSchemaType,
 } from '@/features/vocabulary';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 
-export function NewWord() {
+type EditWordDialogProps = {
+  trigger: React.ReactNode;
+  word: Vocabulary;
+};
+
+export function EditWordDialog({ trigger, word }: EditWordDialogProps) {
   const [open, setOpen] = React.useState(false);
 
-  const { form } = useVocabularyCreateForm();
-  const { createMutation } = vocabularyApi.useCreate();
+  const { form } = useVocabularyEditForm(word);
+  const { updateMutation } = vocabularyApi.useUpdate();
 
   const onSubmit = (data: vocabularyFormSchemaType) => {
-    createMutation.mutate(
-      { data },
+    updateMutation.mutate(
+      {
+        id: word.id,
+        data: {
+          ...data,
+        },
+      },
       {
         onSuccess: () => {
-          toast.success('Word created successfully');
+          toast.success('Word updated successfully');
 
           setOpen(false);
           form.reset();
@@ -35,16 +43,12 @@ export function NewWord() {
     <ResponsiveDialog
       open={open}
       onOpenChange={setOpen}
-      title='New Word'
-      description='Type a new word and its meaning to your vocabulary.'
-      trigger={
-        <Button>
-          <PlusIcon />
-          Add Word
-        </Button>
-      }
+      title='Edit Word'
+      description='Update the details of your vocabulary word below.'
+      trigger={trigger}
       onCancel={() => form.reset()}
       formId='vocabulary-form'
+      footerBtnText='Save'
     >
       <VocabularyForm form={form} onSubmit={onSubmit} />
     </ResponsiveDialog>

@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import FeatureLayout from '@/components/common/layouts/feature-layout';
 import { Input } from '@/components/ui/input';
 import {
-  NewWord,
+  AddWordDialog,
   SectionCards,
   vocabularyApi,
   VocabularyList,
@@ -58,7 +58,7 @@ function RouteComponent() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <NewWord />
+            <AddWordDialog />
           </div>
           <VocabularyList items={filteredVocabulary} />
         </div>

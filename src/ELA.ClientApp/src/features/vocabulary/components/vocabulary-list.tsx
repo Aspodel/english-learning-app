@@ -58,7 +58,10 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
                 <ItemDescription>{item.ipa}</ItemDescription>
               </div>
 
-              <VocabularyCardDropdown onDelete={() => handleDelete(item.id)} />
+              <VocabularyCardDropdown
+                word={item}
+                onDelete={() => handleDelete(item.id)}
+              />
             </div>
           </ItemContent>
         </Item>

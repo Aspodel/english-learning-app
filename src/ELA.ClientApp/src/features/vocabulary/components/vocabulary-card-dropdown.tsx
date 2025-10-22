@@ -15,12 +15,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { EditWordDialog } from '@/features/vocabulary';
 
 type VocabularyCardDropdownProps = {
+  word: Vocabulary;
   onDelete: () => void;
 };
 
 export function VocabularyCardDropdown({
+  word,
   onDelete,
 }: VocabularyCardDropdownProps) {
   return (
@@ -43,24 +46,34 @@ export function VocabularyCardDropdown({
           <DropdownMenuItem disabled>
             <CirclePauseIcon /> Suspense
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <SquarePenIcon />
-            Edit
-          </DropdownMenuItem>
+          <EditWordDialog
+            word={word}
+            trigger={
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <SquarePenIcon />
+                Edit
+              </DropdownMenuItem>
+            }
+          />
           <ConfirmDialog
             title='Confirm Delete'
             description='Are you sure you want to delete this word? This action cannot be undone.'
             onConfirm={onDelete}
-          >
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <Trash2Icon />
-              Delete
-            </DropdownMenuItem>
-          </ConfirmDialog>
+            trigger={
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <Trash2Icon />
+                Delete
+              </DropdownMenuItem>
+            }
+          />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

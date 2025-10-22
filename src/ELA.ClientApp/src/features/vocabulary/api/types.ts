@@ -6,6 +6,17 @@ export type CreateVocabularyDto = {
 export type UpdateVocabularyDto = {
   text: string;
   ipa: string;
-  userId: string;
-  definitions: Definition[];
+  definitions?: DefinitionDto[];
+};
+
+export type DefinitionDto = {
+  meaning: string;
+  translation: string;
+  partOfSpeech: string;
+  examples?: ExampleDto[];
+};
+
+export type ExampleDto = {
+  text: string;
+  translation: string;
 };
