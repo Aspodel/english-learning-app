@@ -20,8 +20,9 @@ public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVoca
 
     public async Task<PaginatedList<VocabularyListItemDto>> Handle(GetVocabulariesWithPaginationQuery request, CancellationToken cancellationToken)
     {
+        
         var query = _context.Vocabularies
-            // .Where(v => v.UserId == _currentUser.Id)
+            .Where(v => v.UserId == _currentUser.Id)
             .OrderBy(v => v.Created)
                 .ThenBy(v => v.Text)
             .Skip((request.PageNumber - 1) * request.PageSize)
@@ -32,7 +33,13 @@ public class GetVocabulariesWithPaginationQueryHandler : IRequestHandler<GetVoca
                 v.Text,
                 v.IPA,
                 v.Definitions.Count,
-                v.Created
+                v.Created,
+                v.Definitions.Where(d => d.PartOfSpeech != null)
+                            .Select(d => new PartOfSpeechDto(
+                                    d.PartOfSpeech!.Name,
+                                    d.PartOfSpeech.Abbreviation))
+                            .Distinct()
+                            .ToList()
             ));
 
         return await PaginatedList<VocabularyListItemDto>.CreateAsync(query, request.PageNumber, request.PageSize, cancellationToken);

@@ -21,14 +21,20 @@ public class SearchVocabulariesQueryHandler : IRequestHandler<SearchVocabularies
             .Where(v => v.UserId == _currentUser.Id &&
                         (v.Text.Contains(request.SearchText) ||
                          v.Definitions.Any(d => d.Meaning.Contains(request.SearchText) ||
-                                                d.Translation.Contains(request.SearchText))))
+                                                (d.Translation != null && d.Translation.Contains(request.SearchText)))))
             .OrderBy(v => v.Text)
             .Select(v => new VocabularyListItemDto(
                 v.Id,
                 v.Text,
                 v.IPA,
                 v.Definitions.Count,
-                v.Created
+                v.Created,
+                v.Definitions.Where(d => d.PartOfSpeech != null)
+                            .Select(d => new PartOfSpeechDto(
+                                    d.PartOfSpeech!.Name,
+                                    d.PartOfSpeech.Abbreviation))
+                            .Distinct()
+                            .ToList()
             ))
             .ToListAsync(cancellationToken);
     }

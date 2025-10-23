@@ -8,7 +8,7 @@ public interface IIdentityService
 
     Task<bool> AuthorizeAsync(string userId, string policyName);
 
-    Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
+    Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, string? email = null, string? firstName = null, string? lastName = null, DateOnly? dateOfBirth = null);
 
     Task<Result> DeleteUserAsync(string userId);
 
@@ -16,7 +16,7 @@ public interface IIdentityService
 
     Task<Result> ChangePasswordAsync(string userId, string currentPassword, string newPassword);
 
-    Task<Result> UpdateProfileAsync(string userId, string email, string firstName, string lastName);
+    Task<Result> UpdateProfileAsync(string userId, string? email, string? firstName, string? lastName, DateOnly? dateOfBirth);
 
     Task<UserDto?> GetUserByIdAsync(string userId);
 

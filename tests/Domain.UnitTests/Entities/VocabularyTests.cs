@@ -7,7 +7,7 @@ public class VocabularyTests
     [Fact]
     public void Should_Create_Vocabulary()
     {
-        var vocab = new Vocabulary("apple", "ˈæp.əl", "user1");
+        var vocab = new Vocabulary("apple", "user1", "ˈæp.əl");
 
         vocab.Text.Should().Be("apple");
         vocab.IPA.Should().Be("ˈæp.əl");
@@ -18,7 +18,7 @@ public class VocabularyTests
     [Fact]
     public void Should_Throw_When_Text_IsEmpty()
     {
-        Action act = () => new Vocabulary("", "ˈæp.əl", "user1");
+        Action act = () => new Vocabulary("", "user1", "ˈæp.əl");
 
         act.Should().Throw<ArgumentException>();
     }
@@ -26,7 +26,7 @@ public class VocabularyTests
     [Fact]
     public void Should_Throw_When_IPA_IsEmpty()
     {
-        Action act = () => new Vocabulary("apple", "", "user1");
+        Action act = () => new Vocabulary("apple", "user1", "");
 
         act.Should().Throw<ArgumentException>();
     }
@@ -34,7 +34,7 @@ public class VocabularyTests
     [Fact]
     public void Should_Update_Vocabulary()
     {
-        var vocab = new Vocabulary("apple", "ˈæp.əl", "user1");
+        var vocab = new Vocabulary("apple", "user1", "ˈæp.əl");
 
         vocab.Update("banana", "bəˈnɑː.nə");
 
@@ -45,7 +45,7 @@ public class VocabularyTests
     [Fact]
     public void Should_Add_Definition()
     {
-        var vocab = new Vocabulary("apple", "ˈæp.əl", "user1");
+        var vocab = new Vocabulary("apple", "user1", "ˈæp.əl");
 
         var def = vocab.AddDefinition("A fruit", "Quả táo", PartOfSpeech.Noun);
 
@@ -58,7 +58,7 @@ public class VocabularyTests
     [Fact]
     public void Should_Remove_Definition()
     {
-        var vocab = new Vocabulary("apple", "ˈæp.əl", "user1");
+        var vocab = new Vocabulary("apple", "user1", "ˈæp.əl");
         var def = vocab.AddDefinition("A fruit", "Quả táo", PartOfSpeech.Noun);
 
         vocab.RemoveDefinition(def.Id);
@@ -69,7 +69,7 @@ public class VocabularyTests
     [Fact]
     public void RemoveDefinition_Should_Throw_When_NotFound()
     {
-        var vocab = new Vocabulary("apple", "ˈæp.əl", "user1");
+        var vocab = new Vocabulary("apple", "user1", "ˈæp.əl");
 
         Action act = () => vocab.RemoveDefinition(999);
 
@@ -80,7 +80,7 @@ public class VocabularyTests
     [Fact]
     public void Should_Update_Definition()
     {
-        var vocab = new Vocabulary("apple", "ˈæp.əl", "user1");
+        var vocab = new Vocabulary("apple", "user1", "ˈæp.əl");
         var def = vocab.AddDefinition("A fruit", "Quả táo", PartOfSpeech.Noun);
 
         vocab.UpdateDefinition(def.Id, "A red fruit", "Trái táo", PartOfSpeech.Adjective);
@@ -93,7 +93,7 @@ public class VocabularyTests
     [Fact]
     public void UpdateDefinition_Should_Throw_When_NotFound()
     {
-        var vocab = new Vocabulary("apple", "ˈæp.əl", "user1");
+        var vocab = new Vocabulary("apple", "user1", "ˈæp.əl");
 
         Action act = () => vocab.UpdateDefinition(999, "meaning", "translation", PartOfSpeech.Verb);
 

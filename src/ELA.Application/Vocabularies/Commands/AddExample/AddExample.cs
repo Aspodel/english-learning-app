@@ -1,6 +1,6 @@
 namespace ELA;
 
-public record AddExampleCommand(int VocabularyId, int DefinitionId, string Text, string Translation) : IRequest<int>;
+public record AddExampleCommand(int VocabularyId, int DefinitionId, string Text, string? Translation) : IRequest<int>;
 
 public class AddExampleCommandHandler : IRequestHandler<AddExampleCommand, int>
 {
@@ -23,11 +23,10 @@ public class AddExampleCommandHandler : IRequestHandler<AddExampleCommand, int>
         var definition = vocab.Definitions.FirstOrDefault(d => d.Id == request.DefinitionId);
         Guard.Against.NotFound(request.DefinitionId, definition);
 
-        definition.AddExample(request.Text, request.Translation);
+        var example = definition.AddExample(request.Text, request.Translation);
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        // last added example Id
-        return definition.Examples.Last().Id;
+        return example.Id;
     }
 }

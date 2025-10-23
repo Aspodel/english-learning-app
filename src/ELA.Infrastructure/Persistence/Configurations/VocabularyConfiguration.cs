@@ -11,8 +11,7 @@ public class VocabularyConfiguration : IEntityTypeConfiguration<Vocabulary>
             .HasMaxLength(200);
 
         builder.Property(v => v.IPA)
-            .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(200);
 
         builder.HasMany(v => v.Definitions)
             .WithOne(d => d.Vocabulary)

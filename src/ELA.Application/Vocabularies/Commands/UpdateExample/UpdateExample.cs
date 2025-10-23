@@ -1,6 +1,6 @@
 namespace ELA;
 
-public record UpdateExampleCommand(int VocabularyId, int DefinitionId, int ExampleId, string Text, string Translation) : IRequest<Unit>;
+public record UpdateExampleCommand(int VocabularyId, int DefinitionId, int ExampleId, string Text, string? Translation) : IRequest<Unit>;
 
 public class UpdateExampleCommandHandler : IRequestHandler<UpdateExampleCommand, Unit>
 {

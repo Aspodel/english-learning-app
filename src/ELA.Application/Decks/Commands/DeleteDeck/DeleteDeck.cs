@@ -18,6 +18,7 @@ public class DeleteDeckCommandHandler : IRequestHandler<DeleteDeckCommand, Unit>
         Guard.Against.NotFound(request.Id, deck);
 
         _context.Decks.Remove(deck);
+        
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

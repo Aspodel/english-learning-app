@@ -41,7 +41,7 @@ public class ApplicationDbContextInitialiser
             // await _context.Database.MigrateAsync();
 
             // Local test: Ensure the database is recreated each time in debug mode
-            await _context.Database.EnsureDeletedAsync();
+            // await _context.Database.EnsureDeletedAsync();
             await _context.Database.EnsureCreatedAsync();
         }
         catch (Exception ex)
@@ -96,15 +96,15 @@ public class ApplicationDbContextInitialiser
         // Default data
         if (!_context.Vocabularies.Any())
         {
-            var vocab1 = new Vocabulary("apple", "ˈæp.əl", user.Id);
+            var vocab1 = new Vocabulary("apple", user.Id, "ˈæp.əl");
             vocab1.AddDefinition("a round fruit", "quả táo", PartOfSpeech.Noun)
                   .AddExample("I ate an apple.", "Tôi đã ăn một quả táo.");
 
-            var vocab2 = new Vocabulary("run", "rʌn", user.Id);
+            var vocab2 = new Vocabulary("run", user.Id, "rʌn");
             vocab2.AddDefinition("to move quickly on foot", "chạy", PartOfSpeech.Verb)
                   .AddExample("She runs every morning.", "Cô ấy chạy mỗi sáng.");
 
-            var vocab3 = new Vocabulary("light", "laɪt", user.Id);
+            var vocab3 = new Vocabulary("light", user.Id, "laɪt");
             vocab3.AddDefinition("the natural agent that makes things visible", "ánh sáng", PartOfSpeech.Noun)
                   .AddExample("Light travels faster than sound.", "Ánh sáng di chuyển nhanh hơn âm thanh.");
             vocab3.AddDefinition("not heavy", "nhẹ", PartOfSpeech.Adjective)
@@ -112,13 +112,13 @@ public class ApplicationDbContextInitialiser
             vocab3.AddDefinition("to set fire to something", "đốt, thắp", PartOfSpeech.Verb)
                   .AddExample("They lit a fire in the fireplace.", "Họ nhóm lửa trong lò sưởi.");
 
-            var vocab4 = new Vocabulary("bank", "bæŋk", user.Id);
+            var vocab4 = new Vocabulary("bank", user.Id, "bæŋk");
             vocab4.AddDefinition("a financial institution", "ngân hàng", PartOfSpeech.Noun)
                   .AddExample("I deposited money in the bank.", "Tôi gửi tiền vào ngân hàng.");
             vocab4.AddDefinition("the side of a river", "bờ sông", PartOfSpeech.Noun)
                   .AddExample("They sat on the river bank.", "Họ ngồi trên bờ sông.");
 
-            var vocab5 = new Vocabulary("play", "pleɪ", user.Id);
+            var vocab5 = new Vocabulary("play", user.Id, "pleɪ");
             vocab5.AddDefinition("to engage in a game or activity", "chơi", PartOfSpeech.Verb)
                   .AddExample("The children are playing in the park.", "Bọn trẻ đang chơi trong công viên.");
             vocab5.AddDefinition("a theatrical performance", "vở kịch", PartOfSpeech.Noun)
@@ -129,7 +129,7 @@ public class ApplicationDbContextInitialiser
 
         if (!_context.Decks.Any())
         {
-            var deck = new Deck("English Basics", user.Id);
+            var deck = new Deck("English Basics", user.Id, "Basic English vocabulary and phrases");
             var card1 = deck.AddCard("Hello", "Xin chào");
             var card2 = deck.AddCard("Goodbye", "Tạm biệt");
 

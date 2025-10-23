@@ -16,25 +16,11 @@ public class ReviewLog : BaseEntity
     public ReviewLog(int cardId, DateTimeOffset reviewDate, int qualityRating,
         int interval, double easeFactor, int repetition)
     {
-        ValidateInputs(cardId, qualityRating, interval, easeFactor, repetition);
-
         CardId = cardId;
         ReviewDate = reviewDate;
         QualityRating = qualityRating;
         Interval = interval;
         EaseFactor = easeFactor;
         Repetition = repetition;
-    }
-
-    private static void ValidateInputs(int cardId, int qualityRating, int interval, double easeFactor, int repetition)
-    {
-        Guard.Against.Negative(cardId, nameof(cardId));
-        Guard.Against.OutOfRange(qualityRating, nameof(qualityRating), 0, 5);
-        Guard.Against.Negative(repetition, nameof(repetition));
-        Guard.Against.Negative(interval, nameof(interval));
-        Guard.Against.Negative(repetition, nameof(repetition));
-
-        if (easeFactor < 1.3)
-            throw new ArgumentException("Ease factor must be >= 1.3", nameof(easeFactor));
     }
 }

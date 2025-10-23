@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ELA.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250905085549_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251022171048_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,8 +37,8 @@ namespace ELA.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -170,6 +170,10 @@ namespace ELA.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<DateTimeOffset>("LastModified")
                         .HasColumnType("timestamp with time zone");
 
@@ -178,8 +182,8 @@ namespace ELA.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -206,7 +210,6 @@ namespace ELA.Infrastructure.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<string>("Translation")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
@@ -237,7 +240,6 @@ namespace ELA.Infrastructure.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<string>("Translation")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
@@ -296,9 +298,8 @@ namespace ELA.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("IPA")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTimeOffset>("LastModified")
                         .HasColumnType("timestamp with time zone");
@@ -488,13 +489,11 @@ namespace ELA.Infrastructure.Migrations
                                 .HasColumnType("integer");
 
                             b1.Property<string>("Abbreviation")
-                                .IsRequired()
                                 .HasMaxLength(10)
                                 .HasColumnType("character varying(10)")
                                 .HasColumnName("POS_Abbreviation");
 
-                            b1.Property<string>("Value")
-                                .IsRequired()
+                            b1.Property<string>("Name")
                                 .HasMaxLength(50)
                                 .HasColumnType("character varying(50)")
                                 .HasColumnName("PartOfSpeech");
@@ -507,8 +506,7 @@ namespace ELA.Infrastructure.Migrations
                                 .HasForeignKey("DefinitionId");
                         });
 
-                    b.Navigation("PartOfSpeech")
-                        .IsRequired();
+                    b.Navigation("PartOfSpeech");
 
                     b.Navigation("Vocabulary");
                 });

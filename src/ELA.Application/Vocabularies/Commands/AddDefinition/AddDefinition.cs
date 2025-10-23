@@ -1,6 +1,6 @@
 namespace ELA;
 
-public record AddDefinitionCommand(int VocabularyId, string Meaning, string Translation, string PartOfSpeech) : IRequest<int>;
+public record AddDefinitionCommand(int VocabularyId, string Meaning, string? Translation, string? PartOfSpeech) : IRequest<int>;
 
 public class AddDefinitionCommandHandler : IRequestHandler<AddDefinitionCommand, int>
 {
@@ -19,7 +19,7 @@ public class AddDefinitionCommandHandler : IRequestHandler<AddDefinitionCommand,
 
         Guard.Against.NotFound(request.VocabularyId, vocab);
 
-        var partOfSpeech = PartOfSpeech.From(request.PartOfSpeech);
+        var partOfSpeech = request.PartOfSpeech is not null ? PartOfSpeech.From(request.PartOfSpeech) : null;
         var definition = vocab.AddDefinition(request.Meaning, request.Translation, partOfSpeech);
 
         await _context.SaveChangesAsync(cancellationToken);

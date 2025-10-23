@@ -1,14 +1,17 @@
-version: '3.8'
-
 services:
   app:
-    image: app-image:latest
+    build:
+      context: .
+      dockerfile: ./src/ELA.Api/Dockerfile
+    image: ela-app:latest
     ports:
       - "8080:80"
+    depends_on:
+      - postgres-db
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ./app:/app
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__ElaDb=Host=postgres-db;Port=5432;Database=ElaDb;Username=local_admin;Password=Secret123!
     restart: always
 
   postgres-db:

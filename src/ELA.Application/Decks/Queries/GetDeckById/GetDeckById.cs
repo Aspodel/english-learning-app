@@ -21,13 +21,15 @@ public class GetDeckByIdQueryHandler : IRequestHandler<GetDeckByIdQuery, DeckDto
             .Select(d => new DeckDto(
                 d.Id,
                 d.Name,
+                d.Description,
                 d.Created,
                 d.Cards.Select(c => new CardDto(
                     c.Id,
                     c.Front,
                     c.Back,
                     c.NextReview,
-                    c.Suspended
+                    c.Suspended,
+                    c.Created
                 )).ToList()
             ))
             .FirstOrDefaultAsync(cancellationToken);

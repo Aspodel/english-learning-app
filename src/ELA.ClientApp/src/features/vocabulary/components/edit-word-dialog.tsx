@@ -23,9 +23,9 @@ export function EditWordDialog({ trigger, word }: EditWordDialogProps) {
   const onSubmit = (data: vocabularyFormSchemaType) => {
     updateMutation.mutate(
       {
-        id: word.id,
         data: {
           ...data,
+          id: word.id,
         },
       },
       {
@@ -48,7 +48,7 @@ export function EditWordDialog({ trigger, word }: EditWordDialogProps) {
       trigger={trigger}
       onCancel={() => form.reset()}
       formId='vocabulary-form'
-      footerBtnText='Save'
+      footerBtnText='Save Changes'
     >
       <VocabularyForm form={form} onSubmit={onSubmit} />
     </ResponsiveDialog>

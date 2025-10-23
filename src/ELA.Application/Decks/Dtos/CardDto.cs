@@ -5,5 +5,6 @@ public record CardDto(
     string Front,
     string Back,
     DateTimeOffset NextReview,
-    bool Suspended
+    bool Suspended,
+    DateTimeOffset Created
 );

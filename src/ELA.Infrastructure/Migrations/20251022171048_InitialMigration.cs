@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ELA.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,7 +33,7 @@ namespace ELA.Infrastructure.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -166,7 +166,8 @@ namespace ELA.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -191,7 +192,7 @@ namespace ELA.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Text = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    IPA = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    IPA = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -247,9 +248,9 @@ namespace ELA.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Meaning = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Translation = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    PartOfSpeech = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    POS_Abbreviation = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    Translation = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    PartOfSpeech = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    POS_Abbreviation = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
                     VocabularyId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -294,7 +295,7 @@ namespace ELA.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Text = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Translation = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Translation = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     DefinitionId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>

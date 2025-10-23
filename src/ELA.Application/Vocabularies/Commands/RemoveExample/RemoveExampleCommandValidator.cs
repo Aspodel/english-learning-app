@@ -5,12 +5,15 @@ public class RemoveExampleCommandValidator : AbstractValidator<RemoveExampleComm
     public RemoveExampleCommandValidator()
     {
         RuleFor(e => e.VocabularyId)
-            .GreaterThan(0).WithMessage("VocabularyId must be greater than 0.");
+            .NotEmpty().WithMessage("Vocabulary Id is required.")
+            .GreaterThan(0).WithMessage("Vocabulary Id must be greater than 0.");
 
         RuleFor(e => e.DefinitionId)
-            .GreaterThan(0).WithMessage("DefinitionId must be greater than 0.");
+            .NotEmpty().WithMessage("Definition Id is required.")
+            .GreaterThan(0).WithMessage("Definition Id must be greater than 0.");
 
         RuleFor(e => e.ExampleId)
-            .GreaterThan(0).WithMessage("ExampleId must be greater than 0.");
+            .NotEmpty().WithMessage("Example Id is required.")
+            .GreaterThan(0).WithMessage("Example Id must be greater than 0.");
     }
 }

@@ -21,9 +21,6 @@ public class Card : BaseAuditableEntity
 
     public Card(string front, string back, int deckId)
     {
-        Guard.Against.NullOrWhiteSpace(front, nameof(front));
-        Guard.Against.NullOrWhiteSpace(back, nameof(back));
-
         Front = front;
         Back = back;
         DeckId = deckId;
@@ -31,9 +28,6 @@ public class Card : BaseAuditableEntity
 
     public void Update(string newFront, string newBack)
     {
-        Guard.Against.NullOrWhiteSpace(newFront, nameof(newFront));
-        Guard.Against.NullOrWhiteSpace(newBack, nameof(newBack));
-
         Front = newFront;
         Back = newBack;
     }
@@ -41,9 +35,6 @@ public class Card : BaseAuditableEntity
     public void AddReviewResult(int qualityRating, DateTimeOffset reviewDate,
         int newInterval, double newEaseFactor, int newRepetition, DateTimeOffset nextReview)
     {
-        if (Suspended) throw new InvalidOperationException("Cannot review a suspended card.");
-        Guard.Against.OutOfRange(qualityRating, nameof(qualityRating), 0, 5);
-
         Interval = newInterval;
         EaseFactor = Math.Max(1.3, newEaseFactor);
         Repetition = newRepetition;

@@ -27,7 +27,7 @@ public class DeckTests
     {
         var deck = new Deck("Old Name", "user1");
 
-        deck.Rename("New Name");
+        deck.Update("New Name");
 
         deck.Name.Should().Be("New Name");
     }

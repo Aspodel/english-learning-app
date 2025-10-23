@@ -29,7 +29,8 @@ public class GetDueCardsForReviewQueryHandler : IRequestHandler<GetDueCardsForRe
                 c.Front,
                 c.Back,
                 c.NextReview,
-                c.Suspended
+                c.Suspended,
+                c.Created
             ))
             .ToListAsync(cancellationToken);
     }

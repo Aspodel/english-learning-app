@@ -4,7 +4,7 @@ namespace ELA;
 
 public record CreateVocabularyCommand(
     string Text,
-    string IPA)
+    string? IPA)
     : IRequest<VocabularyDto>;
 
 public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCommand, VocabularyDto>
@@ -20,9 +20,9 @@ public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCo
 
     public async Task<VocabularyDto> Handle(CreateVocabularyCommand request, CancellationToken cancellationToken)
     {
-        Guard.Against.NotFound(_currentUser.Id ?? "Unknown User", _currentUser.Id);
+        Guard.Against.NullOrEmpty(_currentUser.Id, nameof(_currentUser.Id));
 
-        var entity = new Vocabulary(request.Text, request.IPA, _currentUser.Id);
+        var entity = new Vocabulary(request.Text, _currentUser.Id, request.IPA);
 
         _context.Vocabularies.Add(entity);
 

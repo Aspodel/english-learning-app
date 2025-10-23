@@ -17,13 +17,17 @@ public class RemoveExampleCommandHandler : IRequestHandler<RemoveExampleCommand,
             .Include(v => v.Definitions)
                 .ThenInclude(d => d.Examples)
             .FirstOrDefaultAsync(v => v.Id == request.VocabularyId, cancellationToken);
-
         Guard.Against.NotFound(request.VocabularyId, vocab);
 
         var definition = vocab.Definitions.FirstOrDefault(d => d.Id == request.DefinitionId);
         Guard.Against.NotFound(request.DefinitionId, definition);
 
+        var example = definition.Examples.FirstOrDefault(e => e.Id == request.ExampleId);
+        Guard.Against.NotFound(request.ExampleId, example);
+
         definition.RemoveExample(request.ExampleId);
+
+        _context.Examples.Remove(example);
 
         await _context.SaveChangesAsync(cancellationToken);
 

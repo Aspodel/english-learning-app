@@ -17,25 +17,25 @@ public class DecksController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateDeckCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateDeckCommand command, CancellationToken cancellationToken = default)
     {
-        var result = await Mediator.Send(command);
+        var result = await Mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = result }, result);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] RenameDeckCommand command)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateDeckCommand command, CancellationToken cancellationToken = default)
     {
         if (id != command.Id) return BadRequest();
 
-        await Mediator.Send(command);
+        await Mediator.Send(command, cancellationToken);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
-        await Mediator.Send(new DeleteDeckCommand(id));
+        await Mediator.Send(new DeleteDeckCommand(id), cancellationToken);
         return NoContent();
     }
 }

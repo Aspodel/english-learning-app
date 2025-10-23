@@ -3,23 +3,23 @@ namespace ELA;
 public class Deck : BaseAuditableEntity
 {
     public string Name { get; private set; }
-
+    public string? Description { get; private set; }
     public string UserId { get; private set; }
 
     private readonly List<Card> _cards = [];
     public IReadOnlyCollection<Card> Cards => _cards.AsReadOnly();
 
-    public Deck(string name, string userId)
+    public Deck(string name, string userId, string? description = null)
     {
-        Guard.Against.NullOrWhiteSpace(name, nameof(name));
         Name = name;
         UserId = userId;
+        Description = description;
     }
 
-    public void Rename(string newName)
+    public void Update(string newName, string? newDescription)
     {
-        Guard.Against.NullOrWhiteSpace(newName, nameof(newName));
         Name = newName;
+        Description = newDescription;
     }
 
     public Card AddCard(string front, string back)

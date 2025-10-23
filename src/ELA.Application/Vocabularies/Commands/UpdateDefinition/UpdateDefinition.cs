@@ -1,6 +1,6 @@
 namespace ELA;
 
-public record UpdateDefinitionCommand(int VocabularyId, int DefinitionId, string Meaning, string Translation, string PartOfSpeech) : IRequest<Unit>;
+public record UpdateDefinitionCommand(int VocabularyId, int DefinitionId, string Meaning, string? Translation, string? PartOfSpeech) : IRequest<Unit>;
 
 public class UpdateDefinitionCommandHandler : IRequestHandler<UpdateDefinitionCommand, Unit>
 {
@@ -19,7 +19,7 @@ public class UpdateDefinitionCommandHandler : IRequestHandler<UpdateDefinitionCo
 
         Guard.Against.NotFound(request.VocabularyId, vocab);
 
-        var partOfSpeech = PartOfSpeech.From(request.PartOfSpeech);
+        var partOfSpeech = request.PartOfSpeech is not null ? PartOfSpeech.From(request.PartOfSpeech) : null;
         vocab.UpdateDefinition(request.DefinitionId, request.Meaning, request.Translation, partOfSpeech);
 
         await _context.SaveChangesAsync(cancellationToken);

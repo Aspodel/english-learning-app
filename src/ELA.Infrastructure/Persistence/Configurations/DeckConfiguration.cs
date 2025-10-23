@@ -8,7 +8,10 @@ public class DeckConfiguration : IEntityTypeConfiguration<Deck>
 
         builder.Property(d => d.Name)
             .IsRequired()
-            .HasMaxLength(200);
+            .HasMaxLength(250);
+
+        builder.Property(d => d.Description)
+            .HasMaxLength(500);
 
         builder.HasOne<ApplicationUser>()
             .WithMany()

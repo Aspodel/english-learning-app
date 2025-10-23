@@ -18,32 +18,32 @@ public class VocabulariesController : BaseController
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] string searchText)
+    public async Task<IActionResult> Search([FromQuery] string searchText, CancellationToken cancellationToken = default)
     {
-        var result = await Mediator.Send(new SearchVocabulariesQuery(searchText));
+        var result = await Mediator.Send(new SearchVocabulariesQuery(searchText), cancellationToken);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateVocabularyCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateVocabularyCommand command, CancellationToken cancellationToken = default)
     {
-        var result = await Mediator.Send(command);
+        var result = await Mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateVocabularyCommand command)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateVocabularyCommand command, CancellationToken cancellationToken = default)
     {
         if (id != command.Id) return BadRequest();
 
-        await Mediator.Send(command);
+        await Mediator.Send(command, cancellationToken);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
-        await Mediator.Send(new DeleteVocabularyCommand(id));
+        await Mediator.Send(new DeleteVocabularyCommand(id), cancellationToken);
         return NoContent();
     }
 }

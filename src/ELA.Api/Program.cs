@@ -8,6 +8,19 @@ builder.AddApplicationServices();
 builder.AddInfrastructureServices();
 builder.AddWebApiServices();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,11 +40,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHealthChecks("/health");
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.UseExceptionHandler(options => { });
+
+app.UseCors();
 
 app.UseAuthentication();
 

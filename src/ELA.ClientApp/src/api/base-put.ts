@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 type PutBody<T> = {
-  id: string | number;
   data: T;
   queryParams?: Record<string, string | undefined>;
 };
@@ -13,7 +12,7 @@ type PutResponse = {
   id: string;
 };
 
-export function createPut<T>(name: string, route: string) {
+export function createPut<T extends { id: string | number }>(name: string, route: string) {
   const update = async (body: PutBody<T>): Promise<PutResponse> => {
     const filteredQueryParams = Object.fromEntries(
       Object.entries(body.queryParams ?? {}).filter(
@@ -21,7 +20,7 @@ export function createPut<T>(name: string, route: string) {
       )
     );
     const response = await api.put(
-      route.replace(':id', String(body.id)),
+      route.replace(':id', String(body.data.id)),
       body.data,
       { params: filteredQueryParams }
     );

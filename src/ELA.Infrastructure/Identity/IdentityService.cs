@@ -29,12 +29,15 @@ public class IdentityService : IIdentityService
         return user?.UserName;
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, string? email = null, string? firstName = null, string? lastName = null, DateOnly? dateOfBirth = null)
     {
         var user = new ApplicationUser
         {
             UserName = userName,
-            Email = userName,
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            DateOfBirth = dateOfBirth
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -102,20 +105,21 @@ public class IdentityService : IIdentityService
     public async Task<Result> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        if (user == null) return Result.Failure(new[] { "User not found." });
+        if (user == null) return Result.Failure(["User not found."]);
 
         var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
         return result.ToApplicationResult();
     }
 
-    public async Task<Result> UpdateProfileAsync(string userId, string email, string firstName, string lastName)
+    public async Task<Result> UpdateProfileAsync(string userId, string? email, string? firstName, string? lastName, DateOnly? dateOfBirth)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        if (user == null) return Result.Failure(new[] { "User not found." });
+        if (user == null) return Result.Failure(["User not found."]);
 
         user.Email = email;
         user.FirstName = firstName;
         user.LastName = lastName;
+        user.DateOfBirth = dateOfBirth;
 
         var result = await _userManager.UpdateAsync(user);
         return result.ToApplicationResult();

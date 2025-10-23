@@ -16,10 +16,14 @@ public class RemoveCardCommandHandler : IRequestHandler<RemoveCardCommand, Unit>
         var deck = await _context.Decks
             .Include(d => d.Cards)
             .FirstOrDefaultAsync(d => d.Id == request.DeckId, cancellationToken);
-
         Guard.Against.NotFound(request.DeckId, deck);
 
+        var card = deck.Cards.FirstOrDefault(c => c.Id == request.CardId);
+        Guard.Against.NotFound(request.CardId, card);
+
         deck.RemoveCard(request.CardId);
+
+        _context.Cards.Remove(card);
 
         await _context.SaveChangesAsync(cancellationToken);
 

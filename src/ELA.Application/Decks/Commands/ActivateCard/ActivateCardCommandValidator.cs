@@ -5,6 +5,7 @@ public class ActivateCardCommandValidator : AbstractValidator<ActivateCardComman
     public ActivateCardCommandValidator()
     {
         RuleFor(c => c.CardId)
-            .GreaterThan(0).WithMessage("CardId must be greater than 0.");
+            .NotEmpty().WithMessage("Id is required.")
+            .GreaterThan(0).WithMessage("Id must be greater than zero.");
     }
 }

@@ -3,7 +3,7 @@ namespace ELA;
 public record UpdateVocabularyCommand(
     int Id,
     string Text,
-    string IPA)
+    string? IPA)
     : IRequest<Unit>;
 
 public class UpdateVocabularyCommandHandler : IRequestHandler<UpdateVocabularyCommand, Unit>

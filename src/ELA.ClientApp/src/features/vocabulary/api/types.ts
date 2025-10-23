@@ -4,6 +4,7 @@ export type CreateVocabularyDto = {
 };
 
 export type UpdateVocabularyDto = {
+  id: number;
   text: string;
   ipa: string;
   definitions?: DefinitionDto[];
