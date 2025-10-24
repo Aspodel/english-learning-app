@@ -4,31 +4,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const formSchema = z.object({
-  text: z.string().min(1, 'Text is required'),
-  ipa: z.string().min(1, 'IPA is required'),
-  definitions: z
-    .array(
-      z.object({
-        meaning: z.string().min(1, 'Meaning is required'),
-        translation: z.string().min(1, 'Translation is required'),
-        partOfSpeech: z.string().min(1, 'Part of speech is required'),
-        examples: z
-          .array(
-            z.object({
-              text: z.string().min(1, 'Example text is required'),
-              translation: z.string().min(1, 'Example translation is required'),
-            })
-          )
-          .optional(),
-      })
-    )
-    .optional(),
+  text: z.string().min(1, 'Text is required').max(200, 'Text must not exceed 200 characters'),
+  ipa: z.string().max(200, 'IPA must not exceed 200 characters').optional(),
 });
 
 export type vocabularyFormSchemaType = z.infer<typeof formSchema>;
 
 export function useVocabularyCreateForm() {
-  const initialValues = {
+  const initialValues: vocabularyFormSchemaType = {
     text: '',
     ipa: '',
   };

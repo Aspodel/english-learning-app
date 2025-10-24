@@ -1,23 +1,21 @@
 export type CreateVocabularyDto = {
   text: string;
-  ipa: string;
+  ipa?: string;
 };
 
 export type UpdateVocabularyDto = {
   id: number;
   text: string;
-  ipa: string;
-  definitions?: DefinitionDto[];
+  ipa?: string;
 };
 
-export type DefinitionDto = {
+export type CreateDefinitionDto = {
   meaning: string;
-  translation: string;
-  partOfSpeech: string;
-  examples?: ExampleDto[];
+  translation?: string;
+  partOfSpeech?: string;
 };
 
-export type ExampleDto = {
+export type CreateExampleDto = {
   text: string;
-  translation: string;
+  translation?: string;
 };

@@ -5,7 +5,7 @@ import { api } from '@/lib/api-client';
 import { getErrorMessage } from '@/lib/get-axios-error';
 
 type DeleteBody = {
-  id: string;
+  id: string | number;
   queryParams?: Record<string, string | undefined>;
 };
 
@@ -16,7 +16,7 @@ export function createDelete(name: string, route: string) {
         ([, v]) => typeof v === 'string' && v
       )
     );
-    const response = await api.delete(route.replace(':id', body.id), {
+    const response = await api.delete(route.replace(':id', String(body.id)), {
       params: filteredQueryParams,
     });
     if (response.status === 204) {

@@ -1,6 +1,13 @@
+using ELA.Vocabularies.Dtos;
+
 namespace ELA;
 
-public record AddDefinitionCommand(int VocabularyId, string Meaning, string? Translation, string? PartOfSpeech) : IRequest<int>;
+public record AddDefinitionCommand(
+    int VocabularyId,
+    string Meaning,
+    string? Translation,
+    string? PartOfSpeech,
+    List<CreateExampleDto>? Examples) : IRequest<int>;
 
 public class AddDefinitionCommandHandler : IRequestHandler<AddDefinitionCommand, int>
 {
@@ -19,8 +26,19 @@ public class AddDefinitionCommandHandler : IRequestHandler<AddDefinitionCommand,
 
         Guard.Against.NotFound(request.VocabularyId, vocab);
 
-        var partOfSpeech = request.PartOfSpeech is not null ? PartOfSpeech.From(request.PartOfSpeech) : null;
+        var partOfSpeech = request.PartOfSpeech is not null
+            ? PartOfSpeech.From(request.PartOfSpeech)
+            : null;
+            
         var definition = vocab.AddDefinition(request.Meaning, request.Translation, partOfSpeech);
+
+        if (request.Examples is not null && request.Examples.Any())
+        {
+            foreach (var example in request.Examples)
+            {
+                definition.AddExample(example.Text, example.Translation);
+            }
+        }
 
         await _context.SaveChangesAsync(cancellationToken);
 

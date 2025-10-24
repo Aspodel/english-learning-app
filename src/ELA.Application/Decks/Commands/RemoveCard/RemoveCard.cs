@@ -23,8 +23,6 @@ public class RemoveCardCommandHandler : IRequestHandler<RemoveCardCommand, Unit>
 
         deck.RemoveCard(request.CardId);
 
-        _context.Cards.Remove(card);
-
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

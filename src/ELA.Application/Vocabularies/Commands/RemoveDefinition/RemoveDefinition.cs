@@ -23,8 +23,6 @@ public class RemoveDefinitionCommandHandler : IRequestHandler<RemoveDefinitionCo
 
         vocab.RemoveDefinition(request.DefinitionId);
 
-        _context.Definitions.Remove(definition);
-
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

@@ -22,7 +22,7 @@ type DeckListProps = {
 export const DeckList: React.FC<DeckListProps> = ({ items }) => {
   const { deleteMutation: deleteDeck } = deckApi.useDelete();
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     deleteDeck.mutate(
       { id },
       {
@@ -56,11 +56,14 @@ export const DeckList: React.FC<DeckListProps> = ({ items }) => {
               <div>
                 <ItemTitle className='text-lg'>{deck.name}</ItemTitle>
                 <ItemDescription>
+                  {deck.description}
+                </ItemDescription>
+                <ItemDescription>
                   Created on {format(new Date(deck.created), 'PP')}
                 </ItemDescription>
               </div>
 
-              <DeckCardDropdown onDelete={() => handleDelete(deck.id)} />
+              <DeckCardDropdown deck={deck} onDelete={() => handleDelete(deck.id)} />
             </div>
             <div className='flex'>
               <Badge variant='secondary' className='text-md ml-auto'>

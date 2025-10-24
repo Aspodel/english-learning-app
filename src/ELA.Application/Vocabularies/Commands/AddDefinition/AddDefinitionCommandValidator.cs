@@ -16,6 +16,14 @@ public class AddDefinitionCommandValidator : AbstractValidator<AddDefinitionComm
             .MaximumLength(500).WithMessage("Translation cannot exceed 500 characters.");
 
         RuleFor(d => d.PartOfSpeech)
-            .MaximumLength(50).WithMessage("Part of Speech cannot exceed 50 characters.");
+            .MaximumLength(50).WithMessage("Part of speech must not exceed 50 characters.");
+
+        RuleFor(d => d.PartOfSpeech)
+            .Must(pos => pos.IsValidPartOfSpeech())
+            .WithMessage("Invalid part of speech.")
+            .When(d => !string.IsNullOrWhiteSpace(d.PartOfSpeech));
+
+        RuleForEach(d => d.Examples)
+            .SetValidator(new ExampleInputValidator());
     }
 }

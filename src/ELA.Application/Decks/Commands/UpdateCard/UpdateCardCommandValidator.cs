@@ -12,12 +12,12 @@ public class UpdateCardCommandValidator : AbstractValidator<UpdateCardCommand>
             .NotEmpty().WithMessage("CardId cannot be empty.")
             .GreaterThan(0).WithMessage("CardId must be greater than 0.");
 
-        RuleFor(c => c.NewFront)
-            .NotEmpty().WithMessage("NewFront cannot be empty.")
+        RuleFor(c => c.Front)
+            .NotEmpty().WithMessage("Front card text cannot be empty.")
             .MaximumLength(250).WithMessage("Front card text must not exceed 250 characters.");
 
-        RuleFor(c => c.NewBack)
-            .NotEmpty().WithMessage("NewBack cannot be empty.")
+        RuleFor(c => c.Back)
+            .NotEmpty().WithMessage("Back card text cannot be empty.")
             .MaximumLength(500).WithMessage("Back card text must not exceed 500 characters.");
     }
 }

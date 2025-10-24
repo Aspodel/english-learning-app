@@ -2,14 +2,11 @@ using ELA.Vocabularies.Dtos;
 
 namespace ELA;
 
-public class UpdateVocabularyCommandValidator : AbstractValidator<UpdateVocabularyCommand>
+public class CreateVocabularyWithDetailsCommandValidator
+    : AbstractValidator<CreateVocabularyWithDetailsCommand>
 {
-    public UpdateVocabularyCommandValidator()
+    public CreateVocabularyWithDetailsCommandValidator()
     {
-        RuleFor(v => v.Id)
-            .NotEmpty().WithMessage("Vocabulary Id is required.")
-            .GreaterThan(0).WithMessage("Vocabulary Id must be greater than 0.");
-
         RuleFor(v => v.Text)
             .NotEmpty().WithMessage("Vocabulary is required.")
             .MaximumLength(200).WithMessage("Vocabulary must not exceed 200 characters.");
@@ -18,19 +15,14 @@ public class UpdateVocabularyCommandValidator : AbstractValidator<UpdateVocabula
             .MaximumLength(200).WithMessage("IPA must not exceed 200 characters.");
 
         RuleForEach(v => v.Definitions)
-            .SetValidator(new UpdateDefinitionInputValidator());
+            .SetValidator(new DefinitionInputValidator());
     }
 }
 
-public class UpdateDefinitionInputValidator : AbstractValidator<UpdateDefinitionDto>
+public class DefinitionInputValidator : AbstractValidator<CreateDefinitionDto>
 {
-    public UpdateDefinitionInputValidator()
+    public DefinitionInputValidator()
     {
-        // Allow null Id (new definition) or positive Id (existing)
-        RuleFor(d => d.Id)
-            .Must(id => !id.HasValue || id.Value > 0)
-            .WithMessage("Definition ID must be greater than 0 if provided.");
-
         RuleFor(d => d.Meaning)
             .NotEmpty().WithMessage("Meaning is required.")
             .MaximumLength(500).WithMessage("Meaning must not exceed 500 characters.");
@@ -47,19 +39,14 @@ public class UpdateDefinitionInputValidator : AbstractValidator<UpdateDefinition
             .When(d => !string.IsNullOrWhiteSpace(d.PartOfSpeech));
 
         RuleForEach(d => d.Examples)
-            .SetValidator(new UpdateExampleInputValidator());
+            .SetValidator(new ExampleInputValidator());
     }
 }
 
-public class UpdateExampleInputValidator : AbstractValidator<UpdateExampleDto>
+public class ExampleInputValidator : AbstractValidator<CreateExampleDto>
 {
-    public UpdateExampleInputValidator()
+    public ExampleInputValidator()
     {
-        // Allow null Id (new example) or positive Id (existing)
-        RuleFor(e => e.Id)
-            .Must(id => !id.HasValue || id.Value > 0)
-            .WithMessage("Example ID must be greater than 0 if provided.");
-
         RuleFor(e => e.Text)
             .NotEmpty().WithMessage("Example is required.")
             .MaximumLength(500).WithMessage("Example must not exceed 500 characters.");

@@ -4,7 +4,7 @@ import { createPut } from '@/api/base-put';
 import { createDelete } from '@/api/base-delete';
 import { createSearch } from '@/api/base-search';
 
-export function createCRUD<TCreate, TUpdate, TGet, TSearch>(
+export function createCRUD<TCreate, TUpdate extends { id: string | number; }, TGet, TSearch>(
   name: string,
   routes: {
     get: string;

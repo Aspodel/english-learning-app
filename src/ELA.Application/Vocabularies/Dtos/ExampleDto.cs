@@ -5,3 +5,14 @@ public record ExampleDto(
     string Text,
     string? Translation
 );
+
+public record CreateExampleDto(
+    string Text,
+    string? Translation
+);
+
+public record UpdateExampleDto(
+    int? Id,
+    string Text,
+    string? Translation
+);

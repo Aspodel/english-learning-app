@@ -1,6 +1,6 @@
 declare interface Vocabulary extends BaseAuditableEntity {
   text: string;
-  ipa: string;
+  ipa?: string;
   userId: string;
   definitions: Definition[];
 }

@@ -1,6 +1,6 @@
 namespace ELA;
 
-public record UpdateCardCommand(int DeckId, int CardId, string NewFront, string NewBack) : IRequest<Unit>;
+public record UpdateCardCommand(int DeckId, int CardId, string Front, string Back) : IRequest<Unit>;
 
 public class UpdateCardCommandHandler : IRequestHandler<UpdateCardCommand, Unit>
 {
@@ -19,7 +19,7 @@ public class UpdateCardCommandHandler : IRequestHandler<UpdateCardCommand, Unit>
 
         Guard.Against.NotFound(request.DeckId, deck);
 
-        deck.UpdateCard(request.CardId, request.NewFront, request.NewBack);
+        deck.UpdateCard(request.CardId, request.Front, request.Back);
 
         await _context.SaveChangesAsync(cancellationToken);
 

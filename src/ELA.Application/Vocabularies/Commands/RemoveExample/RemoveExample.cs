@@ -27,8 +27,6 @@ public class RemoveExampleCommandHandler : IRequestHandler<RemoveExampleCommand,
 
         definition.RemoveExample(request.ExampleId);
 
-        _context.Examples.Remove(example);
-
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

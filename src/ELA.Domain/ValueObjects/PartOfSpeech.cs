@@ -12,14 +12,14 @@ public class PartOfSpeech : ValueObject
     public string Abbreviation { get; private set; }
 
     // Predefined instances
-    public static PartOfSpeech Noun => new("noun", "n.");
-    public static PartOfSpeech Verb => new("verb", "v.");
-    public static PartOfSpeech Adjective => new("adjective", "adj.");
-    public static PartOfSpeech Adverb => new("adverb", "adv.");
-    public static PartOfSpeech Pronoun => new("pronoun", "pron.");
-    public static PartOfSpeech Preposition => new("preposition", "prep.");
-    public static PartOfSpeech Conjunction => new("conjunction", "conj.");
-    public static PartOfSpeech Interjection => new("interjection", "interj.");
+    public static PartOfSpeech Noun => new("noun", "n");
+    public static PartOfSpeech Verb => new("verb", "v");
+    public static PartOfSpeech Adjective => new("adjective", "adj");
+    public static PartOfSpeech Adverb => new("adverb", "adv");
+    public static PartOfSpeech Pronoun => new("pronoun", "pron");
+    public static PartOfSpeech Preposition => new("preposition", "prep");
+    public static PartOfSpeech Conjunction => new("conjunction", "conj");
+    public static PartOfSpeech Interjection => new("interjection", "interj");
 
     public static PartOfSpeech From(string name)
     {

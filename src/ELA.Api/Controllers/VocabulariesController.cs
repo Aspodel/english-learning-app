@@ -31,6 +31,13 @@ public class VocabulariesController : BaseController
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
+    [HttpPost("details")]
+    public async Task<IActionResult> CreateWithDetails([FromBody] CreateVocabularyWithDetailsCommand command, CancellationToken cancellationToken = default)
+    {
+        var result = await Mediator.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+    }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateVocabularyCommand command, CancellationToken cancellationToken = default)
     {

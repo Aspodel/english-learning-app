@@ -1,15 +1,10 @@
-export type CreateDeckDto = {
+export type DeckDto = {
   name: string;
   description?: string;
 };
 
-export type UpdateDeckDto = {
-  name?: string;
-  description?: string;
-};
-
 export type DeckListItem = {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   cardCount: number;

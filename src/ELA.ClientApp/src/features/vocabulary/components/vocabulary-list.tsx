@@ -55,7 +55,9 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
             <div className='flex justify-between gap-2'>
               <div>
                 <ItemTitle className='text-lg'>{item.text}</ItemTitle>
-                <ItemDescription>{item.ipa}</ItemDescription>
+                <ItemDescription>
+                  {item.ipa || 'No IPA provided'}
+                </ItemDescription>
               </div>
 
               <VocabularyCardDropdown
@@ -63,6 +65,18 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
                 onDelete={() => handleDelete(item.id)}
               />
             </div>
+
+            <ItemDescription>
+              {item.definitionCount} definitions
+            </ItemDescription>
+            <ItemDescription>
+              {item.partsOfSpeech.map((part: any, index: number) => (
+                <span key={index}>
+                  {part.abbreviation}
+                  {index < item.partsOfSpeech.length - 1 && ', '}
+                </span>
+              ))}
+            </ItemDescription>
           </ItemContent>
         </Item>
       ))}
