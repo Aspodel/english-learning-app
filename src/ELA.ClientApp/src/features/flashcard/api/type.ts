@@ -7,6 +7,7 @@ export type DeckListItem = {
   id: number;
   name: string;
   description?: string;
-  cardCount: number;
   created: string;
+  cardCount: number;
+  dueCardCount: number;
 };

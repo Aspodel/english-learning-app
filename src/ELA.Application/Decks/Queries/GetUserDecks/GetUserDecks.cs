@@ -34,7 +34,8 @@ public class GetUserDecksQueryHandler : IRequestHandler<GetUserDecksQuery, Pagin
                 d.Name,
                 d.Description,
                 d.Created,
-                d.Cards.Count
+                d.Cards.Count,
+                d.Cards.Count(c => c.NextReview <= DateTimeOffset.UtcNow)
             ));
 
         return await PaginatedList<DeckListItemDto>.CreateAsync(query, request.PageNumber, request.PageSize, cancellationToken);

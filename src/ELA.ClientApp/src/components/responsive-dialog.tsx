@@ -23,17 +23,18 @@ import {
 } from '@/components/ui/sheet';
 
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from './ui/scroll-area';
 
 type ResponsiveDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open?: boolean;
   title: string;
-  description: string;
-  trigger: React.ReactNode;
-  children: React.ReactNode;
+  description?: string;
   footerBtnText?: string;
-  onCancel: () => void;
   formId?: string;
+  trigger?: React.ReactNode;
+  children: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
+  onCancel?: () => void;
 };
 
 export function ResponsiveDialog({
@@ -54,12 +55,12 @@ export function ResponsiveDialog({
       {isMobile ? (
         <>
           <DrawerTitle>{title}</DrawerTitle>
-          <DrawerDescription>{description}</DrawerDescription>
+          {description && <DrawerDescription>{description}</DrawerDescription>}
         </>
       ) : (
         <>
           <SheetTitle>{title}</SheetTitle>
-          <SheetDescription>{description}</SheetDescription>
+          {description && <SheetDescription>{description}</SheetDescription>}
         </>
       )}
     </>
@@ -84,10 +85,10 @@ export function ResponsiveDialog({
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-        <DrawerContent>
+        {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
+        <DrawerContent className='flex flex-col'>
           <DrawerHeader className='text-left'>{sharedHeader}</DrawerHeader>
-          {children}
+          <ScrollArea className='overflow-auto'>{children}</ScrollArea>
           <DrawerFooter>{sharedFooter}</DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -96,10 +97,10 @@ export function ResponsiveDialog({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetTrigger asChild>{trigger}</SheetTrigger>
-      <SheetContent>
+      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+      <SheetContent className='flex flex-col'>
         <SheetHeader>{sharedHeader}</SheetHeader>
-        {children}
+        <ScrollArea className='overflow-auto'>{children}</ScrollArea>
         <SheetFooter>{sharedFooter}</SheetFooter>
       </SheetContent>
     </Sheet>

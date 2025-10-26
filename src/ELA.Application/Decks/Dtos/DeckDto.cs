@@ -13,5 +13,6 @@ public record DeckListItemDto(
     string Name,
     string? Description,
     DateTimeOffset Created,
-    int CardCount
+    int CardCount,
+    int DueCardsCount = 0
 );

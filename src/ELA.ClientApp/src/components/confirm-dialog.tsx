@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/alert-dialog';
 
 type ConfirmDialogProps = {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   title?: string;
   description?: string;
   confirmText?: string;
@@ -26,6 +28,8 @@ type ConfirmDialogProps = {
 };
 
 export const ConfirmDialog = ({
+  open,
+  onOpenChange,
   title = 'Are you sure?',
   description = 'This action cannot be undone.',
   confirmText = 'Continue',
@@ -37,7 +41,7 @@ export const ConfirmDialog = ({
   children,
 }: ConfirmDialogProps) => {
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       {trigger && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
       <AlertDialogContent>
         <AlertDialogHeader>

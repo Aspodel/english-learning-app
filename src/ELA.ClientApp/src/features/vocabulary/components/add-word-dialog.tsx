@@ -18,17 +18,18 @@ export function AddWordDialog() {
   const { createMutation } = vocabularyApi.useCreate();
 
   const onSubmit = (data: vocabularyFormSchemaType) => {
-    createMutation.mutate(
-      { data },
-      {
-        onSuccess: () => {
-          toast.success('Word created successfully');
+    console.log(data);
+    // createMutation.mutate(
+    //   { data },
+    //   {
+    //     onSuccess: () => {
+    //       toast.success('Word created successfully');
 
-          setOpen(false);
-          form.reset();
-        },
-      }
-    );
+    //       setOpen(false);
+    //       form.reset();
+    //     },
+    //   }
+    // );
   };
 
   return (

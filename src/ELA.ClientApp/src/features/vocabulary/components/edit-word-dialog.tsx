@@ -1,4 +1,3 @@
-import React from 'react';
 import { toast } from 'sonner';
 
 import {
@@ -8,31 +7,36 @@ import {
   type vocabularyFormSchemaType,
 } from '@/features/vocabulary';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
+import { Loading } from '@/components/common/loading';
 
 type EditWordDialogProps = {
-  trigger: React.ReactNode;
-  word: Vocabulary;
+  id: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
-export function EditWordDialog({ trigger, word }: EditWordDialogProps) {
-  const [open, setOpen] = React.useState(false);
-
-  const { form } = useVocabularyEditForm(word);
+export function EditWordDialog({
+  id,
+  open,
+  onOpenChange,
+}: EditWordDialogProps) {
+  const { data: vocab, isLoading } = vocabularyApi.useGet({ id });
   const { updateMutation } = vocabularyApi.useUpdate();
+  const { form } = useVocabularyEditForm(vocab);
 
   const onSubmit = (data: vocabularyFormSchemaType) => {
     updateMutation.mutate(
       {
         data: {
           ...data,
-          id: word.id,
+          id: id,
         },
       },
       {
         onSuccess: () => {
           toast.success('Word updated successfully');
 
-          setOpen(false);
+          onOpenChange(false);
           form.reset();
         },
       }
@@ -42,15 +46,18 @@ export function EditWordDialog({ trigger, word }: EditWordDialogProps) {
   return (
     <ResponsiveDialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={onOpenChange}
       title='Edit Word'
-      description='Update the details of your vocabulary word below.'
-      trigger={trigger}
+      description='Make changes to the word details below.'
       onCancel={() => form.reset()}
       formId='vocabulary-form'
       footerBtnText='Save Changes'
     >
-      <VocabularyForm form={form} onSubmit={onSubmit} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <VocabularyForm form={form} onSubmit={onSubmit} />
+      )}
     </ResponsiveDialog>
   );
 }

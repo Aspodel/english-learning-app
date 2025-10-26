@@ -41,7 +41,7 @@ export function FieldWrapper({
           {...props}
         >
           {label && (
-            <FieldLabel htmlFor={name}>
+            <FieldLabel htmlFor={name} className='gap-1'>
               {label}
               {tooltip && (
                 <TooltipWrapper label={tooltip} asChild>

@@ -14,6 +14,7 @@ import {
   DeckCardDropdown,
   type DeckListItem,
 } from '@/features/flashcard';
+import { Clock4Icon } from 'lucide-react';
 
 type DeckListProps = {
   items: DeckListItem[];
@@ -55,18 +56,20 @@ export const DeckList: React.FC<DeckListProps> = ({ items }) => {
             <div className='flex justify-between gap-2'>
               <div>
                 <ItemTitle className='text-lg'>{deck.name}</ItemTitle>
-                <ItemDescription>
-                  {deck.description}
-                </ItemDescription>
-                <ItemDescription>
-                  Created on {format(new Date(deck.created), 'PP')}
-                </ItemDescription>
+                <ItemDescription>{deck.description}</ItemDescription>
               </div>
 
-              <DeckCardDropdown deck={deck} onDelete={() => handleDelete(deck.id)} />
+              <DeckCardDropdown
+                deck={deck}
+                onDelete={() => handleDelete(deck.id)}
+              />
             </div>
             <div className='flex'>
-              <Badge variant='secondary' className='text-md ml-auto'>
+              <p className='flex place-items-center gap-1 text-sm text-muted-foreground'>
+                <Clock4Icon className='size-4' />
+                {format(new Date(deck.created), 'PP')}
+              </p>
+              <Badge className='text-md ml-auto bg-teal-100 text-teal-600 border-teal-200 dark:bg-teal-600/30 dark:text-teal-200 dark:border-teal-900'>
                 {deck.cardCount ?? 0} {deck.cardCount === 1 ? 'card' : 'cards'}
               </Badge>
             </div>

@@ -7,7 +7,11 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { EmptyComponent } from '@/components/empty-component';
-import { vocabularyApi, VocabularyCardDropdown } from '@/features/vocabulary';
+import {
+  PartOfSpeechBadge,
+  vocabularyApi,
+  VocabularyCardDropdown,
+} from '@/features/vocabulary';
 
 type VocabularyListProps = {
   items: Vocabulary[] | any[];
@@ -32,7 +36,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
     );
   };
 
-  if (items.length === 0) {
+  if (!items.length) {
     return (
       <EmptyComponent
         title='No Words Found'
@@ -43,7 +47,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
   }
 
   return (
-    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+    <div className='grid grid-cols-1 gap-4 @lg/main:grid-cols-2 @3xl/main:grid-cols-3 @5xl/main:grid-cols-4'>
       {items.map((item) => (
         <Item
           variant='outline'
@@ -54,6 +58,11 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
           <ItemContent>
             <div className='flex justify-between gap-2'>
               <div>
+                <ItemDescription className='mb-2 space-x-1'>
+                  {item.partsOfSpeech.map((part: any, index: number) => (
+                    <PartOfSpeechBadge key={index} part={part.name} />
+                  ))}
+                </ItemDescription>
                 <ItemTitle className='text-lg'>{item.text}</ItemTitle>
                 <ItemDescription>
                   {item.ipa || 'No IPA provided'}
@@ -61,21 +70,13 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
               </div>
 
               <VocabularyCardDropdown
-                word={item}
+                id={item.id}
                 onDelete={() => handleDelete(item.id)}
               />
             </div>
 
             <ItemDescription>
               {item.definitionCount} definitions
-            </ItemDescription>
-            <ItemDescription>
-              {item.partsOfSpeech.map((part: any, index: number) => (
-                <span key={index}>
-                  {part.abbreviation}
-                  {index < item.partsOfSpeech.length - 1 && ', '}
-                </span>
-              ))}
             </ItemDescription>
           </ItemContent>
         </Item>
