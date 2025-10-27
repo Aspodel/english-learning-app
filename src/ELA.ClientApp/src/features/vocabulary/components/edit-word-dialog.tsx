@@ -25,6 +25,7 @@ export function EditWordDialog({
   const { form } = useVocabularyEditForm(vocab);
 
   const onSubmit = (data: vocabularyFormSchemaType) => {
+    console.log(data);
     updateMutation.mutate(
       {
         data: {

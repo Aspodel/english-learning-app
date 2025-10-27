@@ -2,6 +2,7 @@ import React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { PARTS_OF_SPEECH } from '@/features/vocabulary';
 
 const formSchema = z.object({
   text: z
@@ -20,10 +21,7 @@ const formSchema = z.object({
           .string()
           .max(500, 'Translation must not exceed 500 characters')
           .optional(),
-        partOfSpeech: z
-          .string()
-          .max(50, 'Part of speech must not exceed 50 characters')
-          .optional(),
+        partOfSpeech: z.enum(PARTS_OF_SPEECH).optional(),
         examples: z
           .array(
             z.object({
@@ -64,7 +62,15 @@ export function useVocabularyEditForm(vocabulary?: Vocabulary) {
     () => ({
       text: vocabulary?.text || '',
       ipa: vocabulary?.ipa || '',
-      definitions: vocabulary?.definitions || [],
+      definitions: (vocabulary?.definitions || []).map((def) => ({
+        ...def,
+        translation: def.translation || '',
+        partOfSpeech: def.partOfSpeech || undefined,
+        examples: (def.examples || []).map((ex) => ({
+          ...ex,
+          translation: ex.translation || '',
+        })),
+      })),
     }),
     [vocabulary]
   );

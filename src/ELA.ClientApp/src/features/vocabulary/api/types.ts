@@ -1,3 +1,5 @@
+import type { PartOfSpeech } from '@/features/vocabulary';
+
 export type CreateVocabularyDto = {
   text: string;
   ipa?: string;
@@ -7,7 +9,7 @@ export type CreateVocabularyDto = {
 export type CreateDefinitionDto = {
   meaning: string;
   translation?: string;
-  partOfSpeech?: string;
+  partOfSpeech?: PartOfSpeech;
   examples?: CreateExampleDto[];
 };
 
@@ -26,7 +28,7 @@ export type UpdateDefinitionDto = {
   id?: number;
   meaning: string;
   translation?: string;
-  partOfSpeech?: string;
+  partOfSpeech?: PartOfSpeech;
 };
 
 export type UpdateExampleDto = {

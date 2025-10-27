@@ -19,17 +19,17 @@ export function AddWordDialog() {
 
   const onSubmit = (data: vocabularyFormSchemaType) => {
     console.log(data);
-    // createMutation.mutate(
-    //   { data },
-    //   {
-    //     onSuccess: () => {
-    //       toast.success('Word created successfully');
+    createMutation.mutate(
+      { data },
+      {
+        onSuccess: () => {
+          toast.success('Word created successfully');
 
-    //       setOpen(false);
-    //       form.reset();
-    //     },
-    //   }
-    // );
+          setOpen(false);
+          form.reset();
+        },
+      }
+    );
   };
 
   return (
@@ -44,7 +44,13 @@ export function AddWordDialog() {
           Add Word
         </Button>
       }
-      onCancel={() => form.reset()}
+      onCancel={() =>
+        form.reset({
+          text: '',
+          ipa: '',
+          definitions: [],
+        })
+      }
       formId='vocabulary-form'
     >
       <VocabularyForm form={form} onSubmit={onSubmit} />
