@@ -12,6 +12,9 @@ import {
   vocabularyApi,
   VocabularyCardDropdown,
 } from '@/features/vocabulary';
+import { VocabularyDetailsDialog } from './vocabulary-details-dialog';
+import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
 
 type VocabularyListProps = {
   items: Vocabulary[] | any[];
@@ -23,6 +26,8 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
   items,
   onSelect,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const { deleteMutation: deleteVocabulary } = vocabularyApi.useDelete();
 
   const handleDelete = (id: string) => {
@@ -34,6 +39,11 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
         },
       }
     );
+  };
+
+  const handleOpenDetails = (id: number) => {
+    setSelectedId(id);
+    setOpen(true);
   };
 
   if (!items.length) {
@@ -53,7 +63,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
           variant='outline'
           key={item.id}
           className={`cursor-${onSelect ? 'pointer' : 'default'} group gap-0 transition hover:shadow-md hover:scale-[1.05]`}
-          onClick={onSelect ? () => onSelect(item) : undefined}
+          onClick={() => handleOpenDetails(item.id)}
         >
           <ItemContent>
             <div className='flex justify-between gap-2'>
@@ -81,6 +91,26 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
           </ItemContent>
         </Item>
       ))}
+
+      <Link
+        to='/app/vocabulary/$vocabId'
+        params={{ vocabId: '1' }}
+        search={{ from: 'list' }}
+        className='text-blue-600 hover:underline'
+      >
+        Test
+      </Link>
+      
+      {open && (
+        <VocabularyDetailsDialog
+          vocabularyId={selectedId!}
+          open={open}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) setSelectedId(null);
+            setOpen(isOpen);
+          }}
+        />
+      )}
     </div>
   );
 };

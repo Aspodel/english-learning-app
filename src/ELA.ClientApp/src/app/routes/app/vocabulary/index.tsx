@@ -1,5 +1,5 @@
 import React from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 import FeatureLayout from '@/components/common/layouts/feature-layout';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import {
   VocabularyList,
 } from '@/features/vocabulary';
 
-export const Route = createFileRoute('/app/vocabulary')({
+export const Route = createFileRoute('/app/vocabulary/')({
   component: RouteComponent,
 });
 
@@ -19,8 +19,8 @@ function RouteComponent() {
   const [search, setSearch] = React.useState('');
 
   const filteredVocabulary =
-    vocab.data?.items.filter(
-      (item) => item.text.toLowerCase().includes(search.toLowerCase())
+    vocab.data?.items.filter((item) =>
+      item.text.toLowerCase().includes(search.toLowerCase())
     ) || [];
 
   return (
@@ -50,6 +50,7 @@ function RouteComponent() {
             <AddWordDialog />
           </div>
           <VocabularyList items={filteredVocabulary} />
+          <Outlet />
         </div>
       </div>
     </FeatureLayout>

@@ -20,7 +20,7 @@ const badgeVariants = cva('border', {
       conjunction:
         'bg-teal-100 text-teal-600 border-teal-200 dark:bg-teal-600/30 dark:text-teal-200 dark:border-teal-900',
       interjection:
-        'bg-red-100 text-red-600 border-red-200 dark:bg-red-600/30 dark:text-red-200 dark:border-red-900',
+        'bg-cyan-100 text-cyan-600 border-cyan-200 dark:bg-cyan-600/30 dark:text-cyan-200 dark:border-cyan-900',
       default:
         'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-600/30 dark:text-gray-200 dark:border-gray-900',
     },

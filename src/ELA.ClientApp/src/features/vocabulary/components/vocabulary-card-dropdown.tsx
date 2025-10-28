@@ -39,6 +39,7 @@ export function VocabularyCardDropdown({
             aria-label='Open menu'
             size='icon-sm'
             className='p-0 opacity-0 pointer-events-none transition-opacity duration-150 group-hover:opacity-100 group-hover:pointer-events-auto'
+            onClick={(e) => e.stopPropagation()}
           >
             <MoreVerticalIcon />
           </Button>
@@ -53,12 +54,22 @@ export function VocabularyCardDropdown({
               <CirclePauseIcon /> Suspense
             </DropdownMenuItem>
 
-            <DropdownMenuItem onSelect={() => setEditOpen(true)}>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditOpen(true);
+              }}
+            >
               <SquarePenIcon />
               Edit
             </DropdownMenuItem>
 
-            <DropdownMenuItem onSelect={() => setConfirmOpen(true)}>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                setConfirmOpen(true);
+              }}
+            >
               <Trash2Icon />
               Delete
             </DropdownMenuItem>
