@@ -1,60 +1,30 @@
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
-  createFileRoute,
-  useNavigate,
-  useParams,
-} from '@tanstack/react-router';
+import { vocabularyApi } from '@/features/vocabulary';
+import { VocabularyDetailsDialog } from '@/features/vocabulary/components/vocabulary-details-dialog';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/app/vocabulary/$vocabId')({
+  loader: async ({ params, context }) => {
+    const { queryClient } = context;
+
+    // Prefetch and cache using the raw function
+    const data = await queryClient.ensureQueryData({
+      queryKey: ['get-vocabularies', params.vocabId],
+      queryFn: () => vocabularyApi.getById({ id: params.vocabId }),
+    });
+
+    return data;
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { vocabId } = useParams({ from: '/app/vocabulary/$vocabId' });
-
-  const vocabData: any = {
-    '1': {
-      word: 'Eloquent',
-      meaning: 'Fluent or persuasive in speaking or writing.',
-    },
-    '2': {
-      word: 'Meticulous',
-      meaning: 'Showing great attention to detail; very careful.',
-    },
-    '3': {
-      word: 'Serendipity',
-      meaning:
-        'The occurrence of events by chance in a happy or beneficial way.',
-    },
-  };
-
-  const vocab = vocabData[vocabId];
-
+  const vocab: Vocabulary = Route.useLoaderData();
+  const isLoading = false;
   return (
-    <Dialog
-      open={true}
+    <VocabularyDetailsDialog
       onOpenChange={() => navigate({ to: '/app/vocabulary' })}
-    >
-      <DialogContent className='sm:max-w-md'>
-        <DialogHeader>
-          <DialogTitle>{vocab?.word}</DialogTitle>
-        </DialogHeader>
-
-        <p className='mt-2 text-gray-600'>{vocab?.meaning}</p>
-
-        <div className='mt-4 text-right'>
-          <Button onClick={() => navigate({ to: '/app/vocabulary' })}>
-            Close
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+      vocab={vocab}
+    />
   );
 }

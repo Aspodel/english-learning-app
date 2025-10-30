@@ -4,6 +4,12 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 
 import { routeTree } from '@/routeTree.gen';
 
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: ReturnType<typeof createAppRouter>
+  }
+}
+
 export const createAppRouter = (queryClient?: QueryClient) =>
   createRouter({
     routeTree,
@@ -13,7 +19,7 @@ export const createAppRouter = (queryClient?: QueryClient) =>
 export const AppRouter = () => {
   const queryClient = useQueryClient();
 
-  const router = useMemo(() => createAppRouter(queryClient), [queryClient]);
+  const router = useMemo(() => createAppRouter(queryClient), [])
 
   return <RouterProvider router={router} />;
 };

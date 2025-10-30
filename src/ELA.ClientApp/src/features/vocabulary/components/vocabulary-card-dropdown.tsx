@@ -38,7 +38,7 @@ export function VocabularyCardDropdown({
             variant='ghost'
             aria-label='Open menu'
             size='icon-sm'
-            className='p-0 opacity-0 pointer-events-none transition-opacity duration-150 group-hover:opacity-100 group-hover:pointer-events-auto'
+            className='p-0 z-10 opacity-0 pointer-events-none transition-opacity duration-150 group-hover:opacity-100 group-hover:pointer-events-auto'
             onClick={(e) => e.stopPropagation()}
           >
             <MoreVerticalIcon />

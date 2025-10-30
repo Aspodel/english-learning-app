@@ -10,7 +10,7 @@ import {
   VocabularyList,
 } from '@/features/vocabulary';
 
-export const Route = createFileRoute('/app/vocabulary/')({
+export const Route = createFileRoute('/app/vocabulary')({
   component: RouteComponent,
 });
 
