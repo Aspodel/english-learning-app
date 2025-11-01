@@ -18,7 +18,6 @@ import { Route as AppQuizRouteImport } from './app/routes/app/quiz'
 import { Route as AppFlashcardRouteImport } from './app/routes/app/flashcard'
 import { Route as AppDashboardRouteImport } from './app/routes/app/dashboard'
 import { Route as AppVocabularyRouteRouteImport } from './app/routes/app/vocabulary/route'
-import { Route as AppVocabularyVocabIdRouteImport } from './app/routes/app/vocabulary/$vocabId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -65,34 +64,27 @@ const AppVocabularyRouteRoute = AppVocabularyRouteRouteImport.update({
   path: '/vocabulary',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppVocabularyVocabIdRoute = AppVocabularyVocabIdRouteImport.update({
-  id: '/$vocabId',
-  path: '/$vocabId',
-  getParentRoute: () => AppVocabularyRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/app/vocabulary': typeof AppVocabularyRouteRouteWithChildren
+  '/app/vocabulary': typeof AppVocabularyRouteRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/flashcard': typeof AppFlashcardRoute
   '/app/quiz': typeof AppQuizRoute
   '/app/': typeof AppIndexRoute
-  '/app/vocabulary/$vocabId': typeof AppVocabularyVocabIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/app/vocabulary': typeof AppVocabularyRouteRouteWithChildren
+  '/app/vocabulary': typeof AppVocabularyRouteRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/flashcard': typeof AppFlashcardRoute
   '/app/quiz': typeof AppQuizRoute
   '/app': typeof AppIndexRoute
-  '/app/vocabulary/$vocabId': typeof AppVocabularyVocabIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,12 +92,11 @@ export interface FileRoutesById {
   '/app': typeof AppRouteRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/app/vocabulary': typeof AppVocabularyRouteRouteWithChildren
+  '/app/vocabulary': typeof AppVocabularyRouteRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/flashcard': typeof AppFlashcardRoute
   '/app/quiz': typeof AppQuizRoute
   '/app/': typeof AppIndexRoute
-  '/app/vocabulary/$vocabId': typeof AppVocabularyVocabIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,7 +110,6 @@ export interface FileRouteTypes {
     | '/app/flashcard'
     | '/app/quiz'
     | '/app/'
-    | '/app/vocabulary/$vocabId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -130,7 +120,6 @@ export interface FileRouteTypes {
     | '/app/flashcard'
     | '/app/quiz'
     | '/app'
-    | '/app/vocabulary/$vocabId'
   id:
     | '__root__'
     | '/'
@@ -142,7 +131,6 @@ export interface FileRouteTypes {
     | '/app/flashcard'
     | '/app/quiz'
     | '/app/'
-    | '/app/vocabulary/$vocabId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -217,29 +205,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppVocabularyRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/vocabulary/$vocabId': {
-      id: '/app/vocabulary/$vocabId'
-      path: '/$vocabId'
-      fullPath: '/app/vocabulary/$vocabId'
-      preLoaderRoute: typeof AppVocabularyVocabIdRouteImport
-      parentRoute: typeof AppVocabularyRouteRoute
-    }
   }
 }
 
-interface AppVocabularyRouteRouteChildren {
-  AppVocabularyVocabIdRoute: typeof AppVocabularyVocabIdRoute
-}
-
-const AppVocabularyRouteRouteChildren: AppVocabularyRouteRouteChildren = {
-  AppVocabularyVocabIdRoute: AppVocabularyVocabIdRoute,
-}
-
-const AppVocabularyRouteRouteWithChildren =
-  AppVocabularyRouteRoute._addFileChildren(AppVocabularyRouteRouteChildren)
-
 interface AppRouteRouteChildren {
-  AppVocabularyRouteRoute: typeof AppVocabularyRouteRouteWithChildren
+  AppVocabularyRouteRoute: typeof AppVocabularyRouteRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppFlashcardRoute: typeof AppFlashcardRoute
   AppQuizRoute: typeof AppQuizRoute
@@ -247,7 +217,7 @@ interface AppRouteRouteChildren {
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppVocabularyRouteRoute: AppVocabularyRouteRouteWithChildren,
+  AppVocabularyRouteRoute: AppVocabularyRouteRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppFlashcardRoute: AppFlashcardRoute,
   AppQuizRoute: AppQuizRoute,
