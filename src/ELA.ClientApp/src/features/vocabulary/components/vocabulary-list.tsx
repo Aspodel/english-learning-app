@@ -1,3 +1,4 @@
+import React from 'react';
 import { toast } from 'sonner';
 
 import {
@@ -11,21 +12,14 @@ import {
   PartOfSpeechBadge,
   vocabularyApi,
   VocabularyCardDropdown,
+  VocabularyDetailsDialog,
 } from '@/features/vocabulary';
-import { Link } from '@tanstack/react-router';
-import React from 'react';
-import { VocabularyDetailsDialog } from './vocabulary-details-dialog';
 
 type VocabularyListProps = {
   items: Vocabulary[] | any[];
-  onCreate?: () => void;
-  onSelect?: (item: Vocabulary) => void;
 };
 
-export const VocabularyList: React.FC<VocabularyListProps> = ({
-  items,
-  onSelect,
-}) => {
+export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
   const [open, setOpen] = React.useState(false);
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
   const { deleteMutation: deleteVocabulary } = vocabularyApi.useDelete();
@@ -59,52 +53,39 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({
   return (
     <div className='grid grid-cols-1 gap-4 @lg/main:grid-cols-2 @3xl/main:grid-cols-3 @5xl/main:grid-cols-4'>
       {items.map((item) => (
-        // <Link
-        //   to='/app/vocabulary/$vocabId'
-        //   params={{ vocabId: item.id }}
-        //   search={{ from: 'list' }}
-        // >
         <Item
           variant='outline'
           key={item.id}
-          className={`cursor-${onSelect ? 'pointer' : 'default'} group gap-0 transition hover:shadow-md hover:scale-[1.05]`}
+          className='relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
         >
-          <ItemContent>
+          <ItemContent onClick={() => handleOpenDetails(item.id)}>
             <div className='relative'>
-              <div onClick={() => handleOpenDetails(item.id)}>
-                <ItemDescription className='mb-2 space-x-1'>
+              <div>
+                <div className='mb-2 space-x-1'>
                   {item.partsOfSpeech.map((part: any, index: number) => (
                     <PartOfSpeechBadge key={index} part={part.name} />
                   ))}
-                </ItemDescription>
+                </div>
+
                 <ItemTitle className='text-lg'>{item.text}</ItemTitle>
+
                 <ItemDescription>
                   {item.ipa || 'No IPA provided'}
                 </ItemDescription>
+
+                <ItemDescription>
+                  {item.definitionCount} definitions
+                </ItemDescription>
               </div>
-
-              <VocabularyCardDropdown
-                id={item.id}
-                onDelete={() => handleDelete(item.id)}
-              />
             </div>
-
-            <ItemDescription>
-              {item.definitionCount} definitions
-            </ItemDescription>
           </ItemContent>
-        </Item>
-        // </Link>
-      ))}
 
-      {/* <Link
-        to='/app/vocabulary/$vocabId'
-        params={{ vocabId: '1' }}
-        search={{ from: 'list' }}
-        className='text-blue-600 hover:underline'
-      >
-        Test
-      </Link> */}
+          <VocabularyCardDropdown
+            id={item.id}
+            onDelete={() => handleDelete(item.id)}
+          />
+        </Item>
+      ))}
 
       {open && (
         <VocabularyDetailsDialog

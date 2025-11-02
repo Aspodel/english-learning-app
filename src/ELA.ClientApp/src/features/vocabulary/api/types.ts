@@ -36,3 +36,17 @@ export type UpdateExampleDto = {
   text: string;
   translation?: string;
 };
+
+export type VocabularyListItemDto = {
+  id: number;
+  text: string;
+  ipa?: string;
+  definitionCount: number;
+  created: string;
+  partsOfSpeech: PartOfSpeechDto[];
+};
+
+export type PartOfSpeechDto = {
+  name: string;
+  abbreviation: string;
+};

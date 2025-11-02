@@ -54,11 +54,13 @@ export function VocabularyDetailsDialog({
               {vocab.definitions.length > 0 ? (
                 vocab.definitions.map((def, i) => (
                   <div key={def.id} className='mb-6'>
-                    <div className='flex items-baseline gap-2'>
-                      <span className='font-semibold text-lg'>{i + 1}.</span>
-                      <p className='mt-1 text-base'>{def.meaning}</p>
+                    <div className='flex items-baseline gap-2 flex-wrap'>
+                      <span className='font-semibold text-lg'>
+                        {i + 1}. {def.meaning}
+                      </span>
+
                       {def.translation && (
-                        <p className='text-muted-foreground italic'>
+                        <p className='text-muted-foreground text-lg italic'>
                           — {def.translation}
                         </p>
                       )}
@@ -69,10 +71,11 @@ export function VocabularyDetailsDialog({
 
                     {def.examples.length > 0 && (
                       <div className='mt-2 ml-4'>
-                        <h4 className='text-sm font-medium text-muted-foreground'>
+                        <h4 className='font-medium text-muted-foreground'>
                           Examples:
                         </h4>
-                        <ul className='list-disc list-inside text-sm'>
+
+                        <ul className='list-disc list-inside'>
                           {def.examples.map((ex) => (
                             <li key={ex.id} className='mt-1'>
                               <span>{ex.text}</span>
@@ -99,7 +102,7 @@ export function VocabularyDetailsDialog({
             </div>
 
             <DialogFooter>
-              <Button variant='secondary' onClick={() => onOpenChange(false)}>
+              <Button variant='outline' onClick={() => onOpenChange(false)}>
                 Close
               </Button>
             </DialogFooter>

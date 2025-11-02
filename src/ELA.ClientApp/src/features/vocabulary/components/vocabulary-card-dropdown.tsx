@@ -38,8 +38,7 @@ export function VocabularyCardDropdown({
             variant='ghost'
             aria-label='Open menu'
             size='icon-sm'
-            className='absolute right-0 top-0 p-0 z-10 opacity-0 pointer-events-none transition-opacity duration-150 group-hover:opacity-100 group-hover:pointer-events-auto'
-            onClick={(e) => e.stopPropagation()}
+            className='absolute right-4 top-4 p-0 opacity-0 pointer-events-none transition-opacity duration-150 group-hover:opacity-100 group-hover:pointer-events-auto'
           >
             <MoreVerticalIcon />
           </Button>
@@ -54,22 +53,12 @@ export function VocabularyCardDropdown({
               <CirclePauseIcon /> Suspense
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                setEditOpen(true);
-              }}
-            >
+            <DropdownMenuItem onClick={() => setEditOpen(true)}>
               <SquarePenIcon />
               Edit
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                setConfirmOpen(true);
-              }}
-            >
+            <DropdownMenuItem onClick={() => setConfirmOpen(true)}>
               <Trash2Icon />
               Delete
             </DropdownMenuItem>

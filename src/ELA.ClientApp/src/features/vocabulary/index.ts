@@ -9,6 +9,7 @@ export * from './components/part-of-speech-badge';
 export * from './components/section-card';
 export * from './components/vocabulary-card-dropdown';
 export * from './components/definition-form';
+export * from './components/vocabulary-details-dialog';
 export * from './components/vocabulary-form';
 export * from './components/vocabulary-list';
 
