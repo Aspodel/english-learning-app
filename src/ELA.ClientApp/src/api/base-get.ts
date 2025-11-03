@@ -7,6 +7,7 @@ import { api } from "@/lib/api-client";
 type GetBody = {
     id: string | number;
     queryParams?: Record<string, string | undefined>;
+    enable?: boolean;
 }
 
 export function createGet<T>(name: string, route: string) {
@@ -23,6 +24,7 @@ export function createGet<T>(name: string, route: string) {
         const { data, isLoading, refetch, error, isError } = useQuery<T, Error>({
             queryKey: [`get-${name}`, body.id, body.queryParams],
             queryFn: () => getById(body),
+            enabled: body.enable ?? true,
         });
 
         useEffect(() => {

@@ -20,7 +20,6 @@ type VocabularyListProps = {
 };
 
 export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
-  const [open, setOpen] = React.useState(false);
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
   const { deleteMutation: deleteVocabulary } = vocabularyApi.useDelete();
 
@@ -45,11 +44,6 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
     );
   }
 
-  const handleOpenDetails = (id: number) => {
-    setSelectedId(id);
-    setOpen(true);
-  };
-
   return (
     <div className='grid grid-cols-1 gap-4 @lg/main:grid-cols-2 @3xl/main:grid-cols-3 @5xl/main:grid-cols-4'>
       {items.map((item) => (
@@ -58,7 +52,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
           key={item.id}
           className='relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
         >
-          <ItemContent onClick={() => handleOpenDetails(item.id)}>
+          <ItemContent onClick={() => setSelectedId(item.id)}>
             <div className='relative'>
               <div>
                 <div className='mb-2 space-x-1'>
@@ -87,16 +81,10 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
         </Item>
       ))}
 
-      {open && (
-        <VocabularyDetailsDialog
-          vocabularyId={selectedId!}
-          open={open}
-          onOpenChange={(isOpen) => {
-            if (!isOpen) setSelectedId(null);
-            setOpen(isOpen);
-          }}
-        />
-      )}
+      <VocabularyDetailsDialog
+        id={selectedId!}
+        onClose={() => setSelectedId(null)}
+      />
     </div>
   );
 };

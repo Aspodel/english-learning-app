@@ -1,4 +1,7 @@
+import { Loader2Icon } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import {
   Dialog,
   DialogContent,
@@ -8,36 +11,37 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { PartOfSpeechBadge, vocabularyApi } from '@/features/vocabulary';
-import { Separator } from '@radix-ui/react-separator';
-import { Loader2Icon } from 'lucide-react';
 
 type VocabularyDetailsDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  vocabularyId: number;
+  id: number;
+  onClose: () => void;
 };
 
 export function VocabularyDetailsDialog({
-  open,
-  onOpenChange,
-  vocabularyId,
+  id,
+  onClose,
 }: VocabularyDetailsDialogProps) {
-  const { data: vocab, isLoading } = vocabularyApi.useGet(
-    { id: vocabularyId }
-    // { enabled: open }
-  );
+  const { data: vocab, isLoading } = vocabularyApi.useGet({ id, enable: !!id });
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={!!id} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className='max-w-lg sm:max-w-2xl'>
-        {isLoading ? (
+        {isLoading && (
           <div className='flex justify-center items-center py-10'>
             <Loader2Icon className='animate-spin w-6 h-6 text-muted-foreground' />
             <span className='ml-2 text-muted-foreground'>
               Loading vocabulary...
             </span>
           </div>
-        ) : vocab ? (
+        )}
+
+        {/* {error && (
+          <p className="text-destructive">
+            Failed to load vocabulary details. Try again later.
+          </p>
+        )} */}
+
+        {vocab && (
           <>
             <DialogHeader>
               <DialogTitle className='text-2xl font-bold'>
@@ -102,15 +106,11 @@ export function VocabularyDetailsDialog({
             </div>
 
             <DialogFooter>
-              <Button variant='outline' onClick={() => onOpenChange(false)}>
+              <Button variant='outline' onClick={onClose}>
                 Close
               </Button>
             </DialogFooter>
           </>
-        ) : (
-          <div className='text-center text-muted-foreground py-10'>
-            No vocabulary found.
-          </div>
         )}
       </DialogContent>
     </Dialog>
