@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   MoreVerticalIcon,
   PlusCircleIcon,
@@ -8,7 +7,6 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,69 +14,49 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { EditWordDialog } from '@/features/vocabulary';
 
 type VocabularyCardDropdownProps = {
-  id: number;
+  onEdit: () => void;
   onDelete: () => void;
 };
 
 export function VocabularyCardDropdown({
-  id,
+  onEdit,
   onDelete,
 }: VocabularyCardDropdownProps) {
-  const [editOpen, setEditOpen] = React.useState(false);
-  const [confirmOpen, setConfirmOpen] = React.useState(false);
-
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant='ghost'
-            aria-label='Open menu'
-            size='icon-sm'
-            className='absolute right-4 top-4 p-0 opacity-0 pointer-events-none transition-opacity duration-150 group-hover:opacity-100 group-hover:pointer-events-auto'
-          >
-            <MoreVerticalIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className='w-40' align='end'>
-          <DropdownMenuGroup>
-            <DropdownMenuItem disabled>
-              <PlusCircleIcon /> Add to flashcard
-            </DropdownMenuItem>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant='ghost'
+          aria-label='Open menu'
+          size='icon-sm'
+          className='absolute right-4 top-4 p-0 opacity-0 pointer-events-none transition-opacity duration-150 group-hover:opacity-100 group-hover:pointer-events-auto'
+        >
+          <MoreVerticalIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='w-40' align='end'>
+        <DropdownMenuGroup>
+          <DropdownMenuItem disabled>
+            <PlusCircleIcon /> Add to flashcard
+          </DropdownMenuItem>
 
-            <DropdownMenuItem disabled>
-              <CirclePauseIcon /> Suspense
-            </DropdownMenuItem>
+          <DropdownMenuItem disabled>
+            <CirclePauseIcon /> Suspense
+          </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={() => setEditOpen(true)}>
-              <SquarePenIcon />
-              Edit
-            </DropdownMenuItem>
+          <DropdownMenuItem onClick={onEdit}>
+            <SquarePenIcon />
+            Edit
+          </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={() => setConfirmOpen(true)}>
-              <Trash2Icon />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {editOpen && (
-        <EditWordDialog id={id} open={editOpen} onOpenChange={setEditOpen} />
-      )}
-
-      {confirmOpen && (
-        <ConfirmDialog
-          open={confirmOpen}
-          onOpenChange={setConfirmOpen}
-          title='Confirm Delete'
-          description='Are you sure you want to delete this word? This action cannot be undone.'
-          onConfirm={onDelete}
-        />
-      )}
-    </>
+          <DropdownMenuItem onClick={onDelete} className='text-destructive'>
+            <Trash2Icon />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

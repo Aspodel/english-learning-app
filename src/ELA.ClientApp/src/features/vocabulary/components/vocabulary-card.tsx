@@ -10,11 +10,11 @@ import {
   type VocabularyListItemDto,
 } from '@/features/vocabulary';
 
-type VocabularyCardProps = {
+type VocabularyCardProps = React.HTMLAttributes<HTMLDivElement> & {
   vocab: VocabularyListItemDto;
-  onSelect: () => void;
-  onEdit: (v: VocabularyListItemDto) => void;
-  onDelete: (v: VocabularyListItemDto) => void;
+  onSelect: (id: number) => void;
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
 };
 
 export function VocabularyCard({
@@ -28,7 +28,7 @@ export function VocabularyCard({
       variant='outline'
       className='relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
     >
-      <ItemContent onClick={onSelect}>
+      <ItemContent onClick={() => onSelect(vocab.id)}>
         <div className='relative'>
           <div>
             <div className='mb-2 space-x-1'>
@@ -49,9 +49,9 @@ export function VocabularyCard({
       </ItemContent>
 
       <VocabularyCardDropdown
-        id={vocab.id}
-        onDelete={() => onDelete(vocab)}
-        onEdit={() => onEdit(vocab)}
+        // id={vocab.id}
+        onDelete={() => onDelete(vocab.id)}
+        onEdit={() => onEdit(vocab.id)}
       />
     </Item>
   );

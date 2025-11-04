@@ -9,45 +9,32 @@ import {
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Loading } from '@/components/common/loading';
 
-type EditWordDialogProps = {
+type VocabularyEditDialogProps = {
   id: number;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onSave: (v: vocabularyFormSchemaType) => void;
+  onCancel: () => void;
+  isPending: boolean;
 };
 
-export function EditWordDialog({
+export function VocabularyEditDialog({
   id,
-  open,
-  onOpenChange,
-}: EditWordDialogProps) {
+  onSave,
+  onCancel,
+  isPending,
+}: VocabularyEditDialogProps) {
+  if (!id) return null;
+
   const { data: vocab, isLoading } = vocabularyApi.useGet({ id });
-  const { updateMutation } = vocabularyApi.useUpdate();
   const { form } = useVocabularyEditForm(vocab);
 
-  const onSubmit = (data: vocabularyFormSchemaType) => {
-    console.log(data);
-    updateMutation.mutate(
-      {
-        data: {
-          ...data,
-          id: id,
-        },
-      },
-      {
-        onSuccess: () => {
-          toast.success('Word updated successfully');
-
-          onOpenChange(false);
-          form.reset();
-        },
-      }
-    );
-  };
+  if (isPending) {
+    toast.info('Updating word...');
+  }
 
   return (
     <ResponsiveDialog
-      open={open}
-      onOpenChange={onOpenChange}
+      open={!!id}
+      onOpenChange={(o) => !o && onCancel()}
       title='Edit Word'
       description='Make changes to the word details below.'
       onCancel={() => form.reset()}
@@ -57,7 +44,7 @@ export function EditWordDialog({
       {isLoading ? (
         <Loading />
       ) : (
-        <VocabularyForm form={form} onSubmit={onSubmit} />
+        <VocabularyForm form={form} onSubmit={onSave} />
       )}
     </ResponsiveDialog>
   );

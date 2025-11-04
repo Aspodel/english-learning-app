@@ -1,19 +1,14 @@
 import React from 'react';
 import { toast } from 'sonner';
 
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from '@/components/ui/item';
 import { EmptyComponent } from '@/components/empty-component';
 import {
-  PartOfSpeechBadge,
   vocabularyApi,
-  VocabularyCardDropdown,
+  VocabularyCard,
   VocabularyDetailsDialog,
+  VocabularyEditDialog,
 } from '@/features/vocabulary';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 
 type VocabularyListProps = {
   items: Vocabulary[] | any[];
@@ -21,14 +16,36 @@ type VocabularyListProps = {
 
 export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
-  const { deleteMutation: deleteVocabulary } = vocabularyApi.useDelete();
+  const [editingId, setEditingId] = React.useState<number | null>(null);
+  const [deletingId, setDeletingId] = React.useState<number | null>(null);
+
+  const { deleteMutation } = vocabularyApi.useDelete();
+  const { updateMutation } = vocabularyApi.useUpdate();
 
   const handleDelete = (id: number) => {
-    deleteVocabulary.mutate(
+    deleteMutation.mutate(
       { id },
       {
         onSuccess: () => {
+          setDeletingId(null);
           toast.success('Word deleted successfully');
+        },
+      }
+    );
+  };
+
+  const handleEdit = (id: number, data: any) => {
+    updateMutation.mutate(
+      {
+        data: {
+          ...data,
+          id,
+        },
+      },
+      {
+        onSuccess: () => {
+          setEditingId(null);
+          toast.success('Word updated successfully');
         },
       }
     );
@@ -47,43 +64,34 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
   return (
     <div className='grid grid-cols-1 gap-4 @lg/main:grid-cols-2 @3xl/main:grid-cols-3 @5xl/main:grid-cols-4'>
       {items.map((item) => (
-        <Item
-          variant='outline'
+        <VocabularyCard
           key={item.id}
-          className='relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
-        >
-          <ItemContent onClick={() => setSelectedId(item.id)}>
-            <div className='relative'>
-              <div>
-                <div className='mb-2 space-x-1'>
-                  {item.partsOfSpeech.map((part: any, index: number) => (
-                    <PartOfSpeechBadge key={index} part={part.name} />
-                  ))}
-                </div>
-
-                <ItemTitle className='text-lg'>{item.text}</ItemTitle>
-
-                <ItemDescription>
-                  {item.ipa || 'No IPA provided'}
-                </ItemDescription>
-
-                <ItemDescription>
-                  {item.definitionCount} definitions
-                </ItemDescription>
-              </div>
-            </div>
-          </ItemContent>
-
-          <VocabularyCardDropdown
-            id={item.id}
-            onDelete={() => handleDelete(item.id)}
-          />
-        </Item>
+          vocab={item}
+          onSelect={() => setSelectedId(item.id)}
+          onEdit={setEditingId}
+          onDelete={setDeletingId}
+        />
       ))}
 
       <VocabularyDetailsDialog
         id={selectedId!}
         onClose={() => setSelectedId(null)}
+      />
+
+      <VocabularyEditDialog
+        id={editingId!}
+        onSave={(vocab) => handleEdit(editingId!, vocab)}
+        onCancel={() => setEditingId(null)}
+        isPending={updateMutation.isPending}
+      />
+
+      <ConfirmDialog
+        open={!!deletingId}
+        onOpenChange={() => setDeletingId(null)}
+        title='Confirm Delete'
+        description='Are you sure you want to delete this word? This action cannot be undone.'
+        onConfirm={() => handleDelete(deletingId!)}
+        isLoading={deleteMutation.isPending}
       />
     </div>
   );

@@ -11,7 +11,7 @@ import {
 } from '@/features/vocabulary';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 
-export function AddWordDialog() {
+export function VocabularyCreateDialog() {
   const [open, setOpen] = React.useState(false);
 
   const { form } = useVocabularyCreateForm();
