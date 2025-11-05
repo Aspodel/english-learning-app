@@ -51,7 +51,7 @@ export function VocabularyCardDropdown({
             Edit
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={onDelete} className='text-destructive'>
+          <DropdownMenuItem onClick={onDelete}>
             <Trash2Icon />
             Delete
           </DropdownMenuItem>

@@ -5,7 +5,8 @@ namespace ELA;
 public record CreateVocabularyCommand(
     string Text,
     string? IPA,
-    List<CreateDefinitionDto>? Definitions) : IRequest<VocabularyDto>;
+    List<CreateDefinitionDto>? Definitions
+) : IRequest<VocabularyDto>;
 
 public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCommand, VocabularyDto>
 {
