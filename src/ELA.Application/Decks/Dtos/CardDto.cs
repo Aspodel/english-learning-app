@@ -8,3 +8,8 @@ public record CardDto(
     bool Suspended,
     DateTimeOffset Created
 );
+
+public record AddCardDto(
+    string Front,
+    string Back
+);

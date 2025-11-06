@@ -25,7 +25,7 @@ public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCo
 
         var vocabulary = new Vocabulary(request.Text, _currentUser.Id, request.IPA);
 
-        if (request.Definitions is not null && request.Definitions.Any())
+        if (request.Definitions?.Count > 0)
         {
             foreach (var def in request.Definitions)
             {
@@ -35,12 +35,9 @@ public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCo
 
                 var definition = vocabulary.AddDefinition(def.Meaning, def.Translation, partOfSpeech);
 
-                if (def.Examples is not null && def.Examples.Any())
+                if (def.Examples?.Count > 0)
                 {
-                    foreach (var ex in def.Examples)
-                    {
-                        definition.AddExample(ex.Text, ex.Translation);
-                    }
+                    definition.AddExamples(def.Examples.Select(e => (e.Text, e.Translation)));
                 }
             }
         }

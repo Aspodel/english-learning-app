@@ -29,6 +29,13 @@ public class Deck : BaseAuditableEntity
         return card;
     }
 
+    public List<Card> AddCards(IEnumerable<(string Front, string Back)> cards)
+    {
+        var newCards = cards.Select(c => new Card(c.Front, c.Back, Id)).ToList();
+        _cards.AddRange(newCards);
+        return newCards;
+    }
+
     public void RemoveCard(int cardId)
     {
         var card = _cards.FirstOrDefault(c => c.Id == cardId);

@@ -39,6 +39,13 @@ public class Definition : BaseEntity
         return example;
     }
 
+    public List<Example> AddExamples(IEnumerable<(string Text, string? Translation)> examples)
+    {
+        var newExamples = examples.Select(e => new Example(e.Text, e.Translation)).ToList();
+        _examples.AddRange(newExamples);
+        return newExamples;
+    }
+
     public void RemoveExample(int exampleId)
     {
         var example = _examples.FirstOrDefault(e => e.Id == exampleId);

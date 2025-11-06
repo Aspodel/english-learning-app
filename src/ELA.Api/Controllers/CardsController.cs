@@ -24,6 +24,13 @@ public class CardsController : BaseController
         return Ok(result);
     }
 
+    [HttpPost("bulk")]
+    public async Task<IActionResult> CreateBulk([FromBody] AddCardsCommand command, CancellationToken cancellationToken = default)
+    {
+        var result = await Mediator.Send(command, cancellationToken);
+        return Ok(result);
+    }
+
     [HttpPost("{id:int}/review")]
     public async Task<ActionResult<int>> Review(int id, [FromBody] ReviewCardCommand command, CancellationToken cancellationToken = default)
     {

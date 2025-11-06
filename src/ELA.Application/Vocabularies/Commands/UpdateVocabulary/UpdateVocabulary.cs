@@ -72,7 +72,6 @@ public class UpdateVocabularyCommandHandler : IRequestHandler<UpdateVocabularyCo
             vocabulary.RemoveDefinition(def.Id);
         }
 
-        // Save all changes
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;
     }
@@ -90,10 +89,7 @@ public class UpdateVocabularyCommandHandler : IRequestHandler<UpdateVocabularyCo
             if (exInput.Id.HasValue)
             {
                 example = existingExamples.FirstOrDefault(e => e.Id == exInput.Id.Value);
-                if (example != null)
-                {
-                    example.Update(exInput.Text, exInput.Translation);
-                }
+                example?.Update(exInput.Text, exInput.Translation);
             }
 
             if (example == null)
