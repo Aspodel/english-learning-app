@@ -31,30 +31,31 @@ public class Deck : BaseAuditableEntity
 
     public List<Card> AddCards(IEnumerable<(string Front, string Back)> cards)
     {
-        var newCards = cards.Select(c => new Card(c.Front, c.Back, Id)).ToList();
-        _cards.AddRange(newCards);
+        var newCards = new List<Card>();
+        foreach (var (front, back) in cards)
+        {
+            var card = new Card(front, back, Id);
+            _cards.Add(card);
+            newCards.Add(card);
+        }
+
         return newCards;
     }
 
     public void RemoveCard(int cardId)
     {
-        var card = _cards.FirstOrDefault(c => c.Id == cardId);
-        if (card == null)
-        {
-            throw new ArgumentException("Card not found.", nameof(cardId));
-        }
+        var index = _cards.FindIndex(c => c.Id == cardId);
+        if (index < 0)
+            throw new ArgumentException($"Card with Id {cardId} not found.", nameof(cardId));
 
-        _cards.Remove(card);
+        _cards.RemoveAt(index);
     }
 
     public void UpdateCard(int cardId, string newFront, string newBack)
     {
-        var card = _cards.FirstOrDefault(c => c.Id == cardId);
-        if (card == null)
-        {
-            throw new ArgumentException("Card not found.", nameof(cardId));
-        }
-
+        var card = _cards.FirstOrDefault(c => c.Id == cardId)
+            ?? throw new ArgumentException($"Card with Id {cardId} not found.", nameof(cardId));
+        
         card.Update(newFront, newBack);
     }
 }

@@ -39,32 +39,28 @@ public class Definition : BaseEntity
         return example;
     }
 
-    public List<Example> AddExamples(IEnumerable<(string Text, string? Translation)> examples)
+    public void AddExamples(IEnumerable<(string Text, string? Translation)> examples)
     {
-        var newExamples = examples.Select(e => new Example(e.Text, e.Translation)).ToList();
-        _examples.AddRange(newExamples);
-        return newExamples;
+        foreach (var (text, translation) in examples)
+        {
+            _examples.Add(new Example(text, translation));
+        }
     }
 
     public void RemoveExample(int exampleId)
     {
-        var example = _examples.FirstOrDefault(e => e.Id == exampleId);
-        if (example == null)
-        {
-            throw new ArgumentException("Example not found.", nameof(exampleId));
-        }
+        var index = _examples.FindIndex(e => e.Id == exampleId);
+        if (index < 0)
+            throw new ArgumentException($"Example with Id {exampleId} not found.", nameof(exampleId));
 
-        _examples.Remove(example);
+        _examples.RemoveAt(index);
     }
 
     public void UpdateExample(int exampleId, string newText, string? newTranslation)
     {
-        var example = _examples.FirstOrDefault(e => e.Id == exampleId);
-        if (example == null)
-        {
-            throw new ArgumentException("Example not found.", nameof(exampleId));
-        }
-
+        var example = _examples.FirstOrDefault(e => e.Id == exampleId)
+            ?? throw new ArgumentException($"Example with Id {exampleId} not found.", nameof(exampleId));
+        
         example.Update(newText, newTranslation);
     }
 }

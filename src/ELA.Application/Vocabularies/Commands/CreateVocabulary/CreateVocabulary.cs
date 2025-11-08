@@ -25,21 +25,16 @@ public class CreateVocabularyCommandHandler : IRequestHandler<CreateVocabularyCo
 
         var vocabulary = new Vocabulary(request.Text, _currentUser.Id, request.IPA);
 
-        if (request.Definitions?.Count > 0)
+        if (request.Definitions is { Count: > 0 })
         {
-            foreach (var def in request.Definitions)
-            {
-                var partOfSpeech = def.PartOfSpeech is not null
-                    ? PartOfSpeech.From(def.PartOfSpeech)
-                    : null;
+            var definitions = request.Definitions.Select(def => (
+                def.Meaning,
+                def.Translation,
+                def.PartOfSpeech is not null ? PartOfSpeech.From(def.PartOfSpeech) : null,
+                def.Examples?.Select(e => (e.Text, e.Translation)).ToList() ?? []
+            ));
 
-                var definition = vocabulary.AddDefinition(def.Meaning, def.Translation, partOfSpeech);
-
-                if (def.Examples?.Count > 0)
-                {
-                    definition.AddExamples(def.Examples.Select(e => (e.Text, e.Translation)));
-                }
-            }
+            vocabulary.AddDefinitions(definitions);
         }
 
         _context.Vocabularies.Add(vocabulary);

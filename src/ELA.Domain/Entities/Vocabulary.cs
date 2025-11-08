@@ -34,25 +34,31 @@ public class Vocabulary : BaseAuditableEntity
         return definition;
     }
 
+    public void AddDefinitions(IEnumerable<(string Meaning, string? Translation, PartOfSpeech? PartOfSpeech, List<(string Text, string? Translation)> Examples)> definitions)
+    {
+        foreach (var def in definitions)
+        {
+            var newDefinition = AddDefinition(def.Meaning, def.Translation, def.PartOfSpeech);
+
+            if (def.Examples is { Count: > 0 })
+                newDefinition.AddExamples(def.Examples);
+        }
+    }
+
     public void RemoveDefinition(int definitionId)
     {
-        var definition = _definitions.FirstOrDefault(d => d.Id == definitionId);
-        if (definition == null)
-        {
-            throw new ArgumentException("Definition not found.", nameof(definitionId));
-        }
+        var index = _definitions.FindIndex(d => d.Id == definitionId);
+        if (index < 0)
+            throw new ArgumentException($"Definition with Id {definitionId} not found.", nameof(definitionId));
 
-        _definitions.Remove(definition);
+        _definitions.RemoveAt(index);
     }
 
     public void UpdateDefinition(int definitionId, string newMeaning, string? newTranslation, PartOfSpeech? newPartOfSpeech)
     {
-        var definition = _definitions.FirstOrDefault(d => d.Id == definitionId);
-        if (definition == null)
-        {
-            throw new ArgumentException("Definition not found.", nameof(definitionId));
-        }
-
+        var definition = _definitions.FirstOrDefault(d => d.Id == definitionId)
+            ?? throw new ArgumentException($"Definition with Id {definitionId} not found.", nameof(definitionId));
+        
         definition.Update(newMeaning, newTranslation, newPartOfSpeech);
     }
 }

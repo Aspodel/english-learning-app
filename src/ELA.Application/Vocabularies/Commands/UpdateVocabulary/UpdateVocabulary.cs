@@ -6,7 +6,8 @@ public record UpdateVocabularyCommand(
     int Id,
     string Text,
     string? IPA,
-    List<UpdateDefinitionDto>? Definitions) : IRequest<Unit>;
+    List<UpdateDefinitionDto>? Definitions
+) : IRequest<Unit>;
 
 public class UpdateVocabularyCommandHandler : IRequestHandler<UpdateVocabularyCommand, Unit>
 {
@@ -22,96 +23,75 @@ public class UpdateVocabularyCommandHandler : IRequestHandler<UpdateVocabularyCo
         var vocabulary = await _context.Vocabularies
             .Include(v => v.Definitions)
                 .ThenInclude(d => d.Examples)
-            .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
+            .SingleOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
 
         Guard.Against.NotFound(request.Id, vocabulary);
 
-         // 1️⃣ Update vocabulary itself
+        // ---- Update base vocabulary fields ----
         vocabulary.Update(request.Text, request.IPA);
 
-        var existingDefs = vocabulary.Definitions.ToList();
-        var incomingDefs = request.Definitions ?? new List<UpdateDefinitionDto>();
+        var existingDefinitions = vocabulary.Definitions.ToDictionary(d => d.Id);
+        var incomingDefinitions = request.Definitions ?? [];
 
-        // 2️⃣ Update or add definitions
-        foreach (var defInput in incomingDefs)
+        // ---- Process incoming definitions ----
+        foreach (var defDto in incomingDefinitions)
         {
-            PartOfSpeech? partOfSpeech = defInput.PartOfSpeech is not null
-                ? PartOfSpeech.From(defInput.PartOfSpeech)
-                : null;
-
-            Definition? definition = null;
-
-            if (defInput.Id.HasValue)
+            if (defDto.Id is null or <= 0)
             {
-                definition = existingDefs.FirstOrDefault(d => d.Id == defInput.Id.Value);
-                definition?.Update(defInput.Meaning, defInput.Translation, partOfSpeech);
+                var newDefinition = vocabulary.AddDefinition(
+                    defDto.Meaning,
+                    defDto.Translation,
+                    defDto.PartOfSpeech is not null ? PartOfSpeech.From(defDto.PartOfSpeech) : null
+                );
+
+                if (defDto.Examples?.Count > 0)
+                    newDefinition.AddExamples(defDto.Examples.Select(e => (e.Text, e.Translation)));
+
+                continue;
             }
 
-            if (definition == null)
-            {
-                // new definition
-                definition = vocabulary.AddDefinition(defInput.Meaning, defInput.Translation, partOfSpeech);
-            }
+            // Update existing definition
+            if (!existingDefinitions.Remove(defDto.Id.Value, out var definition))
+                throw new ArgumentException($"Definition {defDto.Id} not found in Vocabulary {vocabulary.Id}.");
 
-            // handle examples
-            HandleExamples(definition, defInput.Examples);
+            definition.Update(
+                defDto.Meaning,
+                defDto.Translation,
+                defDto.PartOfSpeech is not null ? PartOfSpeech.From(defDto.PartOfSpeech) : null
+            );
+
+            SyncExamples(definition, defDto.Examples ?? Enumerable.Empty<UpdateExampleDto>());
         }
 
-        // 3️⃣ Delete definitions missing from request
-        var incomingDefIds = incomingDefs
-            .Where(d => d.Id.HasValue)
-            .Select(d => d.Id!.Value)
-            .ToHashSet();
-
-        var defsToRemove = existingDefs
-            .Where(d => !incomingDefIds.Contains(d.Id))
-            .ToList();
-
-        foreach (var def in defsToRemove)
-        {
-            vocabulary.RemoveDefinition(def.Id);
-        }
+        // ---- Remove definitions not in request ----
+        foreach (var obsolete in existingDefinitions.Values)
+            vocabulary.RemoveDefinition(obsolete.Id);
 
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;
     }
 
-    private void HandleExamples(Definition definition, List<UpdateExampleDto>? exampleInputs)
+    private static void SyncExamples(Definition definition, IEnumerable<UpdateExampleDto> incomingExamples)
     {
-        var existingExamples = definition.Examples.ToList();
-        var incomingExamples = exampleInputs ?? new List<UpdateExampleDto>();
+        var existingExamples = definition.Examples.ToDictionary(e => e.Id);
 
-        // Update or add examples
-        foreach (var exInput in incomingExamples)
+        foreach (var exDto in incomingExamples)
         {
-            Example? example = null;
-
-            if (exInput.Id.HasValue)
+            if (exDto.Id is null or <= 0)
             {
-                example = existingExamples.FirstOrDefault(e => e.Id == exInput.Id.Value);
-                example?.Update(exInput.Text, exInput.Translation);
+                definition.AddExample(exDto.Text, exDto.Translation);
+                continue;
             }
 
-            if (example == null)
+            // Existing example → update and remove from dictionary
+            if (existingExamples.Remove(exDto.Id.Value, out var existing))
             {
-                // new example
-                definition.AddExample(exInput.Text, exInput.Translation);
+                existing.Update(exDto.Text, exDto.Translation);
             }
         }
 
-        // Delete examples missing from request
-        var incomingExampleIds = incomingExamples
-            .Where(e => e.Id.HasValue)
-            .Select(e => e.Id!.Value)
-            .ToHashSet();
-
-        var examplesToRemove = existingExamples
-            .Where(e => !incomingExampleIds.Contains(e.Id))
-            .ToList();
-
-        foreach (var ex in examplesToRemove)
-        {
-            definition.RemoveExample(ex.Id);
-        }
+        // Remove examples that no longer exist in DTO
+        foreach (var obsolete in existingExamples.Values)
+            definition.RemoveExample(obsolete.Id);
     }
 }
