@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { DeckDto } from '../api/type';
 
 const formSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(250, 'Name must not exceed 250 characters'),
+  name: z.string().min(1, 'Deck name is required').max(250, 'Deck name must not exceed 250 characters'),
   description: z
     .string()
     .max(500, 'Description must not exceed 500 characters')

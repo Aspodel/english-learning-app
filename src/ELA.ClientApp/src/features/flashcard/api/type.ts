@@ -3,7 +3,7 @@ export type DeckDto = {
   description?: string;
 };
 
-export type DeckListItem = {
+export type DeckListItemDto = {
   id: number;
   name: string;
   description?: string;

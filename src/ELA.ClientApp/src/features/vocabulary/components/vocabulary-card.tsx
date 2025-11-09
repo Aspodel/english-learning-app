@@ -49,7 +49,6 @@ export function VocabularyCard({
       </ItemContent>
 
       <VocabularyCardDropdown
-        // id={vocab.id}
         onDelete={() => onDelete(vocab.id)}
         onEdit={() => onEdit(vocab.id)}
       />

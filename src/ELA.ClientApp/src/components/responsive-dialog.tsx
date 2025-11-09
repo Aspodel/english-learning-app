@@ -24,6 +24,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from './ui/scroll-area';
+import { Loader2Icon } from 'lucide-react';
 
 type ResponsiveDialogProps = {
   open?: boolean;
@@ -35,6 +36,7 @@ type ResponsiveDialogProps = {
   children: React.ReactNode;
   onOpenChange?: (open: boolean) => void;
   onCancel?: () => void;
+  loading?: boolean;
 };
 
 export function ResponsiveDialog({
@@ -46,6 +48,7 @@ export function ResponsiveDialog({
   children,
   footerBtnText = 'Add',
   onCancel,
+  loading = false,
   formId = 'form',
 }: ResponsiveDialogProps) {
   const isMobile = useIsMobile();
@@ -68,8 +71,14 @@ export function ResponsiveDialog({
 
   const sharedFooter = (
     <>
-      <Button type='submit' form={formId}>
-        {footerBtnText}
+      <Button type='submit' form={formId} disabled={loading}>
+        {loading ? (
+          <>
+            <Loader2Icon className='animate-spin' /> Please wait...
+          </>
+        ) : (
+          footerBtnText
+        )}
       </Button>
       {(isMobile ? DrawerClose : SheetClose)({
         asChild: true,

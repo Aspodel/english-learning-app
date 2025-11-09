@@ -1,38 +1,55 @@
+import React from 'react';
 import { toast } from 'sonner';
-import { format } from 'date-fns';
 
-import { Badge } from '@/components/ui/badge';
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from '@/components/ui/item';
 import { EmptyComponent } from '@/components/empty-component';
 import {
   deckApi,
-  DeckCardDropdown,
-  type DeckListItem,
+  DeckCard,
+  DeckEditDialog,
+  type DeckListItemDto,
 } from '@/features/flashcard';
-import { Clock4Icon } from 'lucide-react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 
 type DeckListProps = {
-  items: DeckListItem[];
+  items: DeckListItemDto[];
 };
 
 export const DeckList: React.FC<DeckListProps> = ({ items }) => {
-  const { deleteMutation: deleteDeck } = deckApi.useDelete();
+  const [editing, setEditing] = React.useState<DeckListItemDto | null>(null);
+  const [deletingId, setDeletingId] = React.useState<number | null>(null);
+
+  const { updateMutation } = deckApi.useUpdate();
+  const { deleteMutation } = deckApi.useDelete();
+
+  const handleEdit = (id: number, data: any) => {
+    updateMutation.mutate(
+      {
+        data: {
+          ...data,
+          id,
+        },
+      },
+      {
+        onSuccess: () => {
+          setEditing(null);
+          toast.success('Word updated successfully');
+        },
+      }
+    );
+  };
 
   const handleDelete = (id: number) => {
-    deleteDeck.mutate(
+    deleteMutation.mutate(
       { id },
       {
         onSuccess: () => {
+          setDeletingId(null);
           toast.success('Deck deleted successfully');
         },
       }
     );
   };
+
   if (items.length === 0) {
     return (
       <EmptyComponent
@@ -46,36 +63,29 @@ export const DeckList: React.FC<DeckListProps> = ({ items }) => {
   return (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
       {items.map((deck) => (
-        <Item
-          variant='outline'
+        <DeckCard
           key={deck.id}
-          className={` group gap-0 transition hover:shadow-md hover:scale-[1.05]`}
-          // onClick={onSelect ? () => onSelect(item) : undefined}
-        >
-          <ItemContent>
-            <div className='flex justify-between gap-2'>
-              <div>
-                <ItemTitle className='text-lg'>{deck.name}</ItemTitle>
-                <ItemDescription>{deck.description}</ItemDescription>
-              </div>
-
-              <DeckCardDropdown
-                deck={deck}
-                onDelete={() => handleDelete(deck.id)}
-              />
-            </div>
-            <div className='flex'>
-              <p className='flex place-items-center gap-1 text-sm text-muted-foreground'>
-                <Clock4Icon className='size-4' />
-                {format(new Date(deck.created), 'PP')}
-              </p>
-              <Badge className='text-md ml-auto bg-teal-100 text-teal-600 border-teal-200 dark:bg-teal-600/30 dark:text-teal-200 dark:border-teal-900'>
-                {deck.cardCount ?? 0} {deck.cardCount === 1 ? 'card' : 'cards'}
-              </Badge>
-            </div>
-          </ItemContent>
-        </Item>
+          deck={deck}
+          onEdit={() => setEditing(deck)}
+          onDelete={() => setDeletingId(deck.id)}
+        />
       ))}
+
+      <DeckEditDialog
+        deck={editing!}
+        onSave={(deck) => handleEdit(editing!.id, deck)}
+        onCancel={() => setEditing(null)}
+        isPending={updateMutation.isPending}
+      />
+
+      <ConfirmDialog
+        open={!!deletingId}
+        onOpenChange={() => setDeletingId(null)}
+        title='Confirm Delete'
+        description='Are you sure you want to delete this deck? All associated flashcards will also be deleted. This action cannot be undone.'
+        onConfirm={() => handleDelete(deletingId!)}
+        loading={deleteMutation.isPending}
+      />
     </div>
   );
 };

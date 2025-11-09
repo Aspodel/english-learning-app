@@ -46,12 +46,12 @@ export function VocabularyCardDropdown({
             <CirclePauseIcon /> Suspense
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={onEdit}>
+          <DropdownMenuItem onSelect={onEdit}>
             <SquarePenIcon />
             Edit
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={onDelete}>
+          <DropdownMenuItem onSelect={onDelete}>
             <Trash2Icon />
             Delete
           </DropdownMenuItem>

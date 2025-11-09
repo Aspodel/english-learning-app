@@ -22,7 +22,7 @@ type ConfirmDialogProps = {
   cancelText?: string;
   onConfirm?: () => void;
   onCancel?: () => void;
-  isLoading?: boolean;
+  loading?: boolean;
   trigger?: React.ReactNode;
   children?: React.ReactNode;
 };
@@ -36,7 +36,7 @@ export const ConfirmDialog = ({
   cancelText = 'Cancel',
   onConfirm,
   onCancel,
-  isLoading = false,
+  loading = false,
   trigger,
   children,
 }: ConfirmDialogProps) => {
@@ -53,8 +53,8 @@ export const ConfirmDialog = ({
 
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onCancel}>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? (
+          <AlertDialogAction onClick={onConfirm} disabled={loading}>
+            {loading ? (
               <>
                 <Loader2Icon className='animate-spin' />
                 Please wait...

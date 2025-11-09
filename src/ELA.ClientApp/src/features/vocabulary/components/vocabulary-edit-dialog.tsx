@@ -10,7 +10,7 @@ import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Loading } from '@/components/common/loading';
 
 type VocabularyEditDialogProps = {
-  id: number;
+  id: number | null;
   onSave: (v: vocabularyFormSchemaType) => void;
   onCancel: () => void;
   isPending: boolean;
@@ -40,6 +40,7 @@ export function VocabularyEditDialog({
       onCancel={() => form.reset()}
       formId='vocabulary-form'
       footerBtnText='Save Changes'
+      loading={isPending || isLoading}
     >
       {isLoading ? (
         <Loading />

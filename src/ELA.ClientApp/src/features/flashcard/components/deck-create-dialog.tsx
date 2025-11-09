@@ -11,7 +11,7 @@ import {
 } from '@/features/flashcard';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 
-export function NewDeck() {
+export function DeckCreateDialog() {
   const [open, setOpen] = React.useState(false);
 
   const { form } = useDeckCreateForm();

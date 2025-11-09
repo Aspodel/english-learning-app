@@ -1,6 +1,7 @@
 import React from 'react';
 import { toast } from 'sonner';
 
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import { EmptyComponent } from '@/components/empty-component';
 import {
   vocabularyApi,
@@ -8,7 +9,6 @@ import {
   VocabularyDetailsDialog,
   VocabularyEditDialog,
 } from '@/features/vocabulary';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 
 type VocabularyListProps = {
   items: Vocabulary[] | any[];
@@ -91,7 +91,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
         title='Confirm Delete'
         description='Are you sure you want to delete this word? This action cannot be undone.'
         onConfirm={() => handleDelete(deletingId!)}
-        isLoading={deleteMutation.isPending}
+        loading={deleteMutation.isPending}
       />
     </div>
   );
