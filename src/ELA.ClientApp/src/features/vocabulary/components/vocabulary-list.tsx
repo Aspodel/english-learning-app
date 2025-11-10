@@ -62,7 +62,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
   }
 
   return (
-    <div className='grid grid-cols-1 gap-4 @lg/main:grid-cols-2 @3xl/main:grid-cols-3 @5xl/main:grid-cols-4'>
+    <div className='grid grid-cols-1 gap-4 @md/main:grid-cols-2 @3xl/main:grid-cols-3 @5xl/main:grid-cols-4 @7xl/main:grid-cols-5'>
       {items.map((item) => (
         <VocabularyCard
           key={item.id}

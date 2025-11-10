@@ -11,3 +11,16 @@ export type DeckListItemDto = {
   cardCount: number;
   dueCardCount: number;
 };
+
+export type CreateCardDto = {
+  deckId: number;
+  front: string;
+  back: string;
+};
+
+export type UpdateCardDto = {
+  deckId: number;
+  cardId: number;
+  front: string;
+  back: string;
+};

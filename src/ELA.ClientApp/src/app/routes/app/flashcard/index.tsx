@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import FeatureLayout from '@/components/common/layouts/feature-layout';
 import { deckApi, DeckCreateDialog, DeckList,  } from '@/features/flashcard';
 
-export const Route = createFileRoute('/app/flashcard')({
+export const Route = createFileRoute('/app/flashcard/')({
   component: RouteComponent,
 });
 

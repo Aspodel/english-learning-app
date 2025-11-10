@@ -56,5 +56,5 @@ export function createGet<T>(name: string, route: string) {
         return { getMutation }
     }
 
-    return { useGet, useGetMutation, getById };
+    return { useGet, useGetMutation };
 }

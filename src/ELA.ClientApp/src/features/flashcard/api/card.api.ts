@@ -1,16 +1,16 @@
 import { createCRUD } from '@/lib/crud-factory';
 
-const endpoint = 'card';
+import type { CreateCardDto, UpdateCardDto } from '@/features/flashcard';
 
-export const cardApi = createCRUD<
-  CreateCardDto,
-  UpdateCardDto,
-  Card,
-  Card
->(endpoint, {
-  get: `/${endpoint}/:id`,
-  post: `/${endpoint}`,
-  put: `/${endpoint}/:id`,
-  delete: `/${endpoint}/:id`,
-  search: `/${endpoint}`,
-});
+const endpoint = 'cards';
+
+export const cardApi = (deckId: number) => createCRUD<CreateCardDto, UpdateCardDto, Card, Card>(
+  endpoint,
+  {
+    get: `/${endpoint}/:id`,
+    post: `/${endpoint}`,
+    put: `/${endpoint}/:id`,
+    delete: `/${endpoint}/:id`,
+    search: `/decks/${deckId}/${endpoint}`,
+  }
+);
