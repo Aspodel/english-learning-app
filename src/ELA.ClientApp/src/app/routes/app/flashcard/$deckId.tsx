@@ -9,7 +9,9 @@ export const Route = createFileRoute('/app/flashcard/$deckId')({
 
 function RouteComponent() {
   const { deckId } = Route.useParams();
-  const { data, isLoading } = cardApi(Number(deckId)).useSearch({});
+  const { data, isLoading } = cardApi.useList<PaginatedList<Card>>({
+    deckId: Number(deckId),
+  });
 
   return (
     <>

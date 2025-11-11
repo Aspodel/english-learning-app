@@ -10,26 +10,26 @@ import {
   type vocabularyFormSchemaType,
 } from '@/features/vocabulary';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function VocabularyCreateDialog() {
   const [open, setOpen] = React.useState(false);
+  const queryClient = useQueryClient();
 
   const { form } = useVocabularyCreateForm();
-  const { createMutation } = vocabularyApi.useCreate();
+  const { mutate: createVocab } = vocabularyApi.useCreate({
+    onSuccess: () => {
+      toast.success('Word created successfully');
+      setOpen(false);
+      form.reset();
+      queryClient.invalidateQueries({
+        queryKey: vocabularyApi.keys.list({ pageSize: 100 }),
+      });
+    },
+  });
 
   const onSubmit = (data: vocabularyFormSchemaType) => {
-    console.log(data);
-    createMutation.mutate(
-      { data },
-      {
-        onSuccess: () => {
-          toast.success('Word created successfully');
-
-          setOpen(false);
-          form.reset();
-        },
-      }
-    );
+    createVocab({ data });
   };
 
   return (

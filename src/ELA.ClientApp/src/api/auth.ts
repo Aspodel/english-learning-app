@@ -6,7 +6,7 @@ import {
   type UseMutationOptions,
   type UseQueryOptions,
 } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 
 const authKey = ['authenticated-user'];
 
@@ -28,12 +28,12 @@ type SignUpCredentials = z.infer<typeof signUpCredentialsSchema>;
 
 // API call functions
 const getUser = async (): Promise<User> => {
-  const response = await api.get('/users/me');
+  const response = await apiClient.get('/users/me');
   return response.data;
 };
 
 const requestWithCredentials = async <T>(url: string, data: T) => {
-  const response = await api.post(url, data);
+  const response = await apiClient.post(url, data);
   
   // store token
   const token = response.data.token;

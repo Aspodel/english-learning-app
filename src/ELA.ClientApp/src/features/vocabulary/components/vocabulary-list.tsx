@@ -8,10 +8,12 @@ import {
   VocabularyCard,
   VocabularyDetailsDialog,
   VocabularyEditDialog,
+  type VocabularyListItemDto,
 } from '@/features/vocabulary';
+import { useQueryClient } from '@tanstack/react-query';
 
 type VocabularyListProps = {
-  items: Vocabulary[] | any[];
+  items: VocabularyListItemDto[];
 };
 
 export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
@@ -19,36 +21,38 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
   const [editingId, setEditingId] = React.useState<number | null>(null);
   const [deletingId, setDeletingId] = React.useState<number | null>(null);
 
-  const { deleteMutation } = vocabularyApi.useDelete();
-  const { updateMutation } = vocabularyApi.useUpdate();
+  const { useDelete, useUpdate } = vocabularyApi;
+  const queryClient = useQueryClient();
+
+  const deleteVocab = useDelete({
+    onSuccess: () => {
+      setDeletingId(null);
+      toast.success('Word deleted successfully');
+      queryClient.invalidateQueries({
+        queryKey: vocabularyApi.keys.list({ pageSize: 100 }),
+      });
+    },
+  });
+
+  const updateVocab = useUpdate({
+    onSuccess: () => {
+      setEditingId(null);
+      toast.success('Word updated successfully');
+      queryClient.invalidateQueries({
+        queryKey: vocabularyApi.keys.list({ pageSize: 100 }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: vocabularyApi.keys.detail(editingId!),
+      });
+    },
+  });
 
   const handleDelete = (id: number) => {
-    deleteMutation.mutate(
-      { id },
-      {
-        onSuccess: () => {
-          setDeletingId(null);
-          toast.success('Word deleted successfully');
-        },
-      }
-    );
+    deleteVocab.mutate({ id });
   };
 
-  const handleEdit = (id: number, data: any) => {
-    updateMutation.mutate(
-      {
-        data: {
-          ...data,
-          id,
-        },
-      },
-      {
-        onSuccess: () => {
-          setEditingId(null);
-          toast.success('Word updated successfully');
-        },
-      }
-    );
+  const handleEdit = (data: any) => {
+    updateVocab.mutate(data);
   };
 
   if (!items.length) {
@@ -66,7 +70,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
       {items.map((item) => (
         <VocabularyCard
           key={item.id}
-          vocab={item}
+          vocabulary={item}
           onSelect={() => setSelectedId(item.id)}
           onEdit={setEditingId}
           onDelete={setDeletingId}
@@ -80,9 +84,9 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
 
       <VocabularyEditDialog
         id={editingId!}
-        onSave={(vocab) => handleEdit(editingId!, vocab)}
+        onSave={(vocab) => handleEdit(vocab)}
         onCancel={() => setEditingId(null)}
-        isPending={updateMutation.isPending}
+        isPending={updateVocab.isPending}
       />
 
       <ConfirmDialog
@@ -91,7 +95,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ items }) => {
         title='Confirm Delete'
         description='Are you sure you want to delete this word? This action cannot be undone.'
         onConfirm={() => handleDelete(deletingId!)}
-        loading={deleteMutation.isPending}
+        loading={deleteVocab.isPending}
       />
     </div>
   );

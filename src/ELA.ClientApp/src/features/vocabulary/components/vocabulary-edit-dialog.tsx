@@ -1,5 +1,3 @@
-import { toast } from 'sonner';
-
 import {
   useVocabularyEditForm,
   vocabularyApi,
@@ -11,7 +9,7 @@ import { Loading } from '@/components/common/loading';
 
 type VocabularyEditDialogProps = {
   id: number | null;
-  onSave: (v: vocabularyFormSchemaType) => void;
+  onSave: (vocab: vocabularyFormSchemaType) => void;
   onCancel: () => void;
   isPending: boolean;
 };
@@ -24,12 +22,8 @@ export function VocabularyEditDialog({
 }: VocabularyEditDialogProps) {
   if (!id) return null;
 
-  const { data: vocab, isLoading } = vocabularyApi.useGet({ id });
+  const { data: vocab, isLoading } = vocabularyApi.useDetail(id);
   const { form } = useVocabularyEditForm(vocab);
-
-  if (isPending) {
-    toast.info('Updating word...');
-  }
 
   return (
     <ResponsiveDialog

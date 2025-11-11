@@ -21,7 +21,7 @@ export function VocabularyDetailsDialog({
   id,
   onClose,
 }: VocabularyDetailsDialogProps) {
-  const { data: vocab, isLoading } = vocabularyApi.useGet({ id, enable: !!id });
+  const { data: vocab, isLoading } = vocabularyApi.useDetail(id);
 
   return (
     <Dialog open={!!id} onOpenChange={(o) => !o && onClose()}>

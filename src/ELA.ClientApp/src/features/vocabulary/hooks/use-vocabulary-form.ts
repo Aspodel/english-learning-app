@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PARTS_OF_SPEECH } from '@/features/vocabulary';
 
 const formSchema = z.object({
+  id: z.number().optional(),
   text: z
     .string()
     .min(1, 'Text is required')
@@ -60,6 +61,7 @@ export function useVocabularyCreateForm() {
 export function useVocabularyEditForm(vocabulary?: Vocabulary) {
   const initialValues: vocabularyFormSchemaType = React.useMemo(
     () => ({
+      id: vocabulary?.id,
       text: vocabulary?.text || '',
       ipa: vocabulary?.ipa || '',
       definitions: (vocabulary?.definitions || []).map((def) => ({

@@ -8,6 +8,7 @@ import {
   vocabularyApi,
   VocabularyCreateDialog,
   VocabularyList,
+  type VocabularyListItemDto,
 } from '@/features/vocabulary';
 
 export const Route = createFileRoute('/app/vocabulary')({
@@ -15,13 +16,15 @@ export const Route = createFileRoute('/app/vocabulary')({
 });
 
 function RouteComponent() {
-  const vocab = vocabularyApi.useSearch({ queryParams: { pageSize: '100' } });
   const [search, setSearch] = React.useState('');
+  const vocab = vocabularyApi.useList<PaginatedList<VocabularyListItemDto>>({
+    pageSize: 100,
+  });
 
   const filteredVocabulary =
-    vocab.data?.items.filter((item) =>
+    vocab.data?.items?.filter((item) =>
       item.text.toLowerCase().includes(search.toLowerCase())
-    ) || [];
+    ) ?? [];
 
   return (
     <FeatureLayout

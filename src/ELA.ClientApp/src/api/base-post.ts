@@ -1,4 +1,4 @@
-import { api } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { getErrorMessage } from '@/lib/get-axios-error';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -19,7 +19,7 @@ export function createPost<T>(name: string, route: string) {
         ([, v]) => typeof v === 'string' && v
       )
     );
-    const response = await api.post(route, body.data, {
+    const response = await apiClient.post(route, body.data, {
       params: filteredQueryParams,
     });
     if (response.status === 201) {
