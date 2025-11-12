@@ -29,7 +29,7 @@ export function VocabularyCreateDialog() {
   });
 
   const onSubmit = (data: vocabularyFormSchemaType) => {
-    createVocab({ data });
+    createVocab({data});
   };
 
   return (

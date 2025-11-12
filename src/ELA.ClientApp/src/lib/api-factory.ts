@@ -28,9 +28,10 @@ export function createCrudApi<
 }: CrudConfig<TData, TVars, TListParams>) {
   const keys = {
     all: [resource] as const,
-    list: (params?: TListParams) => [resource, 'list', params] as const,
+    list: (params?: TListParams) =>
+      [resource, 'list', params].filter(Boolean) as QueryKey,
     detail: (id: string | number, parentParams?: any) =>
-      [resource, 'detail', id, parentParams] as const,
+      [resource, 'detail', id, parentParams].filter(Boolean) as QueryKey,
   };
 
   const resolveBase = (params?: TListParams) =>
@@ -60,7 +61,9 @@ export function createCrudApi<
     useQuery<T>({
       queryKey: keys.detail(id, params),
       queryFn: async () => {
-        const res = await apiClient.get(`${resolveBase(params)}/${id}`);
+        const res = await apiClient.get(`${resolveBase(params)}/${id}`, {
+          params,
+        });
         return res.data;
       },
       enabled: !!id,

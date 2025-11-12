@@ -9,6 +9,11 @@ declare interface BaseAuditableEntity<TId = number> extends BaseEntity<TId> {
   lastModifiedBy?: string;
 }
 
+declare interface PaginationParams {
+  pageNumber?: number;
+  pageSize?: number;
+}
+
 declare interface PaginatedList<T> {
   items: T[];
   pageNumber: number;

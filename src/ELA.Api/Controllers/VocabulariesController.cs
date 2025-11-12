@@ -17,9 +17,9 @@ public class VocabulariesController : BaseController
     [HttpGet]
     [ProducesResponseType(typeof(PaginatedList<VocabularyListItemDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetWithPagination([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetWithPagination([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var result = await Mediator.Send(new GetVocabulariesWithPaginationQuery(page, pageSize), cancellationToken);
+        var result = await Mediator.Send(new GetVocabulariesWithPaginationQuery(pageNumber, pageSize), cancellationToken);
         return Ok(result);
     }
 

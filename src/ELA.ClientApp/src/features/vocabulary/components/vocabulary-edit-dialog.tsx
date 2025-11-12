@@ -20,9 +20,7 @@ export function VocabularyEditDialog({
   onCancel,
   isPending,
 }: VocabularyEditDialogProps) {
-  if (!id) return null;
-
-  const { data: vocab, isLoading } = vocabularyApi.useDetail(id);
+  const { data: vocab, isLoading } = vocabularyApi.useDetail(id!);
   const { form } = useVocabularyEditForm(vocab);
 
   return (
