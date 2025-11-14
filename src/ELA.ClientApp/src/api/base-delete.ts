@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { getErrorMessage } from '@/lib/get-axios-error';
 
 type DeleteBody = {
@@ -16,7 +16,7 @@ export function createDelete(name: string, route: string) {
         ([, v]) => typeof v === 'string' && v
       )
     );
-    const response = await api.delete(route.replace(':id', String(body.id)), {
+    const response = await apiClient.delete(route.replace(':id', String(body.id)), {
       params: filteredQueryParams,
     });
     if (response.status === 204) {

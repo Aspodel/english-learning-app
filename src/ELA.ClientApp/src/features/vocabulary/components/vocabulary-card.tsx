@@ -29,23 +29,19 @@ export function VocabularyCard({
       className='relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
     >
       <ItemContent onClick={() => onSelect(vocabulary.id)}>
-        <div className='relative'>
-          <div>
-            <div className='mb-2 space-x-1'>
-              {vocabulary.partsOfSpeech.map((part: any, index: number) => (
-                <PartOfSpeechBadge key={index} part={part.name} />
-              ))}
-            </div>
-
-            <ItemTitle className='text-lg'>{vocabulary.text}</ItemTitle>
-
-            <ItemDescription>{vocabulary.ipa || 'No IPA provided'}</ItemDescription>
-
-            <ItemDescription>
-              {vocabulary.definitionCount} definitions
-            </ItemDescription>
-          </div>
+        <div className='mb-2 space-x-1'>
+          {vocabulary.partsOfSpeech.map((part: any, index: number) => (
+            <PartOfSpeechBadge key={index} part={part.name} />
+          ))}
         </div>
+
+        <ItemTitle className='text-lg'>{vocabulary.text}</ItemTitle>
+
+        <ItemDescription>{vocabulary.ipa || 'No IPA provided'}</ItemDescription>
+
+        <ItemDescription>
+          {vocabulary.definitionCount} definitions
+        </ItemDescription>
       </ItemContent>
 
       <VocabularyCardDropdown

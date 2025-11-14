@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cardApi } from '@/features/flashcard';
+import { FlashcardList } from '@/features/flashcard/components/flashcard-list';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/app/flashcard/$deckId')({
@@ -31,22 +32,7 @@ function RouteComponent() {
           ))}
         </div>
       ) : data?.items.length ? (
-        <div className='grid gap-4'>
-          {data.items.map((card: any) => (
-            <Card key={card.id ?? `${card.front ?? ''}-${card.back ?? ''}`}>
-              <CardHeader>
-                <CardTitle className='font-medium'>
-                  {card.front ?? 'No front'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className='text-sm text-muted-foreground'>
-                  {card.back ?? 'No back'}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <FlashcardList cards={data.items} />
       ) : (
         <Card>
           <CardContent>

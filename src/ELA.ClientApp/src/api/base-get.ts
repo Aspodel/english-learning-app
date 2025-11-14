@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getErrorMessage } from "@/lib/get-axios-error";
-import { api } from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
 
 type GetBody = {
     id: string | number;
@@ -15,7 +15,7 @@ export function createGet<T>(name: string, route: string) {
         const filteredQueryParams = Object.fromEntries(
             Object.entries(body.queryParams ?? {}).filter(([, v]) => typeof v === "string" && v)
         );
-        const response = await api.get(route.replace(":id", String(body.id)), { params: filteredQueryParams });
+        const response = await apiClient.get(route.replace(":id", String(body.id)), { params: filteredQueryParams });
         if (response.status === 200) return response.data;
         throw new Error(`Failed to get ${name}`);
     };

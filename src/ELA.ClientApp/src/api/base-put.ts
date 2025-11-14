@@ -1,4 +1,4 @@
-import { api } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { getErrorMessage } from '@/lib/get-axios-error';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -19,7 +19,7 @@ export function createPut<T extends { id: string | number }>(name: string, route
         ([, v]) => typeof v === 'string' && v
       )
     );
-    const response = await api.put(
+    const response = await apiClient.put(
       route.replace(':id', String(body.data.id)),
       body.data,
       { params: filteredQueryParams }
