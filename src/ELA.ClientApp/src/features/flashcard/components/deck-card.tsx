@@ -22,7 +22,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
     <Item
       variant='outline'
       key={deck.id}
-      className='relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
+      className='bg-card relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
     >
       <ItemContent>
         <Link to='/app/flashcard/$deckId' params={{ deckId: String(deck.id) }}>

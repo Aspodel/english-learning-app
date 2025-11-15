@@ -17,8 +17,8 @@ function RouteComponent() {
   return (
     <>
       {isLoading ? (
-        <div className='space-y-4'>
-          {[...Array(3)].map((_, i) => (
+        <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5'>
+          {[...Array(8)].map((_, i) => (
             <Card key={i}>
               <CardHeader>
                 <CardTitle>
@@ -34,13 +34,15 @@ function RouteComponent() {
       ) : data?.items.length ? (
         <FlashcardList cards={data.items} />
       ) : (
-        <Card>
-          <CardContent>
-            <p className='text-center text-sm text-muted-foreground'>
-              No cards found.
-            </p>
-          </CardContent>
-        </Card>
+        <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5'>
+          <Card>
+            <CardContent>
+              <p className='text-center text-sm text-muted-foreground'>
+                No cards found.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       )}
     </>
   );

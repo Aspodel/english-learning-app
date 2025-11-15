@@ -13,7 +13,7 @@ export const FlashcardCard: React.FC<FlashcardCardProps> = ({ card }) => {
   return (
     <Item
       variant='outline'
-      className='relative transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
+      className='bg-card relative transition hover:shadow-xs hover:scale-[1.05] cursor-pointer'
     >
       <ItemContent className='items-center'>
         <ItemTitle className='text-lg'>{card.front}</ItemTitle>

@@ -26,7 +26,7 @@ export function VocabularyCard({
   return (
     <Item
       variant='outline'
-      className='relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
+      className='bg-card relative group gap-0 transition hover:shadow-md hover:scale-[1.05] cursor-pointer'
     >
       <ItemContent onClick={() => onSelect(vocabulary.id)}>
         <div className='mb-2 space-x-1'>

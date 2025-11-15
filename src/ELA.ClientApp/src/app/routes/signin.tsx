@@ -6,7 +6,7 @@ import SigninForm from '@/features/auth/components/signin-form';
 export const Route = createFileRoute('/signin')({
   component: SignIn,
   validateSearch: (search) => ({
-    redirectTo: search.redirectTo as string | undefined,
+    redirectTo: search.redirectTo ?? undefined,
   }),
 });
 

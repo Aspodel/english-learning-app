@@ -1,18 +1,18 @@
 import * as React from 'react';
 import {
-  BadgeCheck,
-  Bell,
-  BookMarked,
-  ChevronsUpDown,
-  CreditCard,
-  Flame,
-  Home,
-  LogOut,
-  NotebookPen,
-  Send,
-  Settings,
-  Sparkles,
-  WalletCards,
+  BadgeCheckIcon,
+  BellIcon,
+  BrainIcon,
+  CloudyIcon,
+  CreditCardIcon,
+  FlameIcon,
+  FolderIcon,
+  LayoutDashboardIcon,
+  LogOutIcon,
+  MoreVerticalIcon,
+  SendIcon,
+  SettingsIcon,
+  SparklesIcon,
 } from 'lucide-react';
 
 import {
@@ -49,8 +49,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const handleLogout = () => {
     logout();
-    navigate({ to: '/signin' });
-  }
+    navigate({
+      to: '/signin',
+      search: { redirectTo: undefined },
+    });
+  };
 
   return (
     <Sidebar collapsible='icon' {...props}>
@@ -63,14 +66,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className='hover:bg-transparent'
             >
               <Link to='/'>
-                <div className='bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md'>
-                  <Flame className='size-4' />
+                <div className='flex aspect-square size-8 items-center justify-center rounded-md'>
+                  <FlameIcon
+                    className='size-8 text-primary'
+                    fill='currentColor'
+                  />
                 </div>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate text-base text-primary font-semibold'>ELA</span>
-                  <span className='truncate'>
-                    Modern learning platform
+                  <span className='truncate text-base text-primary font-semibold'>
+                    ELA
                   </span>
+                  <span className='truncate'>Modern learning platform</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -87,9 +93,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={isActive}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.title}
+                      className='
+                        data-[active=true]:bg-primary
+                        data-[active=true]:text-primary-foreground
+                        data-[active=true]:hover:bg-primary/90
+                        data-[active=true]:active:bg-primary/90
+                      '
+                    >
                       <Link to={item.url}>
-                        <item.icon className='size-4' />
+                        <item.icon />
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -103,16 +119,30 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup className='mt-auto'>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navSecondary.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon className='size-4' />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navSecondary.map((item) => {
+                const isActive = pathname.startsWith(item.url);
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.title}
+                      className='
+                        data-[active=true]:bg-primary
+                        data-[active=true]:text-primary-foreground
+                        data-[active=true]:hover:bg-primary/90
+                        data-[active=true]:active:bg-primary/90
+                      '
+                    >
+                      <Link to={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -133,11 +163,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </Avatar>
                   <div className='grid flex-1 text-left text-sm leading-tight'>
                     <span className='truncate font-medium'>{'Aspodel'}</span>
-                    <span className='truncate text-xs'>
+                    <span className='truncate text-sm'>
                       {'aspodel@example.com'}
                     </span>
                   </div>
-                  <ChevronsUpDown className='ml-auto size-4' />
+                  <MoreVerticalIcon className='ml-auto size-4' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -154,7 +184,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </Avatar>
                     <div className='grid flex-1 text-left text-sm leading-tight'>
                       <span className='truncate font-medium'>{'Aspodel'}</span>
-                      <span className='truncate text-xs'>
+                      <span className='truncate text-sm'>
                         {'aspodel@example.com'}
                       </span>
                     </div>
@@ -163,28 +193,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <Sparkles />
+                    <SparklesIcon />
                     Upgrade to Pro
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <BadgeCheck />
+                    <BadgeCheckIcon />
                     Account
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <CreditCard />
+                    <CreditCardIcon />
                     Billing
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Bell />
+                    <BellIcon />
                     Notifications
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={handleLogout}>
-                  <LogOut />
+                  <LogOutIcon />
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -200,22 +230,22 @@ const menuItems = [
   {
     title: 'Dashboard',
     url: '/app/dashboard',
-    icon: Home,
+    icon: LayoutDashboardIcon,
   },
   {
     title: 'Vocabulary',
     url: '/app/vocabulary',
-    icon: BookMarked,
+    icon: CloudyIcon,
   },
   {
     title: 'Flashcard',
     url: '/app/flashcard',
-    icon: WalletCards,
+    icon: FolderIcon,
   },
   {
     title: 'Quiz',
     url: '/app/quiz',
-    icon: NotebookPen,
+    icon: BrainIcon,
   },
 ];
 
@@ -223,11 +253,11 @@ const navSecondary = [
   {
     title: 'Feedback',
     url: '/app/feedback',
-    icon: Send,
+    icon: SendIcon,
   },
   {
     title: 'Settings',
     url: '/app/settings',
-    icon: Settings,
+    icon: SettingsIcon,
   },
 ];

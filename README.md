@@ -31,8 +31,8 @@ A modular, scalable flashcard-style vocabulary learning system built with **ASP.
 1. Clone the repository
 
     ```bash
-    git clone https://github.com/aspodel/english-learning-app.git
-    cd english-learning-app
+    git clone https://github.com/aspodel/ela.git
+    cd ela
     ```
 
 2. Set up PostgreSQL and update the connection string
@@ -62,16 +62,6 @@ A modular, scalable flashcard-style vocabulary learning system built with **ASP.
 5. Access the API
 
     Once running, the API will be available at `https://localhost:5001` (or your configured port). You can test endpoints using Scarla UI at `/` or with tools like Postman.
-
-## 🎯 To Do
-
-- [ ] User authentication
-- [ ] Unit and integration testing coverage
-- [ ] Frontend web client (React)
-- [ ] In-app statistics & progress tracking dashboard
-- [ ] Review scheduling and reminders
-- [ ] Advanced spaced repetition algorithm customization
-- [ ] Mobile app (future consideration)
 
 ## 📖 Learn More
 
